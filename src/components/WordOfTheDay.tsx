@@ -34,25 +34,23 @@ export default function WordOfTheDay() {
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.6 }}
-      className="bg-white rounded-2xl shadow-lg overflow-hidden"
+      className="rounded-2xl overflow-hidden border border-neutral-200 dark:border-neutral-800 bg-white/60 dark:bg-neutral-900/40 backdrop-blur"
     >
       {/* Header */}
-      <div className={`bg-gradient-to-r ${eraColors[wordOfTheDay.era as keyof typeof eraColors]} p-6 border-b border-gray-200`}>
-        <div className="flex items-center justify-between mb-4">
+      <div className={`p-6 border-b border-neutral-200 dark:border-neutral-800 bg-white/50 dark:bg-neutral-900/40` }>
+        <div className="flex items-center justify-between mb-3">
           <div className="flex items-center space-x-2">
-            <Calendar className="w-5 h-5 text-gray-600" />
-            <span className="text-sm font-medium text-gray-600 uppercase tracking-wide">Word of the Day</span>
+            <Calendar className="w-4 h-4 text-neutral-500" />
+            <span className="text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase tracking-wide">Word of the Day</span>
           </div>
-          <span className="px-3 py-1 bg-white/80 rounded-full text-xs font-semibold text-gray-700">
+          <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold text-neutral-800 dark:text-neutral-100 border border-neutral-300 dark:border-neutral-700">
             {wordOfTheDay.difficulty}
           </span>
         </div>
-        
-        <h2 className="font-playfair text-3xl font-bold text-gray-900 mb-2">
+        <h2 className="font-playfair text-3xl font-bold text-neutral-900 dark:text-white mb-1">
           {wordOfTheDay.word}
         </h2>
-        
-        <p className="text-gray-700 text-sm">
+        <p className="text-neutral-600 dark:text-neutral-400 text-sm">
           From <span className="font-semibold">{wordOfTheDay.album}</span> • <span className="font-semibold">{wordOfTheDay.song}</span>
         </p>
       </div>
@@ -60,42 +58,42 @@ export default function WordOfTheDay() {
       {/* Content */}
       <div className="p-6">
         <div className="mb-6">
-          <h3 className="font-semibold text-gray-900 mb-2">Definition</h3>
-          <p className="text-gray-700 leading-relaxed">
+          <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-2">Definition</h3>
+          <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
             {wordOfTheDay.definition}
           </p>
         </div>
 
         <div className="mb-6">
-          <h3 className="font-semibold text-gray-900 mb-2">In Taylor's Words</h3>
-          <div className="bg-gray-50 rounded-lg p-4 border-l-4 border-pink-400">
-            <Quote className="w-5 h-5 text-gray-400 mb-2" />
-            <p className="text-gray-700 italic">
+          <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-2">In Taylor's Words</h3>
+          <div className="rounded-lg p-4 border border-neutral-200 dark:border-neutral-800 bg-white/50 dark:bg-neutral-900/30">
+            <Quote className="w-4 h-4 text-neutral-400 mb-2" />
+            <p className="text-neutral-700 dark:text-neutral-300 italic">
               "{wordOfTheDay.lyricSnippet}"
             </p>
           </div>
         </div>
 
         <div className="mb-6">
-          <h3 className="font-semibold text-gray-900 mb-2">Context</h3>
-          <p className="text-gray-600 text-sm leading-relaxed">
+          <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-2">Context</h3>
+          <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
             {wordOfTheDay.context}
           </p>
         </div>
 
         <div className="flex space-x-3">
-          <button className="flex-1 bg-gradient-to-r from-pink-500 to-purple-600 text-white py-2 px-4 rounded-lg font-medium hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
+          <button className="flex-1 py-2 px-4 rounded-lg font-medium text-white bg-neutral-900 dark:bg-white dark:text-neutral-900 hover:shadow transform hover:-translate-y-0.5 transition-all duration-200">
             View Song
           </button>
-          <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+          <button className="px-4 py-2 border border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-lg font-medium hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
             <ExternalLink className="w-4 h-4" />
           </button>
         </div>
       </div>
 
       {/* Footer */}
-      <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
-        <p className="text-xs text-gray-500 text-center">
+      <div className="px-6 py-4 border-t border-neutral-200 dark:border-neutral-800 bg-white/40 dark:bg-neutral-900/40">
+        <p className="text-xs text-neutral-500 dark:text-neutral-400 text-center">
           New word every day at midnight EST
         </p>
       </div>

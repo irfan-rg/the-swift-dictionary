@@ -1,7 +1,6 @@
 import WordOfTheDay from '@/components/WordOfTheDay';
 import HeroSection from '@/components/HeroSection';
 import TopSongs from '@/components/TopSongs';
-import QuickStats from '@/components/QuickStats';
 
 export default function Home() {
   return (
@@ -21,11 +20,6 @@ export default function Home() {
           <div className="lg:col-span-2">
             <TopSongs />
           </div>
-        </div>
-        
-        {/* Quick Stats */}
-        <div className="mt-16">
-          <QuickStats />
         </div>
       </div>
     </div>

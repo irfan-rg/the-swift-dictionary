@@ -78,23 +78,23 @@ export default function TopSongs() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="bg-white rounded-2xl shadow-lg overflow-hidden"
+      className="rounded-2xl overflow-hidden border border-neutral-200 dark:border-neutral-800 bg-white/60 dark:bg-neutral-900/40 backdrop-blur"
     >
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-100 to-pink-100 p-6 border-b border-gray-200">
+      <div className="p-6 border-b border-neutral-200 dark:border-neutral-800 bg-white/50 dark:bg-neutral-900/40">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 rounded-xl grid place-items-center border border-neutral-200 dark:border-neutral-800">
+              <TrendingUp className="w-5 h-5 text-neutral-700 dark:text-neutral-300" />
             </div>
             <div>
-              <h2 className="font-playfair text-2xl font-bold text-gray-900">Top Songs</h2>
-              <p className="text-gray-600 text-sm">Most vocabulary-rich tracks</p>
+              <h2 className="font-playfair text-2xl font-bold text-neutral-900 dark:text-white">Top Songs</h2>
+              <p className="text-neutral-600 dark:text-neutral-400 text-sm">Most vocabulary-rich tracks</p>
             </div>
           </div>
           <Link
             href="/explorer"
-            className="text-purple-600 hover:text-purple-700 font-medium text-sm flex items-center space-x-1"
+            className="text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white font-medium text-sm flex items-center space-x-1"
           >
             <span>View All</span>
             <ExternalLink className="w-4 h-4" />
@@ -110,30 +110,30 @@ export default function TopSongs() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4, delay: index * 0.1 }}
-            className="p-6 hover:bg-gray-50 transition-colors group"
+            className="p-6 hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-colors group"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-purple-400 to-pink-500 rounded-lg flex items-center justify-center text-white font-bold">
+                <div className="w-12 h-12 rounded-lg grid place-items-center border border-neutral-200 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 font-bold">
                   {index + 1}
                 </div>
                 
                 <div className="flex-1">
                   <div className="flex items-center space-x-2 mb-1">
-                    <h3 className="font-semibold text-gray-900 group-hover:text-purple-600 transition-colors">
+                    <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-colors">
                       {song.title}
                     </h3>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${eraColors[song.era as keyof typeof eraColors]}`}>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium border border-neutral-300 dark:border-neutral-700 text-neutral-600 dark:text-neutral-300`}>
                       {song.album}
                     </span>
                   </div>
                   
-                  <div className="flex items-center space-x-4 text-sm text-gray-600">
+                  <div className="flex items-center space-x-4 text-sm text-neutral-600 dark:text-neutral-400">
                     <div className="flex items-center space-x-1">
                       <Music className="w-4 h-4" />
                       <span>{song.vocabCount} vocab words</span>
                     </div>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${difficultyColors[song.difficulty as keyof typeof difficultyColors]}`}>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium border border-neutral-300 dark:border-neutral-700 text-neutral-600 dark:text-neutral-300`}>
                       {song.difficulty}
                     </span>
                   </div>
@@ -141,12 +141,12 @@ export default function TopSongs() {
               </div>
               
               <div className="flex items-center space-x-2">
-                <button className="p-2 text-gray-400 hover:text-purple-600 transition-colors">
+                <button className="p-2 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors">
                   <Play className="w-5 h-5" />
                 </button>
                 <Link
                   href={`/explorer/song/${song.id}`}
-                  className="p-2 text-gray-400 hover:text-purple-600 transition-colors"
+                  className="p-2 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors"
                 >
                   <ExternalLink className="w-5 h-5" />
                 </Link>
@@ -157,10 +157,10 @@ export default function TopSongs() {
       </div>
 
       {/* Footer */}
-      <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
+      <div className="px-6 py-4 border-t border-neutral-200 dark:border-neutral-800 bg-white/40 dark:bg-neutral-900/40">
         <Link
           href="/explorer"
-          className="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 px-4 rounded-lg font-medium hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center space-x-2"
+          className="w-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 py-3 px-4 rounded-lg font-medium hover:shadow transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center space-x-2"
         >
           <Music className="w-5 h-5" />
           <span>Explore All Songs</span>

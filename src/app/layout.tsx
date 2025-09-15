@@ -27,9 +27,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${playfair.variable} font-sans antialiased bg-gradient-to-br from-pink-50 to-blue-50 min-h-screen`}
+        className={`${inter.variable} ${playfair.variable} font-sans antialiased bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 minimal-grid-bg`}
       >
         <div className="flex flex-col min-h-screen">
+          {/* Floating header appears after hero threshold via internal scroll logic */}
           <Header />
           <main className="flex-1">
             {children}
