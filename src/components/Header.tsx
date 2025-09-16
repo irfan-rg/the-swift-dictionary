@@ -81,7 +81,7 @@ export default function Header() {
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: isVisible ? 0 : -20, opacity: isVisible ? 1 : 0 }}
           transition={{ duration: 0.18 }}
-          className={`search-container mx-auto w-full max-w-2xl md:max-w-3xl lg:max-w-3xl h-14 flex items-center justify-between rounded-full border border-neutral-200 dark:border-neutral-800 backdrop-blur px-3 sm:px-4 relative overflow-hidden shadow-lg ${afterThreshold ? 'bg-white/70 dark:bg-neutral-900/60 shadow-neutral-900/5 dark:shadow-black/20' : 'bg-white/50 dark:bg-neutral-900/40 shadow-neutral-900/0'}`}
+          className={`search-container mx-auto w-full max-w-2xl md:max-w-3xl lg:max-w-3xl h-14 flex items-center justify-between rounded-full border border-neutral-200 dark:border-neutral-800 backdrop-blur px-3 sm:px-4 relative overflow-hidden shadow-lg ${afterThreshold ? 'bg-neutral-900/15 dark:bg-neutral-900/60 shadow-neutral-900/10 dark:shadow-black/20' : 'bg-neutral-900/10 dark:bg-neutral-900/40 shadow-neutral-900/0'}`}
         >
           {/* Left: Logo only (no title) */}
           <Link href="/" className={`flex items-center space-x-3 ${isSearching ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
@@ -92,16 +92,16 @@ export default function Header() {
 
           {/* Center: Nav (hidden on small, hidden when searching) */}
           <nav className={`hidden md:flex items-center space-x-8 ${isSearching ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-            <Link href="/" className="text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors">
+            <Link href="/" className="text-neutral-700 dark:text-neutral-300 hover:text-[var(--accent)] transition-colors">
               Home
             </Link>
-            <Link href="/dictionary" className="text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors">
+            <Link href="/dictionary" className="text-neutral-700 dark:text-neutral-300 hover:text-[var(--accent)] transition-colors">
               Dictionary
             </Link>
-            <Link href="/explorer" className="text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors">
+            <Link href="/explorer" className="text-neutral-700 dark:text-neutral-300 hover:text-[var(--accent)] transition-colors">
               Explorer
             </Link>
-            <Link href="/about" className="text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors">
+            <Link href="/about" className="text-neutral-700 dark:text-neutral-300 hover:text-[var(--accent)] transition-colors">
               About
             </Link>
           </nav>
@@ -151,7 +151,7 @@ export default function Header() {
                 placeholder="Search words or songs..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full h-10 pl-10 pr-4 rounded-full bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 focus:outline-none focus:ring-2 focus:ring-violet-500/60 focus:border-transparent text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500"
+                      className="w-full h-10 pl-10 pr-4 rounded-full bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/60 focus:border-transparent text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500"
               />
                   </div>
             </form>
