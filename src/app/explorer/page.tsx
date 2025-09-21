@@ -21,84 +21,14 @@ const albumColors: Record<string, string> = {
 // Mock album data - will be replaced with real API data
 const albums = [
   {
-    key: "debut",
-    title: "Taylor Swift",
-    year: "2006",
-    songCount: 11,
-    vocabCount: 23,
-    coverImage: "/covers/debut.jpg",
-    accent: "hover:border-green-500/50 dark:hover:border-green-400/50 hover:ring-green-500/50",
-    description: "The beginning of Taylor's storytelling journey"
-  },
-  {
-    key: "fearless",
-    title: "Fearless",
-    year: "2008",
+    key: "midnights",
+    title: "Midnights",
+    year: "2022",
     songCount: 13,
-    vocabCount: 31,
-    coverImage: "/covers/fearless.jpg",
-    accent: "hover:border-yellow-500/50 dark:hover:border-yellow-400/50 hover:ring-yellow-500/50",
-    description: "Country-pop perfection with sophisticated vocabulary"
-  },
-  {
-    key: "speaknow",
-    title: "Speak Now",
-    year: "2010",
-    songCount: 14,
-    vocabCount: 42,
-    coverImage: "/covers/speaknow.jpg",
-    accent: "hover:border-purple-500/50 dark:hover:border-purple-400/50 hover:ring-purple-500/50",
-    description: "Self-written masterpiece with poetic language"
-  },
-  {
-    key: "red",
-    title: "Red",
-    year: "2012",
-    songCount: 16,
-    vocabCount: 38,
-    coverImage: "/covers/red.jpg",
-    accent: "hover:border-red-500/50 dark:hover:border-red-400/50 hover:ring-red-500/50",
-    description: "The transition era with emotional depth"
-  },
-  {
-    key: "1989",
-    title: "1989",
-    year: "2014",
-    songCount: 13,
-    vocabCount: 29,
-    coverImage: "/covers/1989.jpg",
-    accent: "hover:border-blue-500/50 dark:hover:border-blue-400/50 hover:ring-blue-500/50",
-    description: "Pop perfection with clever wordplay"
-  },
-  {
-    key: "reputation",
-    title: "Reputation",
-    year: "2017",
-    songCount: 15,
-    vocabCount: 35,
-    coverImage: "/covers/reputation.jpg",
-    accent: "hover:border-gray-500/50 dark:hover:border-gray-400/50 hover:ring-gray-500/50",
-    description: "Dark pop with sophisticated storytelling"
-  },
-  {
-    key: "lover",
-    title: "Lover",
-    year: "2019",
-    songCount: 18,
-    vocabCount: 47,
-    coverImage: "/covers/lover.jpg",
-    accent: "hover:border-pink-500/50 dark:hover:border-pink-400/50 hover:ring-pink-500/50",
-    description: "Romantic pop with dreamy vocabulary"
-  },
-  {
-    key: "folklore",
-    title: "Folklore",
-    year: "2020",
-    songCount: 16,
-    vocabCount: 52,
-    coverImage: "/covers/folklore.jpg",
-    accent: "hover:border-neutral-500/50 dark:hover:border-neutral-400/50 hover:ring-neutral-500/50",
-    description: "Indie folk with literary sophistication"
+    vocabCount: 41,
+    coverImage: "/covers/midnights.jpg",
+    accent: "hover:border-indigo-500/50 dark:hover:border-indigo-400/50 hover:ring-indigo-500/50",
+    description: "Late-night introspection with poetic depth"
   },
   {
     key: "evermore",
@@ -111,14 +41,84 @@ const albums = [
     description: "Sister album with rich storytelling"
   },
   {
-    key: "midnights",
-    title: "Midnights",
-    year: "2022",
+    key: "folklore",
+    title: "Folklore",
+    year: "2020",
+    songCount: 16,
+    vocabCount: 52,
+    coverImage: "/covers/folklore.jpg",
+    accent: "hover:border-neutral-500/50 dark:hover:border-neutral-400/50 hover:ring-neutral-500/50",
+    description: "Indie folk with literary sophistication"
+  },
+  {
+    key: "lover",
+    title: "Lover",
+    year: "2019",
+    songCount: 18,
+    vocabCount: 47,
+    coverImage: "/covers/lover.jpg",
+    accent: "hover:border-pink-500/50 dark:hover:border-pink-400/50 hover:ring-pink-500/50",
+    description: "Romantic pop with dreamy vocabulary"
+  },
+  {
+    key: "reputation",
+    title: "Reputation",
+    year: "2017",
+    songCount: 15,
+    vocabCount: 35,
+    coverImage: "/covers/reputation.jpg",
+    accent: "hover:border-gray-500/50 dark:hover:border-gray-400/50 hover:ring-gray-500/50",
+    description: "Dark pop with sophisticated storytelling"
+  },
+  {
+    key: "1989",
+    title: "1989",
+    year: "2014",
     songCount: 13,
-    vocabCount: 41,
-    coverImage: "/covers/midnights.jpg",
-    accent: "hover:border-indigo-500/50 dark:hover:border-indigo-400/50 hover:ring-indigo-500/50",
-    description: "Late-night introspection with poetic depth"
+    vocabCount: 29,
+    coverImage: "/covers/1989.jpg",
+    accent: "hover:border-blue-500/50 dark:hover:border-blue-400/50 hover:ring-blue-500/50",
+    description: "Pop perfection with clever wordplay"
+  },
+  {
+    key: "red",
+    title: "Red",
+    year: "2012",
+    songCount: 16,
+    vocabCount: 38,
+    coverImage: "/covers/red.jpg",
+    accent: "hover:border-red-500/50 dark:hover:border-red-400/50 hover:ring-red-500/50",
+    description: "The transition era with emotional depth"
+  },
+  {
+    key: "speaknow",
+    title: "Speak Now",
+    year: "2010",
+    songCount: 14,
+    vocabCount: 42,
+    coverImage: "/covers/speaknow.jpg",
+    accent: "hover:border-purple-500/50 dark:hover:border-purple-400/50 hover:ring-purple-500/50",
+    description: "Self-written masterpiece with poetic language"
+  },
+  {
+    key: "fearless",
+    title: "Fearless",
+    year: "2008",
+    songCount: 13,
+    vocabCount: 31,
+    coverImage: "/covers/fearless.jpg",
+    accent: "hover:border-yellow-500/50 dark:hover:border-yellow-400/50 hover:ring-yellow-500/50",
+    description: "Country-pop perfection with sophisticated vocabulary"
+  },
+  {
+    key: "debut",
+    title: "Taylor Swift",
+    year: "2006",
+    songCount: 11,
+    vocabCount: 23,
+    coverImage: "/covers/debut.jpg",
+    accent: "hover:border-green-500/50 dark:hover:border-green-400/50 hover:ring-green-500/50",
+    description: "The beginning of Taylor's storytelling journey"
   }
 ];
 
@@ -187,23 +187,23 @@ export default function ExplorerPage() {
                 {/* Stats */}
                 <div className="space-y-3 mb-4">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-neutral-600 dark:text-neutral-400">Songs</span>
+                    <span className="text-neutral-600 dark:text-neutral-400 font-medium">Songs</span>
                     <span className="font-semibold text-neutral-900 dark:text-white">{album.songCount}</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-neutral-600 dark:text-neutral-400">Vocab Words</span>
+                    <span className="text-neutral-600 dark:text-neutral-400 font-medium">Vocab Words</span>
                     <span className="font-semibold text-neutral-900 dark:text-white">{album.vocabCount}</span>
                   </div>
                 </div>
 
                 {/* Description */}
-                <p className="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed mb-4">
+                <p className="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed mb-4 font-medium">
                   {album.description}
                 </p>
 
                  {/* CTA */}
                  <div className="flex items-center justify-between">
-                   <span className={`text-sm font-medium text-neutral-800 dark:text-neutral-200 ${albumColors[album.key]} transition-colors`}>
+                   <span className={`text-sm font-bold text-neutral-800 dark:text-neutral-200 ${albumColors[album.key]} transition-colors`}>
                      View Album
                    </span>
                    <Play className={`w-4 h-4 text-neutral-600 dark:text-neutral-400 ${albumColors[album.key]} transition-colors`} />
@@ -214,7 +214,7 @@ export default function ExplorerPage() {
         ))}
       </motion.div>
 
-      {/* Footer Stats */}
+      {/* Footer Stats
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -241,7 +241,7 @@ export default function ExplorerPage() {
             <div className="text-neutral-600 dark:text-neutral-400">Albums</div>
           </div>
         </div>
-      </motion.div>
+      </motion.div> */}
     </div>
   );
 }

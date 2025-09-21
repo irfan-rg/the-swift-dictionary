@@ -29,9 +29,29 @@ export default function WordCard({ item, onOpen }: Props) {
       onClick={() => onOpen?.(item)}
     >
       <div className="flex items-start justify-between gap-4">
-        <div className="space-y-3">
-          <h3 className="font-playfair text-2xl font-bold tracking-wide text-neutral-900 dark:text-white">{item.word}</h3>
-          <div className="mt-1 inline-flex items-center gap-2 text-xs text-neutral-500">
+          <div className="space-y-3">
+            <div>
+              <h3 className="font-playfair text-2xl font-bold tracking-wide text-neutral-900 dark:text-white">{item.word}</h3>
+              <p 
+                className="text-sm mt-1 font-medium"
+                style={{
+                  color:
+                    item.album === "lover" ? "#ec4899" :
+                    item.album === "reputation" ? "#6b7280" :
+                    item.album === "folklore" ? "#737373" :
+                    item.album === "evermore" ? "#d97706" :
+                    item.album === "midnights" ? "#6366f1" :
+                    item.album === "1989" ? "#3b82f6" :
+                    item.album === "red" ? "#ef4444" :
+                    item.album === "speaknow" ? "#a855f7" :
+                    item.album === "fearless" ? "#f59e0b" :
+                    item.album === "debut" ? "#16a34a" : "#6b7280",
+                }}
+              >
+                {item.song}
+              </p>
+            </div>
+            <div className="inline-flex items-center gap-2 text-xs text-neutral-500">
             <span
               className="px-2.5 py-0.5 rounded-full border text-neutral-700 dark:text-neutral-300 uppercase tracking-wide"
               style={{

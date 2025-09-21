@@ -118,13 +118,41 @@ export default function WordModal({ open, onClose, item }: Props) {
 
                   {/* Footer */}
                   <div className="px-6 py-4 border-t border-neutral-200 dark:border-neutral-800 bg-white/50 dark:bg-neutral-900/40">
-                    <div className="flex items-center justify-end">
+                    <div className="flex items-center justify-between">
                       <button
                         className="px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-sm"
                         onClick={onClose}
                       >
                         Close
                       </button>
+                      <a
+                        href={`/explorer/${item.album}/${item.song.toLowerCase().replace(/\s+/g, '-')}`}
+                        className="px-4 py-2 rounded-lg text-sm text-white transition-colors"
+                        style={{
+                          backgroundColor:
+                            item.album === "lover" ? "#ec4899" :
+                            item.album === "reputation" ? "#6b7280" :
+                            item.album === "folklore" ? "#737373" :
+                            item.album === "evermore" ? "#d97706" :
+                            item.album === "midnights" ? "#6366f1" :
+                            item.album === "1989" ? "#3b82f6" :
+                            item.album === "red" ? "#ef4444" :
+                            item.album === "speaknow" ? "#a855f7" :
+                            item.album === "fearless" ? "#f59e0b" :
+                            item.album === "debut" ? "#16a34a" : "#6b7280",
+                        }}
+                        onMouseEnter={(e) => {
+                          const target = e.target as HTMLElement;
+                          const currentColor = target.style.backgroundColor;
+                          target.style.backgroundColor = currentColor + "dd"; // Add opacity for hover
+                        }}
+                        onMouseLeave={(e) => {
+                          const target = e.target as HTMLElement;
+                          target.style.backgroundColor = target.style.backgroundColor.replace("dd", "");
+                        }}
+                      >
+                        View Song
+                      </a>
                     </div>
                   </div>
                 </div>

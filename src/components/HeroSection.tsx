@@ -85,7 +85,7 @@ export default function HeroSection() {
                       return albums.map((album) => (
                         <Link
                           key={album.key}
-                          href={`/explorer?album=${encodeURIComponent(album.key)}`}
+                          href={`/explorer/${album.key}`}
                           className="group relative px-3.5 md:px-4 py-2 rounded-full border border-neutral-300/80 dark:border-neutral-700/70 bg-white/60 dark:bg-neutral-900/50 backdrop-blur text-sm md:text-[15px] text-neutral-800 dark:text-neutral-200 hover:-translate-y-0.5 transition-transform duration-200 shadow-sm"
                           style={{ WebkitTapHighlightColor: 'transparent' }}
                         >

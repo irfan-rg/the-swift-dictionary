@@ -1,9 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowLeft, Music, Play, ExternalLink, Search } from "lucide-react";
+import { ArrowLeft, Music, Play, ExternalLink } from "lucide-react";
 
 // Mock song data - will be replaced with real API data
 const albumData: Record<string, {
@@ -106,34 +105,7 @@ type AlbumPageProps = {
 };
 
 export default function AlbumPage({ params }: AlbumPageProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [sortBy, setSortBy] = useState<"title" | "vocab" | "difficulty">("title");
-
   const album = albumData[params.album];
-
-  const filteredSongs = useMemo(() => {
-    if (!album) return [];
-    
-    let songs = album.songs.filter(song =>
-      song.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
-    // Sort songs
-    songs.sort((a, b) => {
-      switch (sortBy) {
-        case "vocab":
-          return b.vocabCount - a.vocabCount;
-        case "difficulty":
-          const difficultyOrder = { Beginner: 1, Intermediate: 2, Advanced: 3 };
-          return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
-        case "title":
-        default:
-          return a.title.localeCompare(b.title);
-      }
-    });
-
-    return songs;
-  }, [album, searchQuery, sortBy]);
 
   if (!album) {
     return (
@@ -160,7 +132,7 @@ export default function AlbumPage({ params }: AlbumPageProps) {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="mb-8">
         <div className="flex items-center space-x-4">
           <Link
             href="/explorer"
@@ -172,12 +144,12 @@ export default function AlbumPage({ params }: AlbumPageProps) {
             <h1 className="font-playfair text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white">
               {album.title}
             </h1>
+            <div className="h-[2px] w-28 accent-gradient rounded-full opacity-80 my-2" />
             <p className="text-neutral-600 dark:text-neutral-400 text-lg">
               {album.year} • {album.songs.length} songs
             </p>
           </div>
         </div>
-        <div className="h-[2px] w-20 accent-gradient rounded-full opacity-80 hidden md:block" />
       </div>
 
       {/* Album Info Card */}
@@ -232,32 +204,6 @@ export default function AlbumPage({ params }: AlbumPageProps) {
         </div>
       </motion.div>
 
-      {/* Search and Sort */}
-      <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 mb-8">
-        <div className="relative flex-1">
-          <Search aria-hidden className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-600 dark:text-neutral-300 z-10" />
-          <input
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search songs..."
-            className="w-full h-11 pl-10 pr-4 rounded-full bg-white/70 dark:bg-neutral-950/70 backdrop-blur border border-neutral-200 dark:border-neutral-800 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/60 focus:border-transparent text-sm"
-          />
-        </div>
-        <div className="relative">
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as any)}
-            className="appearance-none h-11 pr-10 pl-4 rounded-full bg-white/70 dark:bg-neutral-950/70 backdrop-blur border border-neutral-200 dark:border-neutral-800 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/60 focus:border-transparent min-w-[10rem]"
-          >
-            <option value="title">Sort: A-Z</option>
-            <option value="vocab">Sort: Most Vocab</option>
-            <option value="difficulty">Sort: Difficulty</option>
-          </select>
-          <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden>
-            <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
-          </svg>
-        </div>
-      </div>
 
       {/* Songs Grid */}
       <motion.div
@@ -266,7 +212,7 @@ export default function AlbumPage({ params }: AlbumPageProps) {
         transition={{ duration: 0.6 }}
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
       >
-        {filteredSongs.map((song, index) => (
+        {album.songs.map((song, index) => (
           <motion.div
             key={song.id}
             initial={{ opacity: 0, y: 20 }}
@@ -307,11 +253,6 @@ export default function AlbumPage({ params }: AlbumPageProps) {
         ))}
       </motion.div>
 
-      {filteredSongs.length === 0 && (
-        <div className="text-center text-neutral-500 py-16">
-          No songs found matching your search.
-        </div>
-      )}
     </div>
   );
 }

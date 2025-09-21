@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowLeft, Music, Play, ExternalLink, BookOpen, Volume2 } from "lucide-react";
+import { ArrowLeft, Music, BookOpen } from "lucide-react";
+import WordModal from "@/components/dictionary/WordModal";
 
 // Mock song data - will be replaced with real API data
 const songData: Record<string, Record<string, {
@@ -283,10 +284,34 @@ type SongPageProps = {
 };
 
 export default function SongPage({ params }: SongPageProps) {
-  const [selectedWord, setSelectedWord] = useState<typeof songData[string][string]["vocabWords"][0] | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-
+  const [selectedWord, setSelectedWord] = useState<any>(null);
   const song = songData[params.album]?.[params.song];
+
+  const transformVocabForModal = (vocabWord: any) => {
+    // Extract lyric snippet around the word
+    const lyrics = song.lyrics;
+    const wordPositions = vocabWord.positions;
+    let lyricSnippet = `"${vocabWord.word}" appears in this song`;
+    
+    if (wordPositions && wordPositions.length > 0) {
+      const position = wordPositions[0];
+      const start = Math.max(0, position - 50);
+      const end = Math.min(lyrics.length, position + vocabWord.word.length + 50);
+      const snippet = lyrics.substring(start, end);
+      lyricSnippet = snippet.trim();
+    }
+
+    return {
+      id: vocabWord.word.toLowerCase().replace(/\s+/g, '-'),
+      word: vocabWord.word,
+      definition: vocabWord.definition,
+      lyricSnippet: lyricSnippet,
+      song: song.title,
+      album: song.album,
+      difficulty: vocabWord.difficulty,
+      context: vocabWord.context
+    };
+  };
 
   if (!song) {
     return (
@@ -310,45 +335,11 @@ export default function SongPage({ params }: SongPageProps) {
     );
   }
 
-  const renderLyricsWithVocab = () => {
-    let result = song.lyrics;
-    let offset = 0;
-
-    // Sort vocab words by position (descending) to avoid position shifts
-    const sortedWords = [...song.vocabWords].sort((a, b) => 
-      Math.max(...b.positions) - Math.max(...a.positions)
-    );
-
-    sortedWords.forEach((vocabWord) => {
-      vocabWord.positions.forEach((position) => {
-        const adjustedPosition = position + offset;
-        const before = result.substring(0, adjustedPosition);
-        const word = result.substring(adjustedPosition, adjustedPosition + vocabWord.word.length);
-        const after = result.substring(adjustedPosition + vocabWord.word.length);
-        
-        if (word.toLowerCase() === vocabWord.word.toLowerCase()) {
-          result = before + 
-            `<span class="vocab-word cursor-pointer underline decoration-dotted underline-offset-2 text-[var(--accent)] hover:text-[var(--accent)]/80 transition-colors" data-word="${vocabWord.word}">${word}</span>` + 
-            after;
-          offset += 100; // Account for added HTML
-        }
-      });
-    });
-
-    return result;
-  };
-
-  const handleVocabClick = (word: string) => {
-    const vocabWord = song.vocabWords.find(w => w.word.toLowerCase() === word.toLowerCase());
-    if (vocabWord) {
-      setSelectedWord(vocabWord);
-    }
-  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="mb-8">
         <div className="flex items-center space-x-4">
           <Link
             href={`/explorer/${params.album}`}
@@ -360,12 +351,12 @@ export default function SongPage({ params }: SongPageProps) {
             <h1 className="font-playfair text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white">
               {song.title}
             </h1>
+            <div className="h-[2px] w-28 accent-gradient rounded-full opacity-80 my-2" />
             <p className="text-neutral-600 dark:text-neutral-400 text-lg">
               {song.album} • {song.year}
             </p>
           </div>
         </div>
-        <div className="h-[2px] w-20 accent-gradient rounded-full opacity-80 hidden md:block" />
       </div>
 
       {/* Song Info Card */}
@@ -405,184 +396,88 @@ export default function SongPage({ params }: SongPageProps) {
                       {song.vocabWords.length} vocabulary words
                     </span>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <BookOpen className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
-                    <span className="text-neutral-600 dark:text-neutral-400">
-                      Click highlighted words to learn
-                    </span>
-                  </div>
                 </div>
                 <p className="text-neutral-700 dark:text-neutral-300 text-lg leading-relaxed">
-                  Explore the sophisticated vocabulary Taylor uses in this song. Click on any highlighted word to see its definition and context.
+                  Explore the sophisticated vocabulary Taylor uses in this song.
                 </p>
               </div>
               <div className="flex items-center space-x-3">
-                {song.preview && (
-                  <button
-                    onClick={() => setIsPlaying(!isPlaying)}
-                    className="w-12 h-12 bg-white/60 dark:bg-neutral-900/40 rounded-xl flex items-center justify-center backdrop-blur hover:bg-white/80 dark:hover:bg-neutral-800/60 transition-colors"
-                  >
-                    {isPlaying ? (
-                      <div className="w-4 h-4 bg-neutral-700 dark:text-neutral-300" />
-                    ) : (
-                      <Play className="w-5 h-5 text-neutral-700 dark:text-neutral-300" />
-                    )}
-                  </button>
-                )}
+                <div className="flex items-center space-x-2 text-sm text-neutral-600 dark:text-neutral-400">
+                  <BookOpen className="w-4 h-4" />
+                  <span>{song.vocabWords.length} vocabulary words</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </motion.div>
 
-      {/* Lyrics */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="bg-white/60 dark:bg-neutral-900/40 backdrop-blur rounded-2xl border border-neutral-200 dark:border-neutral-800 p-8"
-      >
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="font-playfair text-2xl font-bold text-neutral-900 dark:text-white">
-            Lyrics
-          </h2>
-          <div className="flex items-center space-x-2 text-sm text-neutral-600 dark:text-neutral-400">
-            <Volume2 className="w-4 h-4" />
-            <span>Click highlighted words</span>
+      {/* Lyrics and Vocabulary Side by Side */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Lyrics Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="bg-white/60 dark:bg-neutral-900/40 backdrop-blur rounded-2xl border border-neutral-200 dark:border-neutral-800 p-8"
+        >
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="font-playfair text-2xl font-bold text-neutral-900 dark:text-white">
+              Lyrics
+            </h2>
           </div>
-        </div>
-        
-        <div 
-          className="text-neutral-800 dark:text-neutral-200 leading-relaxed whitespace-pre-line text-lg"
-          dangerouslySetInnerHTML={{ __html: renderLyricsWithVocab() }}
-          onClick={(e) => {
-            const target = e.target as HTMLElement;
-            if (target.classList.contains('vocab-word')) {
-              const word = target.getAttribute('data-word');
-              if (word) {
-                handleVocabClick(word);
-              }
-            }
-          }}
-        />
-      </motion.div>
+          
+          <div className="text-neutral-800 dark:text-neutral-200 leading-relaxed whitespace-pre-line text-lg">
+            {song.lyrics}
+          </div>
+        </motion.div>
 
-      {/* Vocabulary Words List */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
-        className="mt-8"
-      >
-        <h3 className="font-playfair text-2xl font-bold text-neutral-900 dark:text-white mb-6">
-          Vocabulary Words
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {song.vocabWords.map((word, index) => (
-            <motion.div
-              key={word.word}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
-              className="bg-white/60 dark:bg-neutral-900/40 backdrop-blur rounded-xl border border-neutral-200 dark:border-neutral-800 p-4 hover:shadow-md transition-all duration-200 cursor-pointer"
-              onClick={() => setSelectedWord(word)}
-            >
-              <div className="flex items-start justify-between mb-2">
-                <h4 className="font-semibold text-neutral-900 dark:text-white text-lg">
-                  {word.word}
-                </h4>
-                <span className={`px-2 py-1 rounded-full text-xs font-medium ${difficultyColors[word.difficulty]}`}>
-                  {word.difficulty}
-                </span>
-              </div>
-              <p className="text-neutral-700 dark:text-neutral-300 text-sm mb-2">
-                {word.definition}
-              </p>
-              <p className="text-neutral-600 dark:text-neutral-400 text-xs italic">
-                {word.context}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
-
-      {/* Word Detail Modal */}
-      <AnimatePresence>
-        {selectedWord && (
-          <motion.div
-            className="fixed inset-0 bg-black/50 dark:bg-black/70 z-[100] flex items-center justify-center p-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSelectedWord(null)}
-          >
-            <motion.div
-              role="dialog"
-              aria-modal="true"
-              className="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"
-              initial={{ opacity: 0, scale: 0.98, y: 8 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.98, y: 8 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="w-full max-w-2xl rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white/80 dark:bg-neutral-900/70 backdrop-blur shadow-xl max-h-[85vh] overflow-hidden pointer-events-auto">
-                {/* Header */}
-                <div className="relative p-6 border-b border-neutral-200 dark:border-neutral-800">
-                  <div className="absolute inset-0 bg-gradient-to-r from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-900" />
-                  <div className="relative z-10">
-                    <button
-                      aria-label="Close"
-                      className="absolute top-3 right-3 p-2 rounded-full border border-neutral-300/70 dark:border-neutral-700/60 bg-white/70 dark:bg-neutral-900/70 text-neutral-700 dark:text-neutral-200 hover:bg-white/90 dark:hover:bg-neutral-800/80 focus:outline-none focus:ring-2 focus:ring-neutral-400/40"
-                      onClick={() => setSelectedWord(null)}
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                    </button>
-                    <h2 className="font-playfair text-3xl font-bold text-gray-900 dark:text-white mb-1 pr-10">
-                      {selectedWord.word}
-                    </h2>
-                    <p className="text-gray-700 dark:text-neutral-300 text-sm pr-12">
-                      From <span className="font-semibold capitalize">{song.album}</span> • <span className="font-semibold">{song.title}</span>
-                    </p>
-                  </div>
+        {/* Vocabulary Words List */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="bg-white/60 dark:bg-neutral-900/40 backdrop-blur rounded-2xl border border-neutral-200 dark:border-neutral-800 p-8 flex flex-col"
+        >
+          <h3 className="font-playfair text-2xl font-bold text-neutral-900 dark:text-white mb-6">
+            Vocabulary Words
+          </h3>
+          <div className="space-y-4 flex-1 overflow-y-auto min-h-0">
+            {song.vocabWords.map((word, index) => (
+              <motion.div
+                key={word.word}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                className="bg-white/60 dark:bg-neutral-900/40 backdrop-blur rounded-xl border border-neutral-200 dark:border-neutral-800 p-4 hover:shadow-md transition-all duration-200 cursor-pointer"
+                onClick={() => setSelectedWord(transformVocabForModal(word))}
+              >
+                <div className="flex items-start justify-between mb-2">
+                  <h4 className="font-semibold text-neutral-900 dark:text-white text-lg">
+                    {word.word}
+                  </h4>
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${difficultyColors[word.difficulty]}`}>
+                    {word.difficulty}
+                  </span>
                 </div>
+                <p className="text-neutral-700 dark:text-neutral-300 text-sm mb-2">
+                  {word.definition}
+                </p>
+                <p className="text-neutral-600 dark:text-neutral-400 text-xs italic">
+                  {word.context}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
 
-                {/* Body */}
-                <div className="p-6 overflow-y-auto max-h-[calc(85vh-140px)]">
-                  <div className="mb-6">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">Definition</h3>
-                      <span className="inline-block px-2.5 py-1 rounded-full text-[11px] font-semibold text-neutral-800 dark:text-neutral-100 border border-neutral-300 dark:border-neutral-700">
-                        {selectedWord.difficulty}
-                      </span>
-                    </div>
-                    <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed text-sm">
-                      {selectedWord.definition}
-                    </p>
-                  </div>
-
-                  <div className="mb-6">
-                    <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-2">Context</h3>
-                    <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
-                      {selectedWord.context}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Footer */}
-                <div className="bg-neutral-50 dark:bg-neutral-800 px-6 py-4 border-t border-neutral-200 dark:border-neutral-800 flex justify-end">
-                  <button
-                    onClick={() => setSelectedWord(null)}
-                    className="px-4 py-2 border border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-lg font-medium hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Word Modal */}
+      <WordModal 
+        open={!!selectedWord} 
+        onClose={() => setSelectedWord(null)} 
+        item={selectedWord} 
+      />
     </div>
   );
 }
