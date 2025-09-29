@@ -27,7 +27,7 @@ Discover the beautiful, complex words hidden within Taylor Swift's discography. 
 
 ### Prerequisites
 - Node.js 18+ 
-- npm, yarn, pnpm, or bun
+- npm
 
 ### Installation
 
@@ -98,21 +98,9 @@ This is a **temporary README** for development purposes. The project currently f
 - ✅ Word of the Day feature
 - ✅ Responsive design with dark mode
 - ✅ Mock data implementation
-
-## 🔮 Future Enhancements
-
-- [ ] Real database integration with Supabase
-- [ ] User accounts and favorites
-- [ ] Audio pronunciation features
-- [ ] Quiz mode for vocabulary practice
-- [ ] Social sharing of favorite words
-- [ ] Advanced analytics and insights
-
-## 🤝 Contributing
+  
 
 This is a personal project, but suggestions and feedback are always welcome!
-
-
 
 ---
 
