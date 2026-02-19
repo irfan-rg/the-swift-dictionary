@@ -1,0 +1,366 @@
+{
+  "slug": "debut",
+  "title": "Taylor Swift",
+  "year": 2006,
+  "description": "The beginning of Taylor's storytelling journey",
+  "songs": [
+    {
+      "track_number": 1,
+      "title": "Tim McGraw",
+      "slug": "tim-mcgraw",
+      "lyrics": "He said the way my blue eyes shined\nPut those Georgia stars to shame that night\nI said, \"That's a lie\"\nJust a boy in a Chevy truck\nThat had a tendency of gettin' stuck\nOn backroads at night\n\nAnd I was right there beside him all summer long\nAnd then the time we woke up to find that summer gone\n\nBut when you think Tim McGraw\nI hope you think my favorite song\nThe one we danced to all night long\nThe moon like a spotlight on the lake\nWhen you think happiness\nI hope you think that little black dress\nThink of my head on your chest\nAnd my old faded blue jeans\nWhen you think Tim McGraw\nI hope you think of me\n\nSeptember saw a month of tears\nAnd thankin' God that you weren't here\nTo see me like that\nBut in a box beneath my bed\nIs a letter that you never read\nFrom three summers back\n\nIt's hard not to find it all a little bittersweet\nAnd lookin' back on all of that, it's nice to believe\n\nWhen you think Tim McGraw\nI hope you think my favorite song\nThe one we danced to all night long\nThe moon like a spotlight on the lake\nWhen you think happiness\nI hope you think that little black dress\nThink of my head on your chest\nAnd my old faded blue jeans\nWhen you think Tim McGraw\nI hope you think of me\n\nAnd I'm back for the first time since then\nI'm standin' on your street\nAnd there's a letter left on your doorstep\nAnd the first thing that you'll read\n\nIs, \"When you think Tim McGraw\nI hope you think my favorite song\nSomeday you'll turn your radio on\nI hope it takes you back to that place\"\nWhen you think happiness\nI hope you think that little black dress\nThink of my head on your chest\nAnd my old faded blue jeans\nWhen you think Tim McGraw\nI hope you think of me\n\nOh, think of me, mmm\nHe said the way my blue eyes shined\nPut those Georgia stars to shame that night\nI said, \"That's a lie\"",
+      "genius_url": "https://genius.com/Taylor-swift-tim-mcgraw-lyrics",
+      "vocab": [
+        {
+          "word": "bittersweet",
+          "definition": "Having a mixture of both sweet and bitter feelings, often used to describe a nostalgic or sentimental experience. It can also refer to a situation that has both positive and negative aspects.",
+          "lyric_snippet": "It's hard not to find it all a little bittersweet",
+          "context": "Taylor uses 'bittersweet' to express the complex emotions she feels when looking back on the past relationship, acknowledging both the happiness and the pain it brought. This word captures the nostalgia and sentimental value of the memories she shared with her former lover.",
+          "difficulty": "Intermediate"
+        },
+        {
+          "word": "tendency",
+          "definition": "A natural or habitual inclination to do something, often used to describe a person's behavior or a thing's characteristic. It can also refer to a likelihood or probability of something happening.",
+          "lyric_snippet": "That had a tendency of gettin' stuck",
+          "context": "Taylor uses 'tendency' to describe the Chevy truck's habit of getting stuck, which adds to the song's narrative of a casual, summer romance. This word highlights the carefree and spontaneous nature of their relationship.",
+          "difficulty": "Beginner"
+        },
+        {
+          "word": "spotlight",
+          "definition": "A strong beam of light focused on a particular person or thing, often used to draw attention to something. It can also refer to a position of prominence or attention.",
+          "lyric_snippet": "The moon like a spotlight on the lake",
+          "context": "Taylor uses 'spotlight' to create a vivid image of the moon shining down on the lake, symbolizing the special moment she shared with her former lover. This word emphasizes the romantic and intimate atmosphere of the scene.",
+          "difficulty": "Beginner"
+        }
+      ]
+    },
+    {
+      "track_number": 2,
+      "title": "Picture to Burn",
+      "slug": "picture-to-burn",
+      "lyrics": "State the obvious, I didn't get my perfect fantasy\nI realize you love yourself more than you could ever love me\nSo go and tell your friends that I'm obsessive and crazy\nThat's fine, you won't mind if I say\nBy the way\n\nI hate that stupid old pickup truck you never let me drive\nYou're a redneck heartbreak who's really bad at lyin'\nSo watch me strike a match on all my wasted time\nAs far as I'm concerned, you're just another picture to burn\n\nThere's no time for tears, I'm just sittin' here planning my revenge\nThere's nothin' stoppin' me from goin' out with all of your best friends\nAnd if you come around sayin' sorry to me\nMy daddy's gonna show ya how sorry you'll be\n\n'Cause I hate that stupid old pickup truck you never let me drive\nYou're a redneck heartbreak who's really bad at lyin'\nSo watch me strike a match on all my wasted time\nAs far as I'm concerned, you're just another picture to burn\n\nAnd if you're missin' me, you'd better keep it to yourself\n'Cause comin' back around here would be bad for your health\n\n'Cause I hate that stupid old pickup truck you never let me drive\nYou're a redneck heartbreak who's really bad at lyin'\nSo watch me strike a match on all my wasted time\nIn case you haven't heard\nI really, really hate that stupid old pickup truck you never let me drive\nYou're a redneck heartbreak who's really bad at lyin'\nSo watch me strike a match on all my wasted time\nAs far as I'm concerned, you're just another picture to burn\n\nBurn, burn, burn, baby, burn\nYou're just another picture to burn\nBaby, burn",
+      "genius_url": "https://genius.com/Taylor-swift-picture-to-burn-lyrics",
+      "vocab": [
+        {
+          "word": "obvious",
+          "definition": "clearly evident or easily seen; not hidden or mysterious",
+          "lyric_snippet": "state the obvious",
+          "context": "Taylor uses this word to express that it's clear her fantasy of the relationship didn't come true, setting the tone for the rest of the song",
+          "difficulty": "Beginner"
+        },
+        {
+          "word": "obsessive",
+          "definition": "having or showing an excessive and often unreasonable enthusiasm or interest",
+          "lyric_snippet": "tell your friends that i'm obsessive",
+          "context": "Taylor's ex is trying to portray her as obsessive and crazy to their friends, which she seems to take as a badge of honor in her anger",
+          "difficulty": "Intermediate"
+        },
+        {
+          "word": "redneck",
+          "definition": "a person from a rural area, especially in the southern US, often associated with a particular set of cultural and social stereotypes",
+          "lyric_snippet": "you're a redneck heartbreak",
+          "context": "Taylor uses this word to insult her ex, implying he's unsophisticated and untrustworthy",
+          "difficulty": "Intermediate"
+        },
+        {
+          "word": "revenge",
+          "definition": "the act of punishing or harming someone because they have done something wrong or unpleasant to you",
+          "lyric_snippet": "planning my revenge",
+          "context": "Taylor is planning to get back at her ex, possibly by going out with his friends or making him regret his actions",
+          "difficulty": "Beginner"
+        }
+      ]
+    },
+    {
+      "track_number": 3,
+      "title": "Teardrops on My Guitar",
+      "slug": "teardrops-on-my-guitar",
+      "lyrics": "Drew looks at me\nI fake a smile so he won't see\nThat I want and I'm needing\nEverything that we should be\n\nI'll bet she's beautiful, that girl he talks about\nAnd she's got everything that I have to live without\n\nDrew talks to me\nI laugh 'cause it's just so funny\nThat I can't even see\nAnyone when he's with me\n\nHe says he's so in love, he's finally got it right\nI wonder if he knows he's all I think about at night\n\nHe's the reason for the teardrops on my guitar\nThe only thing that keeps me wishin' on a wishing star\nHe's the song in the car I keep singing, don't know why I do\n\nDrew walks by me\nCan he tell that I can't breathe?\nAnd there he goes, so perfectly\nThe kind of flawless I wish I could be\n\nShe'd better hold him tight, give him all her love\nLook in those beautiful eyes and know she's lucky 'cause\n\nHe's the reason for the teardrops on my guitar\nThe only thing that keeps me wishin' on a wishing star\nHe's the song in the car I keep singing, don't know why I do\n\nSo I'll drive home alone as I turn off the light\nI'll put his picture down and maybe get some sleep tonight\n\n'Cause he's the reason for the teardrops on my guitar\nThe only one who's got enough of me to break my heart\nHe's the song in the car I keep singing, don't know why I do\n\nHe's the time taken up, but there's never enough\nAnd he's all that I need to fall into\nDrew looks at me\nI fake a smile, so he won't see",
+      "genius_url": "https://genius.com/Taylor-swift-teardrops-on-my-guitar-lyrics",
+      "vocab": [
+        {
+          "word": "flawless",
+          "definition": "completely perfect or without any faults",
+          "lyric_snippet": "The kind of flawless I wish I could be",
+          "context": "Taylor uses this word to express her admiration and envy towards the idealized version of herself she thinks Drew would prefer, highlighting her own perceived imperfections.",
+          "difficulty": "Intermediate"
+        },
+        {
+          "word": "wishin'",
+          "definition": "an informal or poetic way of saying 'wishing', typically expressing a strong desire or longing",
+          "lyric_snippet": "The only thing that keeps me wishin' on a wishing star",
+          "context": "Taylor uses this word to convey a sense of romantic longing and nostalgia, emphasizing the idea that her feelings for Drew are a constant, unfulfilled desire.",
+          "difficulty": "Beginner"
+        }
+      ]
+    },
+    {
+      "track_number": 4,
+      "title": "A Place in This World",
+      "slug": "a-place-in-this-world",
+      "lyrics": "I don't know what I want, so don't ask me\n'Cause I'm still trying to figure it out\nDon't know what's down this road, I'm just walking\nTrying to see through the rain coming down\nEven though I'm not the only one\nWho feels the way I do\n\nI'm alone, on my own, and that's all I know\nI'll be strong, I'll be wrong, oh, but life goes on\nOh, I'm just a girl trying to find a place in this world\n\nGot the radio on, my old blue jeans\nAnd I'm wearing my heart on my sleeve\nFeeling lucky today, got the sunshine\nCould you tell me what more do I need?\nAnd tomorrow's just a mystery, oh, yeah\nBut that's okay\n\nI'm alone, on my own, and that's all I know\nI'll be strong, I'll be wrong, oh, but life goes on\nOh, I'm just a girl trying to find a place in this world\n\nMaybe I'm just a girl on a mission\nBut I'm ready to fly\n\nI'm alone, on my own, and that's all I know\nI'll be strong, I'll be wrong, oh, but life goes on\nOh, I'm alone, on my own, and that's all I know\nOh, I'm just a girl trying to find a place in this world\n\nOh, I'm just a girl\nOh, I'm just a girl, oh, oh\nOh, I'm just a girl",
+      "genius_url": "https://genius.com/Taylor-swift-a-place-in-this-world-lyrics",
+      "vocab": [
+        {
+          "word": "mystery",
+          "definition": "A person, thing, or situation that is difficult to understand or explain. Something that is unknown or unexplained.",
+          "lyric_snippet": "tomorrow's just a mystery, oh, yeah",
+          "context": "Taylor uses 'mystery' to describe the uncertainty of the future, reflecting her feelings of self-discovery and exploration. The word adds to the song's themes of uncertainty and growth.",
+          "difficulty": "Intermediate"
+        },
+        {
+          "word": "mission",
+          "definition": "A task or assignment that someone is given or takes upon themselves. A strongly felt aim or ambition.",
+          "lyric_snippet": "maybe I'm just a girl on a mission",
+          "context": "Taylor uses 'mission' to convey a sense of purpose and determination, highlighting her desire to find her place in the world. The word suggests a sense of direction and focus.",
+          "difficulty": "Intermediate"
+        },
+        {
+          "word": "sleeve",
+          "definition": "The part of a garment that covers the arm. To wear one's heart on one's sleeve means to openly show one's feelings.",
+          "lyric_snippet": "and I'm wearing my heart on my sleeve",
+          "context": "Taylor uses the phrase 'wearing my heart on my sleeve' to express her vulnerability and openness, suggesting that she is not afraid to show her emotions. The word adds to the song's themes of self-expression and honesty.",
+          "difficulty": "Beginner"
+        }
+      ]
+    },
+    {
+      "track_number": 5,
+      "title": "Cold as You",
+      "slug": "cold-as-you",
+      "lyrics": "You have a way of coming easily to me\nAnd when you take, you take the very best of me\nSo I start a fight 'cause I need to feel something\nAnd you do what you want 'cause I'm not what you wanted\n\nOh, what a shame, what a rainy ending\nGiven to a perfect day\nJust walk away, ain't no use defending\nWords that you will never say\nAnd now that I'm sitting here thinking it through\nI've never been anywhere cold as you\n\nYou put up walls and paint them all a shade of gray\nAnd I stood there loving you and wished them all away\nAnd you come away with a great little story\nOf a mess of a dreamer with the nerve to adore you\n\nOh, what a shame, what a rainy ending\nGiven to a perfect day\nSo just walk away, ain't no use defending\nWords that you will never say\nAnd now that I'm sitting here thinking it through\nI've never been anywhere cold as you\n\nYou never did give a damn thing, honey\nBut I cried, cried for you\nAnd I know you wouldn't have told nobody\nIf I died, died for you, died for you\n\nOh, what a shame, what a rainy ending\nGiven to a perfect day, oh\nEvery smile you fake is so condescending\nCounting all the scars you made\nAnd now that I'm sitting here thinking it through\nI've never been anywhere cold as you\nOoh-oh",
+      "genius_url": "https://genius.com/Taylor-swift-cold-as-you-lyrics",
+      "vocab": [
+        {
+          "word": "condescending",
+          "definition": "Having or showing an attitude of superiority, often in a way that is perceived as insulting or patronizing. This behavior is typically characterized by a lack of respect for others' feelings or opinions.",
+          "lyric_snippet": "Every smile you fake is so condescending",
+          "context": "Taylor uses this word to describe the subject's fake smiles, implying that they are being superior and insulting. The word highlights the subject's dismissive and belittling attitude towards the speaker.",
+          "difficulty": "Advanced"
+        },
+        {
+          "word": "defending",
+          "definition": "Protecting or justifying something, such as an idea or a person, from criticism or attack. This can involve providing arguments or evidence to support one's position.",
+          "lyric_snippet": "Just walk away, ain't no use defending",
+          "context": "Taylor uses this word to convey the idea that it's pointless to try to justify or protect the relationship, as it's already failed. The word emphasizes the futility of the speaker's efforts to salvage the relationship.",
+          "difficulty": "Intermediate"
+        },
+        {
+          "word": "mess",
+          "definition": "A situation or state of confusion, disorder, or chaos. This can refer to a physical space, a person's life, or a situation that is difficult to manage or understand.",
+          "lyric_snippet": "A mess of a dreamer",
+          "context": "Taylor uses this word to describe herself as a romantic and idealistic person who has been hurt by the subject's actions. The word highlights the speaker's emotional state and the chaos caused by the relationship.",
+          "difficulty": "Beginner"
+        },
+        {
+          "word": "nerve",
+          "definition": "The courage or audacity to do something, often in a way that is perceived as bold or daring. This can involve taking risks or challenging conventional norms.",
+          "lyric_snippet": "With the nerve to adore you",
+          "context": "Taylor uses this word to describe her own courage in loving the subject, despite being hurt by them. The word emphasizes the speaker's bravery and vulnerability in the face of adversity.",
+          "difficulty": "Intermediate"
+        },
+        {
+          "word": "shame",
+          "definition": "A feeling of guilt, regret, or embarrassment, often in response to a perceived wrongdoing or shortcoming. This can involve a sense of self-criticism or remorse.",
+          "lyric_snippet": "Oh, what a shame",
+          "context": "Taylor uses this word to express her regret and disappointment at the end of the relationship. The word highlights the speaker's emotional pain and sense of loss.",
+          "difficulty": "Beginner"
+        }
+      ]
+    },
+    {
+      "track_number": 6,
+      "title": "The Outside",
+      "slug": "the-outside",
+      "lyrics": "I didn't know what I would find\nWhen I went looking for a reason, I know\nI didn't read between the lines\nAnd, baby, I've got nowhere to go\n\nI tried to take the road less traveled by\nBut nothing seems to work the first few times\nAm I right?\n\nSo how can I ever try to be better?\nNobody ever lets me in\nI can still see you, this ain't the best view\nOn the outside looking in\nI've been a lot of lonely places\nI've never been on the outside\n\nYou saw me there, but never knew\nThat I would give it all up to be\nA part of this, a part of you\nAnd now, it's all too late, so you see\n\nYou could've helped if you had wanted to\nBut no one notices until it's too late to do anything\n\nHow can I ever try to be better?\nNobody ever lets me in\nI can still see you, this ain't the best view\nOn the outside looking in\nI've been a lot of lonely places\nI've never been on the outside\n\nOh, yeah\n\nHow can I ever try to be better?\nNobody ever lets me in\nAnd I can still see you, this ain't the best view\nOn the outside looking in\nI've been a lot of lonely places\nI've never been on the outside\n\nOh-oh\nOh, oh-oh\nOh-oh\nOh-oh",
+      "genius_url": "https://genius.com/Taylor-swift-the-outside-lyrics",
+      "vocab": [
+        {
+          "word": "traveled",
+          "definition": "to journey or move from one place to another, typically for a long distance. It can also refer to a path or road that is taken.",
+          "lyric_snippet": "I tried to take the road less traveled by",
+          "context": "Taylor uses this word to express her desire to take a unique path in life, but faces difficulties in doing so. The phrase 'road less traveled' is a reference to Robert Frost's poem, symbolizing a choice that is less conventional.",
+          "difficulty": "Intermediate"
+        },
+        {
+          "word": "notices",
+          "definition": "to become aware of something or someone, often unexpectedly. It can also mean to pay attention to or observe something.",
+          "lyric_snippet": "But no one notices until it's too late to do anything",
+          "context": "Taylor uses this word to convey the feeling of being overlooked or ignored by others, until it is too late to make a difference.",
+          "difficulty": "Beginner"
+        }
+      ]
+    },
+    {
+      "track_number": 7,
+      "title": "Tied Together with a Smile",
+      "slug": "tied-together-with-a-smile",
+      "lyrics": "Seems the only one who doesn't see your beauty\nIs the face in the mirror looking back at you\nYou walk around here thinking you're not pretty\nBut that's not true\n'Cause I know you\n\nHold on, baby, you're losing it\nThe water's high, you're jumping into it and letting go\nAnd no one knows\nThat you cry, but you don't tell anyone\nThat you might not be the golden one\nAnd you're tied together with a smile\nBut you're coming undone, oh\n\nI guess it's true that love was all you wanted\n'Cause you're giving it away like it's extra change\nHoping it will end up in his pocket (Pocket)\nBut he leaves you out like a penny in the rain\nOh, 'cause it's not his price to pay\nIt's not his price to pay\n\nHold on, baby, you're losing it\nThe water's high, you're jumping into it and letting go\nAnd no one knows\nThat you cry, but you don't tell anyone\nThat you might not be the golden one\nAnd you're tied together with a smile\nBut you're coming undone, oh\nOh, oh\n\nHold on, baby, you're losing it\nThe water's high, you're jumping into it and letting go\nAnd no one knows\nThat you cry but you don't tell anyone\nThat you might not be the golden one\nAnd you're tied together with a smile\nBut you're coming undone, oh\n\nYou're tied together with a smile\nBut you're coming undone, oh, oh-oh\nGoodbye, baby\nWith a smile, baby, baby\nOh",
+      "genius_url": "https://genius.com/Taylor-swift-tied-together-with-a-smile-lyrics",
+      "vocab": [
+        {
+          "word": "beauty",
+          "definition": "The quality of being pleasing and attractive. It can refer to physical appearance or other qualities that give pleasure or satisfaction.",
+          "lyric_snippet": "see your beauty",
+          "context": "Taylor uses this word to highlight the inner and outer beauty of the person she's addressing, which they themselves cannot see.",
+          "difficulty": "Beginner"
+        },
+        {
+          "word": "golden",
+          "definition": "Something or someone that is considered to be of great value or highly desirable. It can also refer to a period of great success or happiness.",
+          "lyric_snippet": "the golden one",
+          "context": "Taylor uses this word to describe someone who is perfect or highly valued, implying that the person in the song feels they don't measure up to this standard.",
+          "difficulty": "Intermediate"
+        },
+        {
+          "word": "undoing",
+          "definition": "The act of causing something to come to an end or to be destroyed. It can also refer to the process of something falling apart.",
+          "lyric_snippet": "you're coming undone",
+          "context": "Taylor uses this word to describe the emotional state of the person in the song, who is struggling to keep their life together despite their inner turmoil.",
+          "difficulty": "Intermediate"
+        },
+        {
+          "word": "extra",
+          "definition": "More than what is needed or expected. It can also refer to something that is additional or supplementary.",
+          "lyric_snippet": "giving it away like it's extra change",
+          "context": "Taylor uses this word to describe how the person in the song is giving away their love and affection freely, without expecting anything in return.",
+          "difficulty": "Beginner"
+        }
+      ]
+    },
+    {
+      "track_number": 8,
+      "title": "Stay Beautiful",
+      "slug": "stay-beautiful",
+      "lyrics": "Cory's eyes are like a jungle\nHe smiles, it's like the radio\nHe whispers songs into my window\nIn words that nobody knows\nThere's pretty girls on every corner\nThey watch him as he's walking home\nSaying, \"Does he know?\"\nWill you ever know?\n\nYou're beautiful, every little piece, love\nDon't you know you're really gonna be someone?\nAsk anyone\nAnd when you find everything you looked for\nI hope your life leads you back to my door\nOh, but if it don't\nStay beautiful\n\nCory finds another way to be\nThe highlight of my day\nI'm taking pictures in my mind\nSo I can save 'em for a rainy day\nIt's hard to make a conversation\nWhen he's taking my breath away\nI should say, \"Hey, by the way\"\n\nYou're beautiful, every little piece, love\nDon't you know you're really gonna be someone?\nAsk anyone\nAnd when you find everything you looked for\nI hope your life leads you back to my door\nOh, but if it don't\nStay beautiful\n\nIf you and I are a story\nThat never gets told\nIf what you are is a daydream\nI'll never get to hold, at least you'll know\n\nYou're beautiful, every little piece, love\nDon't you know you're really gonna be someone?\nAsk anyone\nAnd when you find everything you looked for\nI hope your life leads you back to my front door\nOh, but if it don't\nWill you stay beautiful, beautiful, beautiful?\nBeautiful, beautiful, beautiful\n\nLa-la-la\nOh-oh-oh\nOh-oh-oh-oh\nOh, but if it don't\nStay beautiful, stay beautiful\nNa-na-na, na-na",
+      "genius_url": "https://genius.com/Taylor-swift-stay-beautiful-lyrics",
+      "vocab": [
+        {
+          "word": "jungle",
+          "definition": "A dense and lush tropical forest, often with a diverse range of plant and animal life. In a broader sense, it can also refer to a challenging or confusing situation.",
+          "lyric_snippet": "Cory's eyes are like a jungle",
+          "context": "Taylor uses 'jungle' to describe Cory's captivating eyes, suggesting they are mysterious and alluring. The comparison creates a vivid and exotic image.",
+          "difficulty": "Intermediate"
+        },
+        {
+          "word": "highlight",
+          "definition": "The most exciting or enjoyable part of an experience or event. It can also refer to a feature or aspect that is particularly noticeable or attractive.",
+          "lyric_snippet": "Cory finds another way to be the highlight",
+          "context": "Taylor uses 'highlight' to express how Cory's presence makes her day more enjoyable and memorable. The word emphasizes the positive impact he has on her life.",
+          "difficulty": "Beginner"
+        },
+        {
+          "word": "conversation",
+          "definition": "A talk, especially an informal one, between two or more people. It involves the exchange of ideas, thoughts, and opinions.",
+          "lyric_snippet": "It's hard to make a conversation",
+          "context": "Taylor uses 'conversation' to describe the difficulty she faces in talking to Cory, implying that she is intimidated or distracted by his presence.",
+          "difficulty": "Beginner"
+        },
+        {
+          "word": "daydream",
+          "definition": "A series of pleasant thoughts that distract one's attention from the present. It is a state of mind where a person's thoughts wander and imagine a more desirable situation.",
+          "lyric_snippet": "If what you are is a daydream",
+          "context": "Taylor uses 'daydream' to express the idea that her relationship with Cory might be an unattainable fantasy. The word conveys a sense of longing and wistfulness.",
+          "difficulty": "Intermediate"
+        }
+      ]
+    },
+    {
+      "track_number": 9,
+      "title": "Should've Said No",
+      "slug": "shouldve-said-no",
+      "lyrics": "It's strange to think the songs we used to sing\nThe smiles, the flowers, everything is gone\nYesterday, I found out about you\nEven now, just lookin' at you feels wrong\n\nYou say that you'd take it all back\nGiven one chance\nIt was a moment of weakness\nAnd you said yes\n\nYou should've said no, you should've gone home\nYou should've thought twice 'fore you let it all go\nYou should've known that word\n'Bout what you did with her'd get back to me (Get back to me)\nAnd I should've been there in the back of your mind\nI shouldn't be asking myself why\nYou shouldn't be begging for forgiveness at my feet\nYou should've said no\nBaby, and you might still have me\n\nYou can see that I've been cryin'\nAnd baby, you know all the right things to say\nBut do you honestly expect me to believe\nWe could ever be the same?\n\nYou say that the past is the past\nYou need one chance\nIt was a moment of weakness\nAnd you said yes\n\nYou should've said no, you should've gone home\nYou should've thought twice 'fore you let it all go\nYou should've known that word\n'Bout what you did with her’d get back to me (Get back to me)\nAnd I should've been there in the back of your mind\nI shouldn't be asking myself why\nYou shouldn't be begging for forgiveness at my feet\nYou should've said no\nBaby, and you might still have me\nOh, oh\n\nI can't resist\nBefore you go, tell me this\nWas it worth it?\nWas she worth this?\nNo, no\nNo, no, no, no\n\nYou should've said no, you should've gone home\nYou should've thought twice 'fore you let it all go\nYou should've known that word\n'Bout what you did with her’d get back to me (Get back to me)\nAnd I should've been there, in the back of your mind\nI shouldn't be asking myself why\nYou shouldn't be begging for forgiveness at my feet\nYou should've said no\nBaby, and you might still have me",
+      "genius_url": "https://genius.com/Taylor-swift-shouldve-said-no-lyrics",
+      "vocab": [
+        {
+          "word": "weakness",
+          "definition": "The state of being weak or fragile, often referring to a lack of moral strength or willpower. It can also describe a personal flaw or vulnerability.",
+          "lyric_snippet": "It was a moment of weakness",
+          "context": "Taylor uses 'weakness' to describe the moment when her partner gave in to temptation and cheated on her, implying a lack of moral strength or self-control.",
+          "difficulty": "Intermediate"
+        },
+        {
+          "word": "forgiveness",
+          "definition": "The act of forgiving someone for a mistake or wrongdoing, often involving a willingness to let go of resentment or anger.",
+          "lyric_snippet": "You shouldn't be begging for forgiveness",
+          "context": "Taylor sings about how her partner is seeking forgiveness for their infidelity, but she's hesitant to grant it, highlighting the complexity of forgiveness in relationships.",
+          "difficulty": "Beginner"
+        },
+        {
+          "word": "vulnerability",
+          "definition": "The state of being open to attack, criticism, or emotional hurt, often due to a lack of protection or defense.",
+          "lyric_snippet": "And I should've been there in the back of your mind",
+          "context": "Although 'vulnerability' is not explicitly mentioned, Taylor implies her own vulnerability by expressing how she should have been on her partner's mind, suggesting a desire for emotional protection and consideration.",
+          "difficulty": "Intermediate"
+        },
+        {
+          "word": "resist",
+          "definition": "To withstand or oppose something, often requiring a significant amount of effort or willpower.",
+          "lyric_snippet": "I can't resist",
+          "context": "Taylor sings about being unable to resist her emotions or the temptation to confront her partner, highlighting the struggle to control one's feelings or actions.",
+          "difficulty": "Beginner"
+        }
+      ]
+    },
+    {
+      "track_number": 10,
+      "title": "Mary's Song (Oh My My My)",
+      "slug": "marys-song-oh-my-my-my",
+      "lyrics": "She said I was seven and you were nine\nI looked at you like the stars that shined\nIn the sky, the pretty lights\nAnd our daddies used to joke about the two of us\nGrowing up and falling in love\nAnd our mamas smiled and rolled their eyes\nAnd said, \"Oh, my, my, my\"\n\nTake me back to the house in the backyard tree\nSaid you'd beat me up, you were bigger than me\nYou never did, you never did\nTake me back when our world was one block wide\nI dared you to kiss me and ran when you tried\nJust two kids, you and I\nOh, my, my, my, my\n\nWell, I was sixteen when suddenly\nI wasn't that little girl you used to see\nBut your eyes still shined like pretty lights\nAnd our daddies used to joke about the two of us\nThey never believed we'd really fall in love\nAnd our mamas smiled and rolled their eyes\nAnd said, \"Oh, my, my, my\"\n\nTake me back to the creek beds we turned up\n2 AM riding in your truck\nAnd all I need is you next to me\nTake me back to the time we had our very first fight\nThe slamming of doors 'stead of kissing goodnight\nYou stayed outside 'til the morning light\nOh, my, my, my, my\n\nA few years had gone and come around\nWe were sitting at our favorite spot in town\nAnd you looked at me, got down on one knee\n\nTake me back to the time when we walked down the aisle\nOur whole town came and our mamas cried\nYou said, \"I do,\" and I did, too\nTake me home where we met so many years before\nWe'll rock our babies on that very front porch\nAfter all this time, you and I\n\nAnd I'll be eighty-seven, you'll be eighty-nine\nI'll still look at you like the stars that shine\nIn the sky, oh, my, my, my",
+      "genius_url": "https://genius.com/Taylor-swift-marys-song-oh-my-my-my-lyrics",
+      "vocab": [
+        {
+          "word": "daddies",
+          "definition": "The plural form of 'daddy', referring to fathers. It is often used informally or in poetic language.",
+          "lyric_snippet": "And our daddies used to joke",
+          "context": "Taylor uses this word to describe the lighthearted and playful relationship between the two families, particularly the fathers.",
+          "difficulty": "Beginner"
+        },
+        {
+          "word": "mamas",
+          "definition": "The plural form of 'mama', referring to mothers. It is often used informally or in poetic language.",
+          "lyric_snippet": "And our mamas smiled and rolled",
+          "context": "Taylor uses this word to describe the reaction of the mothers to the idea of the two children growing up and falling in love.",
+          "difficulty": "Beginner"
+        },
+        {
+          "word": "aisle",
+          "definition": "A passage between rows of seats, especially in a church or other place of worship. It can also refer to the act of walking down this passage, typically during a wedding ceremony.",
+          "lyric_snippet": "Take me back to the time when we walked down the aisle",
+          "context": "Taylor uses this word to describe the moment when the couple gets married, walking down the aisle together.",
+          "difficulty": "Intermediate"
+        }
+      ]
+    },
+    {
+      "track_number": 11,
+      "title": "Our Song",
+      "slug": "our-song",
+      "lyrics": "I was ridin' shotgun with my hair undone\nIn the front seat of his car\nHe's got a one-hand feel on the steering wheel\nThe other on my heart\nI look around, turn the radio down\nHe says, \"Baby, is something wrong?\"\nI say, \"Nothin', I was just thinkin' how we don't have a song\"\nAnd he says\n\nOur song is a slammin' screen door\nSneakin' out late, tappin' on your window\nWhen we're on the phone and you talk real slow\n'Cause it's late and your mama don't know\nOur song is the way you laugh\nThe first date, \"Man, I didn't kiss her and I should have\"\nAnd when I got home, 'fore I said \"Amen\"\nAskin' God if he could play it again\n\nI was walking up the front porch steps\nAfter everythin' that day\nHad gone all wrong and been trampled on\nAnd lost and thrown away\nGot to the hallway, well on my way to my lovin' bed\nI almost didn't notice all the roses\nAnd the note that said\n\nOur song is a slammin' screen door\nSneakin' out late, tappin' on your window\nWhen we're on the phone and you talk real slow\n'Cause it's late and your mama don't know\nOur song is the way you laugh\nThe first date, \"Man, I didn't kiss her and I should have\"\nAnd when I got home, 'fore I said \"Amen\"\nAskin' God if he could play it again\n\nDa-da-da-da\n\nI've heard every album, listened to the radio\nWaited for somethin' to come along\nThat was as good as our song\n\n'Cause our song is a slammin' screen door\nSneakin' out late, tappin' on his window\nWhen we're on the phone and he talks real slow\n'Cause it's late and his mama don't know\nOur song is the way he laughs\nThe first date, \"Man, I didn't kiss him and I should have\"\nAnd when I got home, 'fore I said \"Amen\"\nAskin' God if he could play it again\n\nPlay it again, oh, yeah\nOh-oh, yeah\n\nI was ridin' shotgun with my hair undone\nIn the front seat of his car\nI grabbed a pen and an old napkin\nAnd I wrote down our song",
+      "genius_url": "https://genius.com/Taylor-swift-our-song-lyrics",
+      "vocab": [
+        {
+          "word": "trampled",
+          "definition": "to be treated roughly or unfairly, often in a way that causes damage or injury. It can also mean to be defeated or overpowered.",
+          "lyric_snippet": "Had gone all wrong and been trampled on",
+          "context": "Taylor uses this word to describe how her day had gone terribly wrong, emphasizing the emotional impact of the events.",
+          "difficulty": "Intermediate"
+        },
+        {
+          "word": "amen",
+          "definition": "a word used to express agreement or confirmation, often at the end of a prayer. It can also be used to show strong agreement or to emphasize the end of a statement.",
+          "lyric_snippet": "'fore I said 'Amen'",
+          "context": "Taylor uses this word to describe a moment of reflection and prayer, where she is seeking a higher power's intervention in her relationship.",
+          "difficulty": "Beginner"
+        },
+        {
+          "word": "napkin",
+          "definition": "a small piece of cloth or paper used for wiping the mouth or hands while eating.",
+          "lyric_snippet": "I grabbed a pen and an old napkin",
+          "context": "Taylor uses this word to describe a spontaneous moment of creativity, where she uses an available material to write down her song.",
+          "difficulty": "Beginner"
+        }
+      ]
+    }
+  ]
+}

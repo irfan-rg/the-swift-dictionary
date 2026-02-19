@@ -1,0 +1,4 @@
+lyricsgenius>=3.0.1
+groq>=1.0.0
+supabase>=2.0.0
+python-dotenv>=1.0.0
