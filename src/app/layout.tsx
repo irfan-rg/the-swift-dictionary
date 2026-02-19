@@ -15,8 +15,21 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "The Swift Dictionary",
-  description: "Discover Taylor Swift's sophisticated vocabulary through her lyrics",
+  title: {
+    default: "The Swift Dictionary",
+    template: "%s | The Swift Dictionary",
+  },
+  description: "Discover Taylor Swift's sophisticated vocabulary through her lyrics.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://theswiftdictionary.com"),
+  openGraph: {
+    title: "The Swift Dictionary",
+    description: "Discover Taylor Swift's sophisticated vocabulary through her lyrics.",
+    siteName: "The Swift Dictionary",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function RootLayout({

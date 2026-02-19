@@ -1,8 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Sparkles, BookOpen, Music } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import Link from 'next/link';
+import { ERAS } from '@/lib/constants';
 
 export default function HeroSection() {
   return (
@@ -27,7 +28,7 @@ export default function HeroSection() {
           >
             <div className="inline-flex items-center space-x-2 rounded-full px-6 py-2 mb-4 -translate-y-2 md:-translate-y-8 border border-neutral-200 dark:border-neutral-800 bg-white/60 dark:bg-neutral-900/40 backdrop-blur">
               <Sparkles className="w-4 h-4" style={{ color: 'var(--accent)' }} />
-              <span className="text-xs font-medium text-neutral-600 dark:text-neutral-400 tracking-wide uppercase">Discover Taylor's Vocabulary</span>
+              <span className="text-xs font-medium text-neutral-600 dark:text-neutral-400 tracking-wide uppercase">Discover Taylor&apos;s Vocabulary</span>
             </div>
             
             <h1 className="font-playfair text-5xl md:text-7xl font-bold mb-6 text-neutral-600 dark:text-neutral-300 tracking-wider">
@@ -36,7 +37,7 @@ export default function HeroSection() {
             <div className="mx-auto h-[2px] w-40 accent-gradient rounded-full mb-8 opacity-80" />
             
             <p className="text-lg md:text-xl text-neutral-600 dark:text-neutral-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Unlock the sophisticated vocabulary hidden in Taylor Swift's lyrics. 
+              Unlock the sophisticated vocabulary hidden in Taylor Swift&apos;s lyrics. 
               From <em className="em-accent">serendipitous</em> to <em className="em-secondary">ephemeral</em>, 
               discover the words that make her songs magical.
             </p>
@@ -70,22 +71,10 @@ export default function HeroSection() {
                 <div className="w-full overflow-x-auto md:overflow-visible scrollbar-none">
                   <div className="flex md:justify-center items-center gap-2 md:gap-3 min-w-max md:min-w-0">
                     {(() => {
-                      const albums = [
-                        { key: 'debut', label: 'Debut', color: '#16a34a' },
-                        { key: 'fearless', label: 'Fearless', color: '#f59e0b' },
-                        { key: 'speaknow', label: 'Speak Now', color: '#a855f7' },
-                        { key: 'red', label: 'Red', color: '#ef4444' },
-                        { key: '1989', label: '1989', color: '#3b82f6' },
-                        { key: 'reputation', label: 'Reputation', color: '#6b7280' },
-                        { key: 'lover', label: 'Lover', color: '#ec4899' },
-                        { key: 'folklore', label: 'Folklore', color: '#737373' },
-                        { key: 'evermore', label: 'Evermore', color: '#d97706' },
-                        { key: 'midnights', label: 'Midnights', color: '#6366f1' },
-                      ];
-                      return albums.map((album) => (
+                      return ERAS.map((album) => (
                         <Link
-                          key={album.key}
-                          href={`/explorer/${album.key}`}
+                          key={album.slug}
+                          href={`/explorer/${album.slug}`}
                           className="group relative px-3.5 md:px-4 py-2 rounded-full border border-neutral-300/80 dark:border-neutral-700/70 bg-white/60 dark:bg-neutral-900/50 backdrop-blur text-sm md:text-[15px] text-neutral-800 dark:text-neutral-200 hover:-translate-y-0.5 transition-transform duration-200 shadow-sm"
                           style={{ WebkitTapHighlightColor: 'transparent' }}
                         >

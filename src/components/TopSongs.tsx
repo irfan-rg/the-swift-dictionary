@@ -1,74 +1,20 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Music, Play, ExternalLink, TrendingUp } from 'lucide-react';
+import { Music, ExternalLink, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
+import type { SongWithAlbum } from '@/lib/types';
 
-// Mock data - will be replaced with real API data
-const topSongs = [
-  {
-    id: 1,
-    title: 'Anti-Hero',
-    album: 'Midnights',
-    vocabCount: 12,
-    difficulty: 'Intermediate',
-    era: 'midnights',
-    preview: 'https://p.scdn.co/mp3-preview/sample1.mp3'
-  },
-  {
-    id: 2,
-    title: 'Cardigan',
-    album: 'Folklore',
-    vocabCount: 15,
-    difficulty: 'Advanced',
-    era: 'folklore',
-    preview: 'https://p.scdn.co/mp3-preview/sample2.mp3'
-  },
-  {
-    id: 3,
-    title: 'Willow',
-    album: 'Evermore',
-    vocabCount: 18,
-    difficulty: 'Advanced',
-    era: 'evermore',
-    preview: 'https://p.scdn.co/mp3-preview/sample3.mp3'
-  },
-  {
-    id: 4,
-    title: 'Lover',
-    album: 'Lover',
-    vocabCount: 8,
-    difficulty: 'Beginner',
-    era: 'lover',
-    preview: 'https://p.scdn.co/mp3-preview/sample4.mp3'
-  },
-  {
-    id: 5,
-    title: 'Look What You Made Me Do',
-    album: 'Reputation',
-    vocabCount: 10,
-    difficulty: 'Intermediate',
-    era: 'reputation',
-    preview: 'https://p.scdn.co/mp3-preview/sample5.mp3'
-  }
+// Fallback when DB is empty
+const fallbackSongs: SongWithAlbum[] = [
+  { id: "1", album_id: "", slug: "anti-hero", title: "Anti-Hero", track_number: 3, lyrics: null, vocab_count: 12, difficulty: "Intermediate", spotify_embed_url: null, created_at: "", album_slug: "midnights", album_title: "Midnights" },
+  { id: "2", album_id: "", slug: "cardigan", title: "cardigan", track_number: 2, lyrics: null, vocab_count: 15, difficulty: "Advanced", spotify_embed_url: null, created_at: "", album_slug: "folklore", album_title: "Folklore" },
+  { id: "3", album_id: "", slug: "willow", title: "willow", track_number: 1, lyrics: null, vocab_count: 18, difficulty: "Advanced", spotify_embed_url: null, created_at: "", album_slug: "evermore", album_title: "Evermore" },
 ];
 
-const eraColors = {
-  folklore: 'bg-gray-100 text-gray-800',
-  evermore: 'bg-amber-100 text-amber-800',
-  midnights: 'bg-indigo-100 text-indigo-800',
-  lover: 'bg-pink-100 text-pink-800',
-  reputation: 'bg-gray-200 text-gray-800',
-  '1989': 'bg-blue-100 text-blue-800',
-  red: 'bg-red-100 text-red-800',
-  speaknow: 'bg-purple-100 text-purple-800',
-  fearless: 'bg-yellow-100 text-yellow-800',
-  debut: 'bg-green-100 text-green-800'
-};
+export default function TopSongs({ songs }: { songs?: SongWithAlbum[] }) {
+  const list = songs && songs.length > 0 ? songs : fallbackSongs;
 
-// Removed difficulty levels styling
-
-export default function TopSongs() {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -100,7 +46,7 @@ export default function TopSongs() {
 
       {/* Songs List */}
       <div className="divide-y divide-gray-200 flex-1">
-        {topSongs.map((song, index) => (
+        {list.map((song, index) => (
           <motion.div
             key={song.id}
             initial={{ opacity: 0, x: 20 }}
@@ -119,27 +65,25 @@ export default function TopSongs() {
                     <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-colors">
                       {song.title}
                     </h3>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium border border-neutral-300 dark:border-neutral-700 text-neutral-600 dark:text-neutral-300`}>
-                      {song.album}
+                    <span className="px-2 py-1 rounded-full text-xs font-medium border border-neutral-300 dark:border-neutral-700 text-neutral-600 dark:text-neutral-300">
+                      {song.album_title}
                     </span>
                   </div>
                   
                   <div className="flex items-center space-x-4 text-sm text-neutral-600 dark:text-neutral-400">
                     <div className="flex items-center space-x-1">
                       <Music className="w-4 h-4" style={{ color: 'var(--accent)' }} />
-                      <span>{song.vocabCount} vocab words</span>
+                      <span>{song.vocab_count} vocab words</span>
                     </div>
                   </div>
                 </div>
               </div>
               
               <div className="flex items-center space-x-2">
-                <button className="p-2 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors">
-                  <Play className="w-5 h-5" />
-                </button>
                 <Link
-                  href={`/explorer/song/${song.id}`}
+                  href={`/explorer/${song.album_slug}/${song.slug}`}
                   className="p-2 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors"
+                  aria-label={`View ${song.title}`}
                 >
                   <ExternalLink className="w-5 h-5" />
                 </Link>
@@ -162,4 +106,3 @@ export default function TopSongs() {
     </motion.div>
   );
 }
-
