@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 import WordCard from "@/components/dictionary/WordCard";
 import DictionaryFilters from "@/components/dictionary/DictionaryFilters";
 import WordModal from "@/components/dictionary/WordModal";
+import { createClient } from "@/lib/supabase/client";
 import type { WordCardItem, WordWithDetails } from "@/lib/types";
 
 function toCardItem(w: WordWithDetails): WordCardItem {
@@ -16,6 +17,7 @@ function toCardItem(w: WordWithDetails): WordCardItem {
     definition: w.definition,
     lyricSnippet: w.lyric_snippet,
     song: w.song_title,
+    songSlug: w.song_slug,
     album: w.album_slug,
     difficulty: w.difficulty,
     context: w.context ?? undefined,
@@ -46,6 +48,33 @@ export default function DictionaryClient({
   const router = useRouter();
   const [selected, setSelected] = useState<WordCardItem | null>(null);
   const [searchInput, setSearchInput] = useState(initialQuery);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [favIds, setFavIds] = useState<Set<string>>(new Set());
+
+  // Fetch user & their favorites on mount
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) return;
+      setUserId(user.id);
+      supabase
+        .from("favorites")
+        .select("word_id")
+        .eq("user_id", user.id)
+        .then(({ data }) => {
+          if (data) setFavIds(new Set(data.map((r: { word_id: string }) => r.word_id)));
+        });
+    });
+  }, []);
+
+  const handleFavToggle = useCallback((wordId: string, nowFavorited: boolean) => {
+    setFavIds((prev) => {
+      const next = new Set(prev);
+      if (nowFavorited) next.add(wordId);
+      else next.delete(wordId);
+      return next;
+    });
+  }, []);
 
   const totalPages = Math.max(1, Math.ceil(total / limit));
 
@@ -132,7 +161,11 @@ export default function DictionaryClient({
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
       >
         {items.map((w) => (
-          <WordCard key={w.id} item={w} onOpen={setSelected} />
+          <WordCard
+            key={w.id}
+            item={w}
+            onOpen={setSelected}
+          />
         ))}
         {items.length === 0 && (
           <div className="col-span-full text-center text-neutral-500 py-16">
@@ -165,7 +198,14 @@ export default function DictionaryClient({
       )}
 
       {/* Word Modal */}
-      <WordModal open={!!selected} onClose={() => setSelected(null)} item={selected} />
+      <WordModal
+        open={!!selected}
+        onClose={() => setSelected(null)}
+        item={selected}
+        isFavorited={selected ? favIds.has(selected.id) : false}
+        userId={userId}
+        onFavToggle={handleFavToggle}
+      />
     </div>
   );
 }

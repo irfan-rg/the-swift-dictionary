@@ -121,6 +121,7 @@ export interface WordCardItem {
   definition: string;
   lyricSnippet: string;
   song: string;
+  songSlug: string;
   album: EraSlug;
   difficulty: Difficulty;
   context?: string;

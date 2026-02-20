@@ -13,7 +13,7 @@ type Props = {
 
 const albums = [
   { key: "all", label: "All Eras" },
-  { key: "debut", label: "Debut" },
+  { key: "debut", label: "Taylor Swift" },
   { key: "fearless", label: "Fearless" },
   { key: "speaknow", label: "Speak Now" },
   { key: "red", label: "Red" },
@@ -23,6 +23,8 @@ const albums = [
   { key: "folklore", label: "Folklore" },
   { key: "evermore", label: "Evermore" },
   { key: "midnights", label: "Midnights" },
+  { key: "ttpd", label: "TTPD" },
+  { key: "showgirl", label: "Showgirl" },
 ];
 
 const difficulties = [

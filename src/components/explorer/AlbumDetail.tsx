@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, Music, ExternalLink } from "lucide-react";
 import type { Album, Song } from "@/lib/types";
 
@@ -67,21 +68,20 @@ export default function AlbumDetail({
       >
         <div className="flex flex-col md:flex-row">
           {/* Album Cover */}
-          <div className="md:w-64 h-48 md:h-auto">
-            <img
-              src={album.cover_url ?? ""}
-              alt={`${album.title} album cover`}
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = `data:image/svg+xml;base64,${btoa(`
-                  <svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="400" height="400" fill="#f3f4f6"/>
-                    <text x="200" y="200" text-anchor="middle" dy=".3em" font-family="Arial" font-size="24" fill="#6b7280">${album.title}</text>
-                  </svg>
-                `)}`;
-              }}
-            />
+          <div className="md:w-64 h-48 md:h-auto relative">
+            {album.cover_url ? (
+              <Image
+                src={album.cover_url}
+                alt={`${album.title} album cover`}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 256px"
+              />
+            ) : (
+              <div className="w-full h-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">
+                <span className="text-neutral-500 font-medium">{album.title}</span>
+              </div>
+            )}
           </div>
 
           {/* Album Info */}

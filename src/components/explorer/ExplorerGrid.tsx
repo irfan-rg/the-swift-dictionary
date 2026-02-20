@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { Calendar, Play } from "lucide-react";
 import type { Album } from "@/lib/types";
 
@@ -59,20 +60,19 @@ export default function ExplorerGrid({ albums }: { albums: Album[] }) {
           >
             {/* Album Cover */}
             <div className="relative h-48 w-full">
-              <img
-                src={album.cover_url ?? ""}
-                alt={`${album.title} album cover`}
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = `data:image/svg+xml;base64,${btoa(`
-                    <svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
-                      <rect width="400" height="400" fill="#f3f4f6"/>
-                      <text x="200" y="200" text-anchor="middle" dy=".3em" font-family="Arial" font-size="24" fill="#6b7280">${album.title}</text>
-                    </svg>
-                  `)}`;
-                }}
-              />
+              {album.cover_url ? (
+                <Image
+                  src={album.cover_url}
+                  alt={`${album.title} album cover`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                />
+              ) : (
+                <div className="w-full h-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">
+                  <span className="text-neutral-500 font-medium">{album.title}</span>
+                </div>
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
               <div className="absolute bottom-4 left-4 right-4">
                 <h3 className="font-playfair text-xl font-bold text-white mb-1">

@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft, Music } from "lucide-react";
 import WordModal from "@/components/dictionary/WordModal";
+import { createClient } from "@/lib/supabase/client";
 import type { SongDetail, Word, WordCardItem } from "@/lib/types";
 
 const difficultyColors = {
@@ -20,6 +21,7 @@ function wordToCardItem(word: Word, song: SongDetail): WordCardItem {
     definition: word.definition,
     lyricSnippet: word.lyric_snippet,
     song: song.title,
+    songSlug: song.slug,
     album: song.album_slug,
     difficulty: word.difficulty,
     context: word.context ?? undefined,
@@ -28,6 +30,32 @@ function wordToCardItem(word: Word, song: SongDetail): WordCardItem {
 
 export default function SongDetailView({ song }: { song: SongDetail }) {
   const [selectedWord, setSelectedWord] = useState<WordCardItem | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [favIds, setFavIds] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) return;
+      setUserId(user.id);
+      supabase
+        .from("favorites")
+        .select("word_id")
+        .eq("user_id", user.id)
+        .then(({ data }) => {
+          if (data) setFavIds(new Set(data.map((r: { word_id: string }) => r.word_id)));
+        });
+    });
+  }, []);
+
+  const handleFavToggle = useCallback((wordId: string, nowFavorited: boolean) => {
+    setFavIds((prev) => {
+      const next = new Set(prev);
+      if (nowFavorited) next.add(wordId);
+      else next.delete(wordId);
+      return next;
+    });
+  }, []);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -169,6 +197,9 @@ export default function SongDetailView({ song }: { song: SongDetail }) {
         open={!!selectedWord}
         onClose={() => setSelectedWord(null)}
         item={selectedWord}
+        isFavorited={selectedWord ? favIds.has(selectedWord.id) : false}
+        userId={userId}
+        onFavToggle={handleFavToggle}
       />
     </div>
   );

@@ -3,16 +3,21 @@
 import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
+import Link from "next/link";
 import { getEraColor, getEraGradient } from "@/lib/constants";
+import FavoriteButton from "@/components/FavoriteButton";
 import type { WordCardItem } from "@/lib/types";
 
 type Props = {
   open: boolean;
   onClose: () => void;
   item: WordCardItem | null;
+  isFavorited?: boolean;
+  userId?: string | null;
+  onFavToggle?: (wordId: string, nowFavorited: boolean) => void;
 };
 
-export default function WordModal({ open, onClose, item }: Props) {
+export default function WordModal({ open, onClose, item, isFavorited = false, userId = null, onFavToggle }: Props) {
   const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -77,7 +82,16 @@ export default function WordModal({ open, onClose, item }: Props) {
                     <div className="mb-6">
                       <div className="flex items-center justify-between mb-2">
                         <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">Definition</h3>
-                        <span className="inline-block px-2.5 py-1 rounded-full text-[11px] font-semibold text-neutral-800 dark:text-neutral-100 border border-neutral-300 dark:border-neutral-700">{item.difficulty}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="inline-block px-2.5 py-1 rounded-full text-[11px] font-semibold text-neutral-800 dark:text-neutral-100 border border-neutral-300 dark:border-neutral-700">{item.difficulty}</span>
+                          <FavoriteButton
+                            wordId={item.id}
+                            isFavorited={isFavorited}
+                            userId={userId}
+                            onToggle={onFavToggle}
+                            size="md"
+                          />
+                        </div>
                       </div>
                       <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed text-sm">{item.definition}</p>
                     </div>
@@ -110,22 +124,14 @@ export default function WordModal({ open, onClose, item }: Props) {
                       >
                         Close
                       </button>
-                      <a
-                        href={`/explorer/${item.album}/${item.song.toLowerCase().replace(/\s+/g, '-')}`}
-                        className="px-4 py-2 rounded-lg text-sm text-white transition-colors"
+                      <Link
+                        href={`/explorer/${item.album}/${item.songSlug}`}
+                        className="px-4 py-2 rounded-lg text-sm text-white transition-colors hover:opacity-80"
                         style={{ backgroundColor: getEraColor(item.album) }}
-                        onMouseEnter={(e) => {
-                          const target = e.target as HTMLElement;
-                          const currentColor = target.style.backgroundColor;
-                          target.style.backgroundColor = currentColor + "dd"; // Add opacity for hover
-                        }}
-                        onMouseLeave={(e) => {
-                          const target = e.target as HTMLElement;
-                          target.style.backgroundColor = target.style.backgroundColor.replace("dd", "");
-                        }}
+                        onClick={onClose}
                       >
                         View Song
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>

@@ -44,8 +44,10 @@ export default function WordCard({ item, onOpen }: Props) {
             </span>
           </div>
         </div>
-        <div className="p-2 rounded-md text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-200 transition-colors">
-          <ArrowRight className="w-4 h-4 transform transition-transform duration-200 ease-out group-hover:translate-x-1" />
+        <div className="flex items-center gap-1">
+          <div className="p-2 rounded-md text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-200 transition-colors">
+            <ArrowRight className="w-4 h-4 transform transition-transform duration-200 ease-out group-hover:translate-x-1" />
+          </div>
         </div>
       </div>
 
