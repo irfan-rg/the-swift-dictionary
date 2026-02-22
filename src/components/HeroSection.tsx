@@ -12,7 +12,7 @@ export default function HeroSection() {
       <div className="absolute inset-0 -z-10" id="hero-media-slot">
         <img
           className="hero-video"
-          src="https://i.pinimg.com/736x/74/92/45/7492453e97a344e00507b18f77b02b74.jpg"
+          src="https://res.cloudinary.com/dxeyvwy3v/image/upload/v1771610972/7492453e97a344e00507b18f77b02b74_w3nerw.jpg"
           alt="Background image"
         />
         <div className="hero-vignette" />
