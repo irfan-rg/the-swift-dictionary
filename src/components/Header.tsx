@@ -124,13 +124,13 @@ export default function Header() {
   };
 
   return (
-    <div className="pointer-events-none sticky top-9 z-50 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto pointer-events-auto">
+    <div className="sticky top-9 z-50 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: isVisible ? 0 : -20, opacity: isVisible ? 1 : 0 }}
           transition={{ duration: 0.18 }}
-          className={`search-container mx-auto w-full max-w-2xl md:max-w-3xl lg:max-w-3xl h-14 flex items-center justify-between rounded-full border border-neutral-200 dark:border-neutral-800 backdrop-blur px-3 sm:px-4 relative overflow-hidden shadow-lg ${afterThreshold ? 'bg-neutral-900/15 dark:bg-neutral-900/60 shadow-neutral-900/10 dark:shadow-black/20' : 'bg-neutral-900/10 dark:bg-neutral-900/40 shadow-neutral-900/0'}`}
+          className={`search-container mx-auto w-full max-w-2xl md:max-w-3xl lg:max-w-3xl h-14 flex items-center justify-between rounded-full border border-neutral-200 dark:border-neutral-800 backdrop-blur px-3 sm:px-4 relative overflow-hidden shadow-lg ${afterThreshold ? 'bg-white/90 dark:bg-neutral-900/90' : 'bg-white/70 dark:bg-neutral-900/70'}`}
         >
           {/* Left: Logo only (no title) */}
           <Link href="/" className={`flex items-center space-x-3 ${isSearching ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>

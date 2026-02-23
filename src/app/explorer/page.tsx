@@ -8,7 +8,14 @@ export const metadata: Metadata = {
 };
 
 export default async function ExplorerPage() {
-  const albums = await getAlbums();
+  let albums;
+  
+  try {
+    albums = await getAlbums();
+  } catch (error) {
+    console.error("Error fetching albums:", error);
+    albums = [];
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -21,7 +28,13 @@ export default async function ExplorerPage() {
       </div>
 
       {/* Albums Grid */}
-      <ExplorerGrid albums={albums} />
+      {albums.length > 0 ? (
+        <ExplorerGrid albums={albums} />
+      ) : (
+        <div className="text-center py-12">
+          <p className="text-neutral-600 dark:text-neutral-400">No albums found. Please check your database connection.</p>
+        </div>
+      )}
     </div>
   );
 }

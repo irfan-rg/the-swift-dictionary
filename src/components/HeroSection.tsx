@@ -12,7 +12,7 @@ export default function HeroSection() {
       <div className="absolute inset-0 -z-10" id="hero-media-slot">
         <img
           className="hero-video"
-          src="https://res.cloudinary.com/dxeyvwy3v/image/upload/v1771610972/7492453e97a344e00507b18f77b02b74_w3nerw.jpg"
+          src="https://i.pinimg.com/736x/74/92/45/7492453e97a344e00507b18f77b02b74.jpg"
           alt="Background image"
         />
         <div className="hero-vignette" />
@@ -52,10 +52,10 @@ export default function HeroSection() {
           >
             <Link
               href="/dictionary"
-              className="inline-flex items-center gap-1 font-semibold link-accent transition-colors"
+              className="inline-flex items-center gap-1 font-semibold link-accent transition-colors mb-8 hover:translate-y-[-2px]"
             >
               Browse Dictionary
-              <span aria-hidden>→</span>
+    
             </Link>
           </motion.div>
 
@@ -67,27 +67,46 @@ export default function HeroSection() {
             className="pointer-events-auto"
           >
             <div className="absolute left-0 right-0 bottom-6 md:bottom-10">
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="w-full overflow-x-auto md:overflow-visible scrollbar-none">
-                  <div className="flex md:justify-center items-center gap-2 md:gap-3 min-w-max md:min-w-0">
-                    {(() => {
-                      return ERAS.map((album) => (
-                        <Link
-                          key={album.slug}
-                          href={`/explorer/${album.slug}`}
-                          className="group relative px-3.5 md:px-4 py-2 rounded-full border border-neutral-300/80 dark:border-neutral-700/70 bg-white/60 dark:bg-neutral-900/50 backdrop-blur text-sm md:text-[15px] text-neutral-800 dark:text-neutral-200 hover:-translate-y-0.5 transition-transform duration-200 shadow-sm"
-                          style={{ WebkitTapHighlightColor: 'transparent' }}
-                        >
-                          <span className="relative z-10 inline-flex items-center">
-                            <span>{album.label}</span>
-                          </span>
-                          <span
-                            className="pointer-events-none absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                            style={{ boxShadow: `inset 0 0 0 1px ${album.color}` }}
-                          />
-                        </Link>
-                      ));
-                    })()}
+              <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+                <div className="flex flex-col gap-2">
+                  {/* First row - 6 albums */}
+                  <div className="flex justify-center items-center gap-2 flex-wrap">
+                    {ERAS.slice(0, 6).map((album) => (
+                      <Link
+                        key={album.slug}
+                        href={`/explorer/${album.slug}`}
+                        className="group relative px-3.5 md:px-4 py-2 rounded-full border border-neutral-300/80 dark:border-neutral-700/70 bg-white/60 dark:bg-neutral-900/50 backdrop-blur text-sm md:text-[15px] text-neutral-800 dark:text-neutral-200 hover:-translate-y-0.5 transition-transform duration-200 shadow-sm"
+                        style={{ WebkitTapHighlightColor: 'transparent' }}
+                      >
+                        <span className="relative z-10 inline-flex items-center">
+                          <span>{album.label}</span>
+                        </span>
+                        <span
+                          className="pointer-events-none absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                          style={{ boxShadow: `inset 0 0 0 1px ${album.color}` }}
+                        />
+                      </Link>
+                    ))}
+                  </div>
+                  
+                  {/* Second row - 6 albums */}
+                  <div className="flex justify-center items-center gap-2 flex-wrap">
+                    {ERAS.slice(6, 12).map((album) => (
+                      <Link
+                        key={album.slug}
+                        href={`/explorer/${album.slug}`}
+                        className="group relative px-3.5 md:px-4 py-2 rounded-full border border-neutral-300/80 dark:border-neutral-700/70 bg-white/60 dark:bg-neutral-900/50 backdrop-blur text-sm md:text-[15px] text-neutral-800 dark:text-neutral-200 hover:-translate-y-0.5 transition-transform duration-200 shadow-sm"
+                        style={{ WebkitTapHighlightColor: 'transparent' }}
+                      >
+                        <span className="relative z-10 inline-flex items-center">
+                          <span>{album.label}</span>
+                        </span>
+                        <span
+                          className="pointer-events-none absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                          style={{ boxShadow: `inset 0 0 0 1px ${album.color}` }}
+                        />
+                      </Link>
+                    ))}
                   </div>
                 </div>
               </div>
