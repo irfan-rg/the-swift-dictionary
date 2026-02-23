@@ -111,7 +111,7 @@ export default function DictionaryClient({
   const items = words.map(toCardItem);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pt-20">
       {/* Header Row */}
       <div className="mb-4">
         <h1 className="font-playfair text-3xl md:text-4xl font-bold text-neutral-900 dark:text-neutral-100">
