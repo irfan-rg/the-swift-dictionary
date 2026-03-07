@@ -29,6 +29,7 @@ export interface Album {
   year: number;
   description: string;
   cover_url: string | null;
+  animated_cover_url: string | null;
   song_count: number;
   vocab_count: number;
   spotify_url: string | null;

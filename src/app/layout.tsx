@@ -1,17 +1,33 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Cormorant_Garamond, Nothing_You_Could_Do, Jost } from "next/font/google";
+import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-const inter = Inter({
-  variable: "--font-inter",
+// 1. Classic Serif Display (Dictionary/Victorian feel)
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  display: "swap",
 });
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+// 2. Romantic Handwriting (Taylor's Diary feel)
+const nothingYouCouldDo = Nothing_You_Could_Do({
+  variable: "--font-handwriting",
+  weight: "400",
   subsets: ["latin"],
+  display: "swap",
+});
+
+// 3. Clean, Soft UI/Body (Modern era feel)
+const jost = Jost({
+  variable: "--font-jost",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -23,7 +39,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://theswiftdictionary.com"),
   openGraph: {
     title: "The Swift Dictionary",
-    description: "Discover Taylor Swift's sophisticated vocabulary through her lyrics.",
+    description: "A curated scrapbook of Taylor Swift's lyrical vocabulary.",
     siteName: "The Swift Dictionary",
     type: "website",
   },
@@ -38,18 +54,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${playfair.variable} font-sans antialiased bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 minimal-grid-bg`}
+        suppressHydrationWarning
+        className={`${cormorant.variable} ${nothingYouCouldDo.variable} ${jost.variable} font-body antialiased selection:bg-[var(--accent)] selection:text-[var(--background)]`}
       >
-        <div className="flex flex-col min-h-screen">
-          {/* Floating header appears after hero threshold via internal scroll logic */}
-          <Header />
-          <main className="flex-1">
-            {children}
-          </main>
-          <Footer />
-        </div>
+        <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem>
+          <div className="flex flex-col min-h-screen relative overflow-x-hidden">
+            {/* Soft background glow decoration */}
+            <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[var(--accent)] opacity-[0.03] blur-[120px] pointer-events-none -z-10" />
+            <div className="absolute top-[40%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[var(--accent-muted)] opacity-[0.03] blur-[100px] pointer-events-none -z-10" />
+
+            <Header />
+            <main className="flex-1 w-full flex flex-col pt-8 pb-16">
+              {children}
+            </main>
+            <Footer />
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

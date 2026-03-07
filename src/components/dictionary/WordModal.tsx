@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import Link from "next/link";
-import { getEraColor, getEraGradient } from "@/lib/constants";
+import { getEraColor } from "@/lib/constants";
 import FavoriteButton from "@/components/FavoriteButton";
 import type { WordCardItem } from "@/lib/types";
 
@@ -26,7 +26,6 @@ export default function WordModal({ open, onClose, item, isFavorited = false, us
       if (e.key === "Escape") onClose();
     };
     document.addEventListener("keydown", onKey);
-    // Focus trap: focus the dialog on open
     dialogRef.current?.focus();
     return () => document.removeEventListener("keydown", onKey);
   }, [open, onClose]);
@@ -42,7 +41,7 @@ export default function WordModal({ open, onClose, item, isFavorited = false, us
         >
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/30 backdrop-blur-sm"
             onClick={onClose}
           />
 
@@ -56,92 +55,86 @@ export default function WordModal({ open, onClose, item, isFavorited = false, us
             initial={{ opacity: 0, scale: 0.98, y: 8 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.98, y: 8 }}
-            transition={{ duration: 0.18, ease: "easeOut" }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
           >
-            {(() => {
-              const headerClass = getEraGradient(item.album);
-              return (
-                <div className="w-full max-w-2xl rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white/80 dark:bg-neutral-900/70 backdrop-blur shadow-xl max-h-[85vh] overflow-hidden pointer-events-auto">
-                  {/* Header (clean, no difficulty chip) */}
-                  <div className={`bg-gradient-to-r ${headerClass} p-6 border-b border-neutral-200 dark:border-neutral-800 relative`}>
-                    <button
-                      aria-label="Close"
-                      className="absolute top-3 right-3 p-2 rounded-full border border-neutral-300/70 dark:border-neutral-700/60 bg-white/70 dark:bg-neutral-900/70 text-neutral-700 dark:text-neutral-200 hover:bg-white/90 dark:hover:bg-neutral-800/80 focus:outline-none focus:ring-2 focus:ring-neutral-400/40"
-                      onClick={onClose}
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                    <h2 className="font-playfair text-3xl font-bold text-gray-900 mb-1 pr-10">{item.word}</h2>
-                    <p className="text-gray-700 text-sm pr-12">
-                      From <span className="font-semibold capitalize">{item.album}</span> • <span className="font-semibold">{item.song}</span>
+            <div className="w-full max-w-2xl rounded-sm border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-polaroid)] max-h-[85vh] overflow-hidden pointer-events-auto">
+              {/* Header */}
+              <div
+                className="p-6 border-b border-[var(--border)] relative"
+                style={{ borderLeftWidth: '4px', borderLeftColor: getEraColor(item.album) }}
+              >
+                <button
+                  aria-label="Close"
+                  className="absolute top-4 right-4 p-2 rounded-sm border border-[var(--border)] text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:bg-[var(--surface-raised)] focus:outline-none transition-colors"
+                  onClick={onClose}
+                >
+                  <X className="w-4 h-4" />
+                </button>
+                <h2 className="font-display text-3xl font-medium text-[var(--foreground)] mb-1 pr-10">{item.word}</h2>
+                <p className="font-body text-xs text-[var(--foreground-muted)]">
+                  From <span className="font-medium capitalize" style={{ color: getEraColor(item.album) }}>{item.album}</span> • <span className="font-medium">{item.song}</span>
+                </p>
+              </div>
+
+              {/* Body */}
+              <div className="p-6 overflow-y-auto max-h-[calc(85vh-140px)]">
+                <div className="mb-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)]">Definition</h3>
+                    <div className="flex items-center gap-2">
+                      <span className="font-handwriting text-sm text-[var(--foreground-muted)] opacity-60">{item.difficulty}</span>
+                      <FavoriteButton
+                        wordId={item.id}
+                        isFavorited={isFavorited}
+                        userId={userId}
+                        onToggle={onFavToggle}
+                        size="md"
+                      />
+                    </div>
+                  </div>
+                  <p className="font-body text-sm text-[var(--foreground)] leading-relaxed opacity-80">{item.definition}</p>
+                </div>
+
+                <div className="mb-6">
+                  <h3 className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] mb-3">In Taylor&apos;s Words</h3>
+                  <div className="border-l-2 border-[var(--accent)] pl-4 py-2">
+                    <p className="font-body text-sm text-[var(--foreground)] italic opacity-80">
+                      &ldquo;{item.lyricSnippet}&rdquo; — {item.song}
                     </p>
                   </div>
-
-                  {/* Body */}
-                  <div className="p-6 overflow-y-auto max-h-[calc(85vh-140px)]">
-                    <div className="mb-6">
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">Definition</h3>
-                        <div className="flex items-center gap-2">
-                          <span className="inline-block px-2.5 py-1 rounded-full text-[11px] font-semibold text-neutral-800 dark:text-neutral-100 border border-neutral-300 dark:border-neutral-700">{item.difficulty}</span>
-                          <FavoriteButton
-                            wordId={item.id}
-                            isFavorited={isFavorited}
-                            userId={userId}
-                            onToggle={onFavToggle}
-                            size="md"
-                          />
-                        </div>
-                      </div>
-                      <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed text-sm">{item.definition}</p>
-                    </div>
-
-                    <div className="mb-6">
-                      <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-6">In Taylor&apos;s Words</h3>
-                      <div className="rounded-lg p-4 border border-neutral-200 dark:border-neutral-800 bg-white/50 dark:bg-neutral-900/30">
-                        <svg className="w-4 h-4 mb-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                          <path d="M7.17 6.17C5.97 7.37 5.25 8.97 5.25 10.75C5.25 12.68 6.82 14.25 8.75 14.25C10.68 14.25 12.25 12.68 12.25 10.75C12.25 8.82 10.68 7.25 8.75 7.25C8.46 7.25 8.18 7.28 7.91 7.33C8.21 6.74 8.63 6.2 9.17 5.67C10.37 4.47 11.97 3.75 13.75 3.75V2.25C11.53 2.25 9.5 3.13 8.08 4.54L7.17 5.46V6.17Z" fill="currentColor" opacity="0.6"/>
-                          <path d="M16.17 6.17C14.97 7.37 14.25 8.97 14.25 10.75C14.25 12.68 15.82 14.25 17.75 14.25C19.68 14.25 21.25 12.68 21.25 10.75C21.25 8.82 19.68 7.25 17.75 7.25C17.46 7.25 17.18 7.28 16.91 7.33C17.21 6.74 17.63 6.2 18.17 5.67C19.37 4.47 20.97 3.75 22.75 3.75V2.25C20.53 2.25 18.5 3.13 17.08 4.54L16.17 5.46V6.17Z" fill="currentColor" opacity="0.6"/>
-                        </svg>
-                        <p className="text-neutral-700 dark:text-neutral-300 italic">&ldquo;{item.lyricSnippet}&rdquo; &mdash; {item.song}</p>
-                      </div>
-                    </div>
-
-                    <div className="mb-2">
-                      <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-2">Context</h3>
-                      <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
-                        {item.context || 'Contextual note about how the word is used in the song, the narrative angle, tone, or era influence.'}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Footer */}
-                  <div className="px-6 py-4 border-t border-neutral-200 dark:border-neutral-800 bg-white/50 dark:bg-neutral-900/40">
-                    <div className="flex items-center justify-between">
-                      <button
-                        className="px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-sm"
-                        onClick={onClose}
-                      >
-                        Close
-                      </button>
-                      <Link
-                        href={`/explorer/${item.album}/${item.songSlug}`}
-                        className="px-4 py-2 rounded-lg text-sm text-white transition-colors hover:opacity-80"
-                        style={{ backgroundColor: getEraColor(item.album) }}
-                        onClick={onClose}
-                      >
-                        View Song
-                      </Link>
-                    </div>
-                  </div>
                 </div>
-              );
-            })()}
+
+                <div className="mb-2">
+                  <h3 className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] mb-2">Context</h3>
+                  <p className="font-body text-sm text-[var(--foreground-muted)] leading-relaxed">
+                    {item.context || 'Contextual note about how the word is used in the song, the narrative angle, tone, or era influence.'}
+                  </p>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="px-6 py-4 border-t border-[var(--border)] bg-[var(--surface-raised)]">
+                <div className="flex items-center justify-between">
+                  <button
+                    className="font-body text-xs tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors"
+                    onClick={onClose}
+                  >
+                    Close
+                  </button>
+                  <Link
+                    href={`/explorer/${item.album}/${item.songSlug}`}
+                    className="font-body text-xs tracking-widest uppercase px-4 py-2 rounded-sm text-white transition-colors hover:opacity-80"
+                    style={{ backgroundColor: getEraColor(item.album) }}
+                    onClick={onClose}
+                  >
+                    View Song
+                  </Link>
+                </div>
+              </div>
+            </div>
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
   );
 }
-
-

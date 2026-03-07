@@ -3,29 +3,8 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Music, ExternalLink } from "lucide-react";
+import { ArrowLeft, Music } from "lucide-react";
 import type { Album, Song } from "@/lib/types";
-
-const difficultyColors = {
-  Beginner: "bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-200",
-  Intermediate: "bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-200",
-  Advanced: "bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-200",
-};
-
-const accentBorder: Record<string, string> = {
-  debut: "border-green-500/50 hover:ring-green-500/50",
-  fearless: "border-yellow-500/50 hover:ring-yellow-500/50",
-  speaknow: "border-purple-500/50 hover:ring-purple-500/50",
-  red: "border-red-500/50 hover:ring-red-500/50",
-  "1989": "border-blue-500/50 hover:ring-blue-500/50",
-  reputation: "border-gray-500/50 hover:ring-gray-500/50",
-  lover: "border-pink-500/50 hover:ring-pink-500/50",
-  folklore: "border-neutral-500/50 hover:ring-neutral-500/50",
-  evermore: "border-amber-500/50 hover:ring-amber-500/50",
-  midnights: "border-indigo-500/50 hover:ring-indigo-500/50",
-  ttpd: "border-stone-500/50 hover:ring-stone-500/50",
-  showgirl: "border-orange-500/50 hover:ring-orange-500/50",
-};
 
 export default function AlbumDetail({
   album,
@@ -37,39 +16,50 @@ export default function AlbumDetail({
   const totalVocab = songs.reduce((sum, s) => sum + s.vocab_count, 0);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center space-x-4">
-          <Link
-            href="/explorer"
-            className="p-2 rounded-full border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
-          </Link>
-          <div>
-            <h1 className="font-playfair text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white">
-              {album.title}
-            </h1>
-            <div className="h-[2px] w-28 accent-gradient rounded-full opacity-80 my-2" />
-            <p className="text-neutral-600 dark:text-neutral-400 text-lg">
-              {album.year} &bull; {songs.length} songs
-            </p>
-          </div>
+      <div className="mb-12">
+        <Link
+          href="/explorer"
+          className="inline-flex items-center gap-2 font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--accent)] mb-6 transition-colors"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" />
+          Back to Explorer
+        </Link>
+
+        <h1 className="font-display text-5xl md:text-6xl font-medium tracking-tight text-[var(--foreground)] mb-3">
+          {album.title}
+        </h1>
+        <div className="flex items-center gap-3 text-[var(--foreground-muted)]">
+          <span className="font-body text-sm">{album.year}</span>
+          <span className="w-1 h-1 rounded-full bg-[var(--border-focus)]" />
+          <span className="font-body text-sm">{songs.length} songs</span>
+          <span className="w-1 h-1 rounded-full bg-[var(--border-focus)]" />
+          <span className="font-body text-sm">{totalVocab} vocab words</span>
         </div>
+        <div className="w-16 h-px bg-[var(--border-focus)] mt-6 opacity-50" />
       </div>
 
       {/* Album Info Card */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white/60 dark:bg-neutral-900/40 backdrop-blur overflow-hidden mb-8"
+        transition={{ duration: 0.5 }}
+        className="rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] overflow-hidden mb-12"
       >
         <div className="flex flex-col md:flex-row">
           {/* Album Cover */}
-          <div className="md:w-64 h-48 md:h-auto relative">
-            {album.cover_url ? (
+          <div className="md:w-64 h-48 md:h-auto relative shrink-0 overflow-hidden">
+            {album.animated_cover_url ? (
+              <video
+                src={album.animated_cover_url}
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="w-full h-full object-cover"
+              />
+            ) : album.cover_url ? (
               <Image
                 src={album.cover_url}
                 alt={`${album.title} album cover`}
@@ -78,81 +68,67 @@ export default function AlbumDetail({
                 sizes="(max-width: 768px) 100vw, 256px"
               />
             ) : (
-              <div className="w-full h-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">
-                <span className="text-neutral-500 font-medium">{album.title}</span>
+              <div className="w-full h-full bg-[var(--surface)] flex items-center justify-center">
+                <span className="font-display text-2xl text-[var(--foreground-muted)] opacity-40">{album.title}</span>
               </div>
             )}
           </div>
 
           {/* Album Info */}
           <div className="flex-1 p-8">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <p className="text-neutral-700 dark:text-neutral-300 text-lg leading-relaxed mb-4">
-                  {album.description}
-                </p>
-                <div className="flex items-center space-x-6 text-sm">
-                  <div className="flex items-center space-x-2">
-                    <Music className="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
-                    <span className="text-neutral-600 dark:text-neutral-400">
-                      {songs.length} songs
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-neutral-600 dark:text-neutral-400">
-                      {totalVocab} vocab words
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <p className="font-body text-base text-[var(--foreground-muted)] leading-relaxed">
+              {album.description}
+            </p>
           </div>
         </div>
       </motion.div>
 
-      {/* Songs Grid */}
+      {/* Songs List */}
+      <div className="mb-4">
+        <span className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)]">
+          Tracklist
+        </span>
+      </div>
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        className="border-t border-[var(--border)]"
       >
         {songs.map((song, index) => (
           <motion.div
             key={song.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: index * 0.05 }}
-            whileHover={{ y: -2 }}
-            className="group"
+            initial={{ opacity: 0, x: -8 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: index * 0.04 }}
           >
             <Link
               href={`/explorer/${album.slug}/${song.slug}`}
-              className={`block rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white/60 dark:bg-neutral-900/40 backdrop-blur p-6 hover:shadow-lg transition-all duration-300 ${accentBorder[album.slug] ?? ""} hover:ring-2 hover:ring-inset`}
+              className="group flex items-center gap-5 py-4 border-b border-[var(--border)] hover:bg-[var(--surface-raised)] px-4 -mx-4 transition-colors"
             >
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1">
-                  <h3 className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-[var(--accent)] transition-colors">
-                    {song.title}
-                  </h3>
-                  <div className="flex items-center space-x-2 text-sm text-neutral-600 dark:text-neutral-400">
-                    <Music className="w-4 h-4" />
-                    <span>{song.vocab_count} vocab words</span>
-                  </div>
+              {/* Track Number */}
+              <span className="font-display italic text-xl text-[var(--border-focus)] w-6 text-right shrink-0 opacity-60 group-hover:text-[var(--accent)] transition-colors">
+                {song.track_number}
+              </span>
+
+              {/* Song Info */}
+              <div className="flex-1 min-w-0">
+                <h3 className="font-display font-medium text-lg text-[var(--foreground)] group-hover:text-[var(--accent)] truncate transition-colors">
+                  {song.title}
+                </h3>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <Music className="w-3 h-3 text-[var(--foreground-muted)] opacity-50" />
+                  <span className="font-body text-xs text-[var(--foreground-muted)]">
+                    {song.vocab_count} vocab words
+                  </span>
                 </div>
-                <span
-                  className={`px-2 py-1 rounded-full text-xs font-medium ${difficultyColors[song.difficulty]}`}
-                >
-                  {song.difficulty}
-                </span>
               </div>
 
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-neutral-800 dark:text-neutral-200 group-hover:text-[var(--accent)] transition-colors">
-                  View Words
-                </span>
-                <ExternalLink className="w-4 h-4 text-neutral-600 dark:text-neutral-400 group-hover:text-[var(--accent)] transition-colors" />
-              </div>
+              {/* Difficulty */}
+              <span className="font-handwriting text-sm text-[var(--foreground-muted)] opacity-50 shrink-0 hidden sm:block group-hover:opacity-80 transition-opacity">
+                {song.difficulty}
+              </span>
             </Link>
           </motion.div>
         ))}

@@ -10,24 +10,32 @@ export default async function Home() {
   ]);
 
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <HeroSection />
-      
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
-          {/* Word of the Day */}
-          <div className="lg:col-span-1 h-full">
-            <WordOfTheDay data={wotd} />
-          </div>
-          
-          {/* Top Songs */}
-          <div className="lg:col-span-2 h-full">
-            <TopSongs songs={topSongs} />
-          </div>
+    <div className="flex flex-col w-full max-w-5xl mx-auto gap-12 lg:gap-20">
+
+      {/* Elegant Hero */}
+      <div className="w-full relative">
+        <HeroSection />
+      </div>
+
+      {/* The Scrapbook Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 w-full">
+
+        {/* WOTD - Polaroid Card */}
+        <div className="lg:col-span-5 flex items-center h-full">
+          <WordOfTheDay data={wotd} />
+        </div>
+
+        {/* Top Songs - Diary Log */}
+        <div className="lg:col-span-7 flex">
+          <TopSongs songs={topSongs} />
         </div>
       </div>
+
+      {/* Ornate End Mark */}
+      <div className="w-full max-w-xs mx-auto my-10 divider-ornate">
+        <span className="text-[var(--accent)] opacity-40">✧</span>
+      </div>
+
     </div>
   );
 }

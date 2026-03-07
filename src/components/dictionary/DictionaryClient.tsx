@@ -51,7 +51,6 @@ export default function DictionaryClient({
   const [userId, setUserId] = useState<string | null>(null);
   const [favIds, setFavIds] = useState<Set<string>>(new Set());
 
-  // Fetch user & their favorites on mount
   useEffect(() => {
     const supabase = createClient();
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -78,7 +77,6 @@ export default function DictionaryClient({
 
   const totalPages = Math.max(1, Math.ceil(total / limit));
 
-  // Push new search params to URL — triggers server re-fetch
   const updateParams = useCallback(
     (overrides: Record<string, string>) => {
       const params = new URLSearchParams();
@@ -90,7 +88,6 @@ export default function DictionaryClient({
         page: String(page),
         ...overrides,
       };
-      // Reset to page 1 when filters change (unless page itself is changing)
       if (!("page" in overrides)) merged.page = "1";
 
       for (const [k, v] of Object.entries(merged)) {
@@ -111,13 +108,19 @@ export default function DictionaryClient({
   const items = words.map(toCardItem);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      {/* Header Row */}
-      <div className="mb-4">
-        <h1 className="font-playfair text-3xl md:text-4xl font-bold text-neutral-900 dark:text-neutral-100">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      {/* Header */}
+      <div className="mb-8 text-center">
+        <span className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] block mb-2">
+          The Full Index
+        </span>
+        <h1 className="font-display text-5xl md:text-6xl font-medium tracking-tight text-[var(--foreground)] mb-4">
           Dictionary
         </h1>
-        <div className="mt-2 h-[2px] w-28 accent-gradient rounded-full opacity-80" />
+        <p className="font-body text-sm text-[var(--foreground-muted)] max-w-md mx-auto">
+          Search and filter vocabulary words discovered across every era.
+        </p>
+        <div className="w-16 h-px bg-[var(--border-focus)] mx-auto mt-6 opacity-50" />
       </div>
 
       {/* Search + Filters */}
@@ -128,13 +131,13 @@ export default function DictionaryClient({
         <div className="relative flex-1">
           <Search
             aria-hidden
-            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-600 dark:text-neutral-300 z-10"
+            className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--foreground-muted)] opacity-60 z-10"
           />
           <input
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Search words, songs, or albums..."
-            className="w-full h-11 pl-10 pr-4 rounded-full bg-white/70 dark:bg-neutral-950/70 backdrop-blur border border-neutral-200 dark:border-neutral-800 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/60 focus:border-transparent text-sm"
+            className="w-full h-11 pl-10 pr-4 rounded-sm bg-[var(--surface-raised)] border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/40 focus:border-[var(--border-focus)] font-body text-sm text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] placeholder:opacity-50"
           />
         </div>
         <DictionaryFilters
@@ -148,7 +151,7 @@ export default function DictionaryClient({
       </form>
 
       {/* Results count */}
-      <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+      <p className="font-body text-xs text-[var(--foreground-muted)] opacity-70 mb-4">
         {total} {total === 1 ? "word" : "words"} found
       </p>
 
@@ -168,31 +171,31 @@ export default function DictionaryClient({
           />
         ))}
         {items.length === 0 && (
-          <div className="col-span-full text-center text-neutral-500 py-16">
-            No results found.
+          <div className="col-span-full text-center py-16">
+            <p className="font-body text-sm text-[var(--foreground-muted)]">No results found.</p>
           </div>
         )}
       </motion.div>
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-3 mt-10">
+        <div className="flex items-center justify-center gap-4 mt-12">
           <button
             disabled={page <= 1}
             onClick={() => updateParams({ page: String(page - 1) })}
-            className="p-2 rounded-lg border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="p-2 rounded-sm border border-[var(--border)] text-[var(--foreground-muted)] hover:bg-[var(--surface-raised)] hover:border-[var(--border-focus)] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-4 h-4" />
           </button>
-          <span className="text-sm text-neutral-600 dark:text-neutral-400">
+          <span className="font-body text-xs text-[var(--foreground-muted)] tracking-wide">
             Page {page} of {totalPages}
           </span>
           <button
             disabled={page >= totalPages}
             onClick={() => updateParams({ page: String(page + 1) })}
-            className="p-2 rounded-lg border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="p-2 rounded-sm border border-[var(--border)] text-[var(--foreground-muted)] hover:bg-[var(--surface-raised)] hover:border-[var(--border-focus)] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       )}

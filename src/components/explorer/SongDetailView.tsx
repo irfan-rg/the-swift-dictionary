@@ -8,12 +8,6 @@ import WordModal from "@/components/dictionary/WordModal";
 import { createClient } from "@/lib/supabase/client";
 import type { SongDetail, Word, WordCardItem } from "@/lib/types";
 
-const difficultyColors = {
-  Beginner: "bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-200",
-  Intermediate: "bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-200",
-  Advanced: "bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-200",
-};
-
 function wordToCardItem(word: Word, song: SongDetail): WordCardItem {
   return {
     id: word.id,
@@ -58,130 +52,119 @@ export default function SongDetailView({ song }: { song: SongDetail }) {
   }, []);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center space-x-4">
-          <Link
-            href={`/explorer/${song.album_slug}`}
-            className="p-2 rounded-full border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
-          </Link>
-          <div>
-            <h1 className="font-playfair text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white">
-              {song.title}
-            </h1>
-            <div className="h-[2px] w-28 accent-gradient rounded-full opacity-80 my-2" />
-            <p className="text-neutral-600 dark:text-neutral-400 text-lg">
-              {song.album_title} &bull; Track {song.track_number}
-            </p>
-          </div>
+      <div className="mb-12">
+        <Link
+          href={`/explorer/${song.album_slug}`}
+          className="inline-flex items-center gap-2 font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--accent)] mb-6 transition-colors"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" />
+          Back to {song.album_title}
+        </Link>
+
+        <h1 className="font-display text-5xl md:text-6xl font-medium tracking-tight text-[var(--foreground)] mb-3">
+          {song.title}
+        </h1>
+        <div className="flex items-center gap-3 text-[var(--foreground-muted)]">
+          <span className="font-body text-sm">{song.album_title}</span>
+          <span className="w-1 h-1 rounded-full bg-[var(--border-focus)]" />
+          <span className="font-body text-sm">Track {song.track_number}</span>
+          <span className="w-1 h-1 rounded-full bg-[var(--border-focus)]" />
+          <span className="font-body text-sm">{song.vocab_words.length} vocabulary words</span>
         </div>
+        <div className="w-16 h-px bg-[var(--border-focus)] mt-6 opacity-50" />
       </div>
 
-      {/* Song Info Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white/60 dark:bg-neutral-900/40 backdrop-blur overflow-hidden mb-8"
-      >
-        <div className="flex-1 p-8">
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <div className="flex items-center space-x-6 mb-4">
-                <div className="flex items-center space-x-2">
-                  <Music className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
-                  <span className="text-neutral-600 dark:text-neutral-400">
-                    {song.vocab_words.length} vocabulary words
-                  </span>
-                </div>
-              </div>
-              <p className="text-neutral-700 dark:text-neutral-300 text-lg leading-relaxed">
-                Explore the sophisticated vocabulary Taylor uses in this song.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Spotify Embed */}
-        {song.spotify_embed_url && (
-          <div className="px-8 pb-6">
-            <iframe
-              src={song.spotify_embed_url}
-              width="100%"
-              height="152"
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"
-              className="rounded-xl"
-              title={`Listen to ${song.title}`}
-            />
-          </div>
-        )}
-      </motion.div>
+      {/* Spotify Embed */}
+      {song.spotify_embed_url && (
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-12"
+        >
+          <iframe
+            src={song.spotify_embed_url}
+            width="100%"
+            height="152"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+            className="rounded-sm border border-[var(--border)]"
+            title={`Listen to ${song.title}`}
+          />
+        </motion.div>
+      )}
 
       {/* Lyrics and Vocabulary Side by Side */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Lyrics Section */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="bg-white/60 dark:bg-neutral-900/40 backdrop-blur rounded-2xl border border-neutral-200 dark:border-neutral-800 p-8"
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="bg-[var(--surface-raised)] rounded-sm border border-[var(--border)] p-8"
         >
           <div className="flex items-center justify-between mb-6">
-            <h2 className="font-playfair text-2xl font-bold text-neutral-900 dark:text-white">
-              Lyrics
-            </h2>
+            <div>
+              <span className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] block mb-1">
+                Full Text
+              </span>
+              <h2 className="font-display text-2xl font-medium text-[var(--foreground)]">
+                Lyrics
+              </h2>
+            </div>
           </div>
 
-          <div className="text-neutral-800 dark:text-neutral-200 leading-relaxed whitespace-pre-line text-lg">
+          <div className="font-body text-sm text-[var(--foreground)] leading-[2] whitespace-pre-line opacity-80">
             {song.lyrics ?? "Lyrics not available yet."}
           </div>
         </motion.div>
 
         {/* Vocabulary Words List */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="bg-white/60 dark:bg-neutral-900/40 backdrop-blur rounded-2xl border border-neutral-200 dark:border-neutral-800 p-8 flex flex-col"
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="flex flex-col"
         >
-          <h3 className="font-playfair text-2xl font-bold text-neutral-900 dark:text-white mb-6">
-            Vocabulary Words
-          </h3>
+          <div className="mb-4">
+            <span className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] block mb-1">
+              Discovered Words
+            </span>
+            <h3 className="font-display text-2xl font-medium text-[var(--foreground)]">
+              Vocabulary
+            </h3>
+          </div>
 
           {song.vocab_words.length === 0 ? (
-            <p className="text-neutral-500 dark:text-neutral-400 text-center py-12">
+            <p className="font-body text-sm text-[var(--foreground-muted)] text-center py-12">
               No vocabulary words extracted for this song yet.
             </p>
           ) : (
-            <div className="space-y-4 flex-1 overflow-y-auto min-h-0">
+            <div className="border-t border-[var(--border)]">
               {song.vocab_words.map((word, index) => (
                 <motion.div
                   key={word.id}
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.4, delay: index * 0.05 }}
-                  className="bg-white/60 dark:bg-neutral-900/40 backdrop-blur rounded-xl border border-neutral-200 dark:border-neutral-800 p-4 hover:shadow-md transition-all duration-200 cursor-pointer"
+                  transition={{ duration: 0.3, delay: index * 0.04 }}
+                  className="border-b border-[var(--border)] py-4 cursor-pointer hover:bg-[var(--surface-raised)] px-4 -mx-4 transition-colors group"
                   onClick={() => setSelectedWord(wordToCardItem(word, song))}
                 >
-                  <div className="flex items-start justify-between mb-2">
-                    <h4 className="font-semibold text-neutral-900 dark:text-white text-lg">
+                  <div className="flex items-start justify-between mb-1">
+                    <h4 className="font-display text-lg font-medium text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors">
                       {word.word}
                     </h4>
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${difficultyColors[word.difficulty]}`}
-                    >
+                    <span className="font-handwriting text-sm text-[var(--foreground-muted)] opacity-50 shrink-0">
                       {word.difficulty}
                     </span>
                   </div>
-                  <p className="text-neutral-700 dark:text-neutral-300 text-sm mb-2">
+                  <p className="font-body text-sm text-[var(--foreground-muted)] leading-relaxed">
                     {word.definition}
                   </p>
                   {word.context && (
-                    <p className="text-neutral-600 dark:text-neutral-400 text-xs italic">
+                    <p className="font-handwriting text-xs text-[var(--foreground-muted)] opacity-60 mt-1.5 italic">
                       {word.context}
                     </p>
                   )}

@@ -1,120 +1,69 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { ERAS } from '@/lib/constants';
 
 export default function HeroSection() {
   return (
-    <section className="relative overflow-hidden -mt-14">
-      {/* Media slot (image/video) can be mounted behind content). Fallback: animated gradient vignette */}
-      <div className="absolute inset-0 -z-10" id="hero-media-slot">
-        <img
-          className="hero-video"
-          src="https://i.pinimg.com/736x/74/92/45/7492453e97a344e00507b18f77b02b74.jpg"
-          alt="Background image"
-        />
-        <div className="hero-vignette" />
-      </div>
+    <section className="relative w-full pt-16 pb-10 md:pt-28 md:pb-16 flex flex-col items-center justify-center text-center">
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 min-h-[85vh] md:min-h-screen flex items-center">
-        <div className="text-center w-full">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="mb-8"
-          >
-            <div className="inline-flex items-center space-x-2 rounded-full px-6 py-2 mb-4 -translate-y-2 md:-translate-y-8 border border-neutral-200 dark:border-neutral-800 bg-white/60 dark:bg-neutral-900/40 backdrop-blur">
-              <Sparkles className="w-4 h-4" style={{ color: 'var(--accent)' }} />
-              <span className="text-xs font-medium text-neutral-600 dark:text-neutral-400 tracking-wide uppercase">Discover Taylor&apos;s Vocabulary</span>
-            </div>
-            
-            <h1 className="font-playfair text-5xl md:text-7xl font-bold mb-6 text-neutral-600 dark:text-neutral-300 tracking-wider">
-              The Swift Dictionary
-            </h1>
-            <div className="mx-auto h-[2px] w-40 accent-gradient rounded-full mb-8 opacity-80" />
-            
-            <p className="text-lg md:text-xl text-neutral-600 dark:text-neutral-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Unlock the sophisticated vocabulary hidden in Taylor Swift&apos;s lyrics. 
-              From <em className="em-accent">serendipitous</em> to <em className="em-secondary">ephemeral</em>, 
-              discover the words that make her songs magical.
-            </p>
-          </motion.div>
+      {/* Handwriting Sub-Label */}
+      <motion.p
+        initial={{ opacity: 0, y: 10, rotate: -2 }}
+        animate={{ opacity: 1, y: 0, rotate: -2 }}
+        transition={{ duration: 0.8, delay: 0.1 }}
+        className="font-handwriting text-2xl md:text-3xl lg:text-4xl text-[var(--accent)] mb-4 md:mb-6"
+      >
+        a vocabulary for the eras...
+      </motion.p>
 
-          {/* Subtle CTA link */}
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="absolute left-0 right-0 bottom-24 md:bottom-32 flex justify-center"
-          >
+      {/* Hero Title */}
+      <motion.h1
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+        className="font-display text-6xl sm:text-7xl md:text-8xl lg:text-[7rem] font-medium leading-[0.9] tracking-tight mb-8"
+      >
+        The Swift<br />
+        <span>Dictionary</span>
+      </motion.h1>
+
+      {/* Hero Description */}
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 0.4 }}
+        className="font-body text-base md:text-lg max-w-xl text-[var(--foreground-muted)] font-light leading-relaxed mb-12"
+      >
+        Every lyric tells a story. Every word carries a meaning.
+        Uncover the sophistication hidden in her discography.
+      </motion.p>
+
+      {/* Glowing Era Pills Filter */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.5 }}
+        className="w-full max-w-3xl mx-auto flex flex-wrap justify-center gap-3 md:gap-4 px-4 "
+      >
+        {ERAS.map((era) => (
+          <motion.div key={era.slug} whileHover={{ y: -2 }}>
             <Link
-              href="/dictionary"
-              className="inline-flex items-center gap-1 font-semibold link-accent transition-colors mb-8 hover:translate-y-[-2px]"
+              href={`/explorer/${era.slug}`}
+              className="era-pill"
+              style={{
+                '--hover-bg': `${era.color}15`,
+                '--hover-text': era.color,
+                '--hover-border': `${era.color}50`,
+              } as React.CSSProperties}
             >
-              Browse Dictionary
-    
+              {era.label}
             </Link>
           </motion.div>
+        ))}
+      </motion.div>
 
-          {/* Album/Era chip strip at hero bottom */}
-          <motion.div
-            initial={{ opacity: 0, y: 0 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
-            className="pointer-events-auto"
-          >
-            <div className="absolute left-0 right-0 bottom-6 md:bottom-10">
-              <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-                <div className="flex flex-col gap-2">
-                  {/* First row - 6 albums */}
-                  <div className="flex justify-center items-center gap-2 flex-wrap">
-                    {ERAS.slice(0, 6).map((album) => (
-                      <Link
-                        key={album.slug}
-                        href={`/explorer/${album.slug}`}
-                        className="group relative px-3.5 md:px-4 py-2 rounded-full border border-neutral-300/80 dark:border-neutral-700/70 bg-white/60 dark:bg-neutral-900/50 backdrop-blur text-sm md:text-[15px] text-neutral-800 dark:text-neutral-200 hover:-translate-y-0.5 transition-transform duration-200 shadow-sm"
-                        style={{ WebkitTapHighlightColor: 'transparent' }}
-                      >
-                        <span className="relative z-10 inline-flex items-center">
-                          <span>{album.label}</span>
-                        </span>
-                        <span
-                          className="pointer-events-none absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                          style={{ boxShadow: `inset 0 0 0 1px ${album.color}` }}
-                        />
-                      </Link>
-                    ))}
-                  </div>
-                  
-                  {/* Second row - 6 albums */}
-                  <div className="flex justify-center items-center gap-2 flex-wrap">
-                    {ERAS.slice(6, 12).map((album) => (
-                      <Link
-                        key={album.slug}
-                        href={`/explorer/${album.slug}`}
-                        className="group relative px-3.5 md:px-4 py-2 rounded-full border border-neutral-300/80 dark:border-neutral-700/70 bg-white/60 dark:bg-neutral-900/50 backdrop-blur text-sm md:text-[15px] text-neutral-800 dark:text-neutral-200 hover:-translate-y-0.5 transition-transform duration-200 shadow-sm"
-                        style={{ WebkitTapHighlightColor: 'transparent' }}
-                      >
-                        <span className="relative z-10 inline-flex items-center">
-                          <span>{album.label}</span>
-                        </span>
-                        <span
-                          className="pointer-events-none absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                          style={{ boxShadow: `inset 0 0 0 1px ${album.color}` }}
-                        />
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </div>
     </section>
   );
 }
-
