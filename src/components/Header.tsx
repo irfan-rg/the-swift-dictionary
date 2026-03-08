@@ -49,7 +49,7 @@ export default function Header() {
   };
 
   const doSearch = useCallback(async (q: string) => {
-    if (!q.trim()) { setSearchResults([]); setShowResults(false); return; }
+    if (!q.trim() || q.trim().length < 2) { setSearchResults([]); setShowResults(false); return; }
     try {
       const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
       const data = await res.json();
@@ -90,7 +90,7 @@ export default function Header() {
   const handleSearchInput = (value: string) => {
     setSearchQuery(value);
     if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => doSearch(value), 300);
+    debounceRef.current = setTimeout(() => doSearch(value), 250);
   };
 
   const navLinks = [
@@ -263,7 +263,7 @@ export default function Header() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute top-20 left-4 right-4 sm:left-auto sm:right-auto sm:w-[32rem] glass-panel rounded-sm overflow-hidden z-40"
+            className="pointer-events-auto absolute top-20 left-4 right-4 sm:left-auto sm:right-auto sm:w-[32rem] glass-panel rounded-sm overflow-hidden z-40"
           >
             {searchResults.map((result) => (
               <Link

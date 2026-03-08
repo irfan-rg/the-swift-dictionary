@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Search, ChevronLeft, ChevronRight } from "lucide-react";
@@ -48,6 +48,7 @@ export default function DictionaryClient({
   const router = useRouter();
   const [selected, setSelected] = useState<WordCardItem | null>(null);
   const [searchInput, setSearchInput] = useState(initialQuery);
+  const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [favIds, setFavIds] = useState<Set<string>>(new Set());
 
@@ -102,7 +103,16 @@ export default function DictionaryClient({
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
     updateParams({ q: searchInput });
+  };
+
+  const handleSearchInput = (value: string) => {
+    setSearchInput(value);
+    if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
+    searchDebounceRef.current = setTimeout(() => {
+      updateParams({ q: value });
+    }, 250);
   };
 
   const items = words.map(toCardItem);
@@ -135,7 +145,7 @@ export default function DictionaryClient({
           />
           <input
             value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
+            onChange={(e) => handleSearchInput(e.target.value)}
             placeholder="Search words, songs, or albums..."
             className="w-full h-11 pl-10 pr-4 rounded-sm bg-[var(--surface-raised)] border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/40 focus:border-[var(--border-focus)] font-body text-sm text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] placeholder:opacity-50"
           />

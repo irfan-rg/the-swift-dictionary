@@ -129,7 +129,7 @@ export async function getDictionaryWords(
 
   // Filters
   if (query) {
-    q = q.textSearch("fts", query, { type: "websearch" });
+    q = q.ilike("word", `${query}%`);
   }
   if (album !== "all") {
     q = q.eq("albums.slug", album);
@@ -236,11 +236,12 @@ export async function searchAll(query: string): Promise<SearchResult[]> {
   const supabase = await createClient();
   const results: SearchResult[] = [];
 
-  // Search words
+  // Search words (prefix match)
   const { data: words } = await supabase
     .from("words")
     .select("id, word, definition, songs(slug, title), albums(slug, title)")
-    .textSearch("fts", query, { type: "websearch" })
+    .ilike("word", `${query}%`)
+    .order("word")
     .limit(5);
 
   for (const w of words ?? []) {
@@ -256,11 +257,12 @@ export async function searchAll(query: string): Promise<SearchResult[]> {
     });
   }
 
-  // Search songs
+  // Search songs (prefix match)
   const { data: songs } = await supabase
     .from("songs")
     .select("id, title, slug, albums(slug, title)")
-    .textSearch("fts", query, { type: "websearch" })
+    .ilike("title", `%${query}%`)
+    .order("title")
     .limit(5);
 
   for (const s of songs ?? []) {
