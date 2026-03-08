@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import Link from "next/link";
+import { useTheme } from "next-themes";
 import { getEraColor } from "@/lib/constants";
 import FavoriteButton from "@/components/FavoriteButton";
 import type { WordCardItem } from "@/lib/types";
@@ -19,6 +20,8 @@ type Props = {
 
 export default function WordModal({ open, onClose, item, isFavorited = false, userId = null, onFavToggle }: Props) {
   const dialogRef = useRef<HTMLDivElement>(null);
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
 
   useEffect(() => {
     if (!open) return;
@@ -61,7 +64,7 @@ export default function WordModal({ open, onClose, item, isFavorited = false, us
               {/* Header */}
               <div
                 className="p-6 border-b border-[var(--border)] relative"
-                style={{ borderLeftWidth: '4px', borderLeftColor: getEraColor(item.album) }}
+                style={{ borderLeftWidth: '4px', borderLeftColor: getEraColor(item.album, isDark) }}
               >
                 <button
                   aria-label="Close"
@@ -72,7 +75,7 @@ export default function WordModal({ open, onClose, item, isFavorited = false, us
                 </button>
                 <h2 className="font-display text-3xl font-medium text-[var(--foreground)] mb-1 pr-10">{item.word}</h2>
                 <p className="font-body text-xs text-[var(--foreground-muted)]">
-                  From <span className="font-medium capitalize" style={{ color: getEraColor(item.album) }}>{item.album}</span> • <span className="font-medium">{item.song}</span>
+                  From <span className="font-medium capitalize" style={{ color: getEraColor(item.album, isDark) }}>{item.album}</span> • <span className="font-medium">{item.song}</span>
                 </p>
               </div>
 
@@ -124,7 +127,7 @@ export default function WordModal({ open, onClose, item, isFavorited = false, us
                   <Link
                     href={`/explorer/${item.album}/${item.songSlug}`}
                     className="font-body text-xs tracking-widest uppercase px-4 py-2 rounded-sm text-white transition-colors hover:opacity-80"
-                    style={{ backgroundColor: getEraColor(item.album) }}
+                    style={{ backgroundColor: getEraColor(item.album, isDark) }}
                     onClick={onClose}
                   >
                     View Song

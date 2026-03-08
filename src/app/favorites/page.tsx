@@ -66,7 +66,11 @@ export default async function FavoritesPage() {
                   </h3>
                   <p
                     className="font-body text-xs font-medium mt-1"
-                    style={{ color: getEraColor(word.album_slug) }}
+                    style={{
+                      '--era-light': getEraColor(word.album_slug, false),
+                      '--era-dark': getEraColor(word.album_slug, true),
+                      color: 'light-dark(var(--era-light), var(--era-dark))',
+                    } as React.CSSProperties}
                   >
                     {word.song_title}
                   </p>

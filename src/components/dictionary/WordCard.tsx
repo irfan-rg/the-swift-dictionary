@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { useTheme } from "next-themes";
 import { getEraColor } from "@/lib/constants";
 import type { WordCardItem } from "@/lib/types";
 
@@ -11,6 +12,8 @@ type Props = {
 };
 
 export default function WordCard({ item, onOpen }: Props) {
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -26,7 +29,7 @@ export default function WordCard({ item, onOpen }: Props) {
             <h3 className="font-display text-2xl font-medium tracking-tight text-[var(--foreground)]">{item.word}</h3>
             <p
               className="font-body text-xs font-medium mt-1"
-              style={{ color: getEraColor(item.album) }}
+              style={{ color: getEraColor(item.album, isDark) }}
             >
               {item.song}
             </p>
@@ -34,7 +37,7 @@ export default function WordCard({ item, onOpen }: Props) {
           <div className="inline-flex items-center gap-2">
             <span
               className="font-body text-[9px] tracking-widest uppercase px-2 py-0.5 rounded-sm border text-[var(--foreground-muted)]"
-              style={{ borderColor: getEraColor(item.album) }}
+              style={{ borderColor: getEraColor(item.album, isDark) }}
               title={`Era: ${item.album}`}
             >
               {item.album}

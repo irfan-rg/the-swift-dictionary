@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft, Music } from "lucide-react";
 import WordModal from "@/components/dictionary/WordModal";
+import LyricsDisplay from "@/components/explorer/LyricsDisplay";
 import { createClient } from "@/lib/supabase/client";
 import type { SongDetail, Word, WordCardItem } from "@/lib/types";
 
@@ -116,9 +117,18 @@ export default function SongDetailView({ song }: { song: SongDetail }) {
             </div>
           </div>
 
-          <div className="font-body text-sm text-[var(--foreground)] leading-[2] whitespace-pre-line opacity-80">
-            {song.lyrics ?? "Lyrics not available yet."}
-          </div>
+          {song.lyrics ? (
+            <LyricsDisplay
+              lyrics={song.lyrics}
+              vocabWords={song.vocab_words}
+              albumSlug={song.album_slug}
+              onWordClick={(wordObj) => setSelectedWord(wordToCardItem(wordObj, song))}
+            />
+          ) : (
+            <div className="font-body text-sm text-[var(--foreground)] leading-[2] whitespace-pre-line opacity-80">
+              Lyrics not available yet.
+            </div>
+          )}
         </motion.div>
 
         {/* Vocabulary Words List */}

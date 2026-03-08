@@ -152,34 +152,84 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Hover Era Glow */
-.era-pill {
-  border-radius: 9999px;
-  padding: 0.375rem 1rem;
-  font-family: var(--font-jost), system-ui, sans-serif;
-  font-size: 0.875rem;
-  font-weight: 500;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--foreground-muted);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-  transition:
-    background-color 0.5s ease-in-out,
-    color 0.5s ease-in-out,
-    border-color 0.5s ease-in-out,
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+/* ── Era Marquee ──────────────────────────────────────────── */
+.marquee-mask {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
 }
 
-.era-pill:hover {
-  background: var(--hover-bg, var(--surface));
-  color: var(--hover-text, var(--foreground));
-  border-color: var(--hover-border, var(--border-focus));
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 35s linear infinite;
+  gap: 0.25rem;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  font-family: var(--font-jost), system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--foreground-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  transition:
+    color 0.25s ease,
+    border-color 0.25s ease,
+    background-color 0.25s ease;
+}
+
+.marquee-item:hover {
+  color: var(--era-color, var(--accent));
+  border-color: var(--era-color, var(--border-focus));
+  background-color: color-mix(in srgb, var(--era-color, var(--accent)) 8%, transparent);
+}
+
+.marquee-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  opacity: 0.45;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.marquee-item:hover .marquee-dot {
+  opacity: 1;
+  transform: scale(1.4);
+}
+
+.marquee-label {
+  transition: inherit;
 }
