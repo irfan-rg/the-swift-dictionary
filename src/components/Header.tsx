@@ -174,17 +174,15 @@ export default function Header() {
 
                 {/* Right Controls */}
                 <div className="flex items-center gap-1.5 sm:gap-3 ml-auto">
-                  <button
-                    onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                    className="p-2 rounded-full text-[var(--foreground-muted)] hover:text-[var(--accent)] hover:bg-[var(--surface-raised)] transition-all"
-                    aria-label="Toggle theme"
-                  >
-                    {mounted ? (
-                      theme === 'dark' ? <Sun className="w-[18px] h-[18px]" strokeWidth={1.5} /> : <MoonStar className="w-[18px] h-[18px]" strokeWidth={1.5} />
-                    ) : (
-                      <div className="w-[18px] h-[18px]" />
-                    )}
-                  </button>
+                  {mounted && (
+                    <button
+                      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                      className="p-2 rounded-full text-[var(--foreground-muted)] hover:text-[var(--accent)] hover:bg-[var(--surface-raised)] transition-all"
+                      aria-label="Toggle theme"
+                    >
+                      {theme === 'dark' ? <Sun className="w-[18px] h-[18px]" strokeWidth={1.5} /> : <MoonStar className="w-[18px] h-[18px]" strokeWidth={1.5} />}
+                    </button>
+                  )}
 
                   <button
                     onClick={() => { setIsSearching(true); setShowResults(false); }}
@@ -265,7 +263,7 @@ export default function Header() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute top-20 left-4 right-4 sm:left-auto sm:right-auto sm:w-[32rem] glass-panel rounded-2xl overflow-hidden z-40"
+            className="absolute top-20 left-4 right-4 sm:left-auto sm:right-auto sm:w-[32rem] glass-panel rounded-sm overflow-hidden z-40"
           >
             {searchResults.map((result) => (
               <Link

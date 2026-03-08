@@ -43,6 +43,7 @@ export default function Footer() {
             <h3 className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] font-semibold mb-2">The Project</h3>
             <Link href="/about" className="font-body text-sm text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors">About Us</Link>
             <Link href="/contribute" className="font-body text-sm text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors">Contribute</Link>
+            <a href="https://www.instagram.com/the.swift.dictionary/" target="_blank" rel="noopener noreferrer" className="font-body text-sm text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors">Instagram</a>
           </div>
 
         </div>
