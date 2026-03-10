@@ -138,11 +138,10 @@ export const ERA_MAP: Record<EraSlug, EraInfo> = Object.fromEntries(
   ERAS.map((e) => [e.slug, e])
 ) as Record<EraSlug, EraInfo>;
 
-/** Get the hex era colour for a slug, with fallback. Pass isDark=true for dark-mode variant. */
-export function getEraColor(slug: string, isDark = false): string {
-  const era = ERA_MAP[slug as EraSlug];
-  if (!era) return "#6b7280";
-  return isDark ? era.colorDark : era.color;
+/** Get the CSS variable for an era color. The browser handles light/dark mode automatically. */
+export function getEraColor(slug: string): string {
+  if (!ERA_MAP[slug as EraSlug]) return "var(--foreground-muted)";
+  return `var(--era-${slug})`;
 }
 
 /** Get gradient header classes for a slug, with fallback */

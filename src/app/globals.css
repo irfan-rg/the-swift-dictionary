@@ -21,6 +21,20 @@
   /* Accent — warm acoustic brown */
   --accent: #8B5E3C;
   --accent-muted: #D4A373;
+
+  /* Era Colors */
+  --era-debut: #5F9EA0;
+  --era-fearless: #D4A017;
+  --era-speaknow: #7B2D8E;
+  --era-red: #DC143C;
+  --era-1989: #4A90D9;
+  --era-reputation: #1a1a1a;
+  --era-lover: #E8788F;
+  --era-folklore: #8A8A8A;
+  --era-evermore: #CC5500;
+  --era-midnights: #191970;
+  --era-ttpd: #78716c;
+  --era-showgirl: #f97316;
 }
 
 [data-theme="dark"] {
@@ -39,6 +53,20 @@
   --shadow-polaroid: 0 10px 40px rgba(0, 0, 0, 0.9), 0 2px 8px rgba(0, 0, 0, 0.6);
 
   --glass-bg: rgba(20, 20, 20, 0.7);
+
+  /* Era Colors (Dark Mode) */
+  --era-debut: #7EC8CA;
+  --era-fearless: #FFD700;
+  --era-speaknow: #C084FC;
+  --era-red: #F87171;
+  --era-1989: #87CEEB;
+  --era-reputation: #C0C0C0;
+  --era-lover: #FFB6C1;
+  --era-folklore: #C8C8C8;
+  --era-evermore: #E8923B;
+  --era-midnights: #818CF8;
+  --era-ttpd: #A8A29E;
+  --era-showgirl: #FB923C;
 }
 
 /* ── Base ─────────────────────────────────────────────────── */
@@ -71,8 +99,12 @@ body {
   font-family: var(--font-cormorant), Georgia, serif;
 }
 
+.font-branding {
+  font-family: var(--font-branding), var(--font-cormorant), serif;
+}
+
 .font-body {
-  font-family: var(--font-jost), system-ui, sans-serif;
+  font-family: var(--font-body), system-ui, sans-serif;
 }
 
 .font-handwriting {

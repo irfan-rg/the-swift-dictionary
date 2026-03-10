@@ -12,8 +12,8 @@ export default function Footer() {
 
         {/* Ornate Dictionary Title */}
         <div className="text-center mb-12">
-          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-[var(--foreground)] mb-4">
-            The Swift <span className="italic font-light">Dictionary</span>
+          <h2 className="font-branding text-4xl sm:text-5xl lg:text-6xl font-medium tracking-wide text-[var(--foreground)] mb-4">
+            The Swift Dictionary
           </h2>
           <p className="font-handwriting text-xl sm:text-2xl text-[var(--foreground-muted)] opacity-80">
             A curated scrapbook of every lyric & lore...

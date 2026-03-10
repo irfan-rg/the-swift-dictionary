@@ -118,7 +118,7 @@ export default function Header() {
           : 'shadow-none w-full max-w-7xl rounded-none border-transparent'
           }`}
       >
-        <div className={`relative transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] flex items-center h-14 w-full ${scrolled || isSearching || isMenuOpen ? 'px-5 sm:px-6' : 'px-6 sm:px-8 lg:px-12'}`}>
+        <div className={`relative transition-all duration-700  flex items-center h-14 w-full ${scrolled || isSearching || isMenuOpen ? 'px-5 sm:px-6' : 'px-6 sm:px-8 lg:px-12'}`}>
           <AnimatePresence mode="wait">
             {isSearching ? (
               <motion.div
@@ -157,7 +157,7 @@ export default function Header() {
               >
                 {/* Logo */}
                 <Link href="/" className="shrink-0 flex items-center gap-2">
-                  <span className="font-display font-semibold italic text-xl tracking-wide text-[var(--accent)]">
+                  <span className="font-branding font-semibold text-2xl tracking-wide text-[var(--accent)]">
                     TSD
                   </span>
                 </Link>

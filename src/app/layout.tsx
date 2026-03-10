@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Nothing_You_Could_Do, Jost } from "next/font/google";
+import { Cormorant_Garamond, Nothing_You_Could_Do, Bricolage_Grotesque, Cinzel_Decorative } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import Header from "@/components/Header";
@@ -23,10 +23,17 @@ const nothingYouCouldDo = Nothing_You_Could_Do({
 });
 
 // 3. Clean, Soft UI/Body (Modern era feel)
-const jost = Jost({
-  variable: "--font-jost",
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-body",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  display: "swap",
+});
+
+// 4. Epic Branding (Main Logo)
+const cinzel = Cinzel_Decorative({
+  variable: "--font-branding",
+  subsets: ["latin"],
+  weight: ["400", "700", "900"],
   display: "swap",
 });
 
@@ -57,7 +64,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         suppressHydrationWarning
-        className={`${cormorant.variable} ${nothingYouCouldDo.variable} ${jost.variable} font-body antialiased selection:bg-[var(--accent)] selection:text-[var(--background)]`}
+        className={`${cormorant.variable} ${nothingYouCouldDo.variable} ${bricolage.variable} ${cinzel.variable} font-body antialiased selection:bg-[var(--accent)] selection:text-[var(--background)]`}
       >
         <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem>
           <div className="flex flex-col min-h-screen relative overflow-x-hidden">

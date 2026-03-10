@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useTheme } from 'next-themes';
 import { ERAS } from '@/lib/constants';
 import type { Album } from '@/lib/types';
 
@@ -14,8 +13,6 @@ interface Props {
 
 export default function EraTimeline({ albums }: Props) {
   const [hoveredEra, setHoveredEra] = useState<number | null>(null);
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === 'dark';
 
   // Match ERAS order with album data for proportional widths + covers
   const eraData = ERAS.map((era) => {
@@ -72,7 +69,7 @@ export default function EraTimeline({ albums }: Props) {
               )}
               <span
                 className="font-body text-xs tracking-widest uppercase"
-                style={{ color: isDark ? eraData[hoveredEra].colorDark : eraData[hoveredEra].color }}
+                style={{ color: `var(--era-${eraData[hoveredEra].slug})` }}
               >
                 {eraData[hoveredEra].label} · {eraData[hoveredEra].year}
               </span>
@@ -93,7 +90,7 @@ export default function EraTimeline({ albums }: Props) {
               className="relative transition-all duration-300 ease-out"
               style={{
                 flex: `${proportion} 0 0%`,
-                backgroundColor: isDark ? era.colorDark : era.color,
+                backgroundColor: `var(--era-${era.slug})`,
                 opacity: hoveredEra === null ? 0.5 : hoveredEra === i ? 1 : 0.15,
                 transform: hoveredEra === i ? 'scaleY(2.5)' : 'scaleY(1)',
               }}

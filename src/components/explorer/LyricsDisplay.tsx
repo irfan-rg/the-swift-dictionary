@@ -3,7 +3,6 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { getEraColor } from '@/lib/constants';
-import { useTheme } from 'next-themes';
 import type { Word } from '@/lib/types';
 
 interface LyricsDisplayProps {
@@ -14,51 +13,34 @@ interface LyricsDisplayProps {
 }
 
 export default function LyricsDisplay({ lyrics, vocabWords, albumSlug, onWordClick }: LyricsDisplayProps) {
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === 'dark';
-  const eraColor = getEraColor(albumSlug, isDark);
+  const eraColor = getEraColor(albumSlug);
 
-  // Group lyrics into sections
+  // Group lyrics into stanzas separated by empty lines
   const sections = useMemo(() => {
-    const lines = lyrics.split('\n');
-    const result = [];
-    let currentSection = { type: 'verse', header: '', lines: [] as string[] };
+    // Normalize newlines and split by double blank lines
+    const rawStanzas = lyrics.replace(/\r\n/g, '\n').split(/\n\s*\n/);
     
-    for (const line of lines) {
-      const trimmed = line.trim();
-      if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
-        // push previous section if it has content
-        if (currentSection.lines.length > 0 || currentSection.header) {
-          result.push(currentSection);
-        }
-        
-        const header = trimmed.slice(1, -1); // remove brackets
-        let type = 'verse';
+    return rawStanzas.map((stanzaText) => {
+      const lines = stanzaText.split('\n').map(l => l.trim()).filter(l => l !== '');
+      if (lines.length === 0) return null;
+      
+      let header = '';
+      let type = 'verse';
+      
+      // If stanza has a bracket header
+      if (lines[0].startsWith('[') && lines[0].endsWith(']')) {
+        header = lines[0].slice(1, -1); // remove brackets
         const lowerHeader = header.toLowerCase();
         
         if (lowerHeader.includes('chorus')) type = 'chorus';
         else if (lowerHeader.includes('bridge')) type = 'bridge';
         else if (lowerHeader.includes('intro') || lowerHeader.includes('outro')) type = 'intro';
         
-        currentSection = { type, header, lines: [] };
-      } else {
-        // Skip empty lines at the very beginning of a section to keep it clean
-        if (currentSection.lines.length === 0 && trimmed === '') continue;
-        currentSection.lines.push(line);
+        lines.shift(); // remove header from lyrics lines
       }
-    }
-    if (currentSection.lines.length > 0 || currentSection.header) {
-      result.push(currentSection);
-    }
-    
-    // Trim trailing empty lines from sections
-    return result.map(sec => {
-      const linesCopy = [...sec.lines];
-      while (linesCopy.length > 0 && linesCopy[linesCopy.length - 1].trim() === '') {
-        linesCopy.pop();
-      }
-      return { ...sec, lines: linesCopy };
-    });
+      
+      return { type, header, lines };
+    }).filter(Boolean) as { type: string, header: string, lines: string[] }[];
   }, [lyrics]);
 
   // Helper to escape regex
@@ -107,7 +89,7 @@ export default function LyricsDisplay({ lyrics, vocabWords, albumSlug, onWordCli
       {sections.map((section, secIdx) => {
         let sectionClasses = "transition-all duration-300 ";
         let headerClasses = "font-body text-[10px] tracking-widest uppercase mb-2 opacity-50";
-        let wrapperStyle = {};
+        let wrapperStyle: React.CSSProperties = {};
 
         // Apply distinct styling based on section type
         if (section.type === 'chorus') {
@@ -118,11 +100,13 @@ export default function LyricsDisplay({ lyrics, vocabWords, albumSlug, onWordCli
           };
           headerClasses = "font-body text-[10px] tracking-widest uppercase mb-2 opacity-80 font-medium";
         } else if (section.type === 'bridge') {
-          sectionClasses += "italic pl-6 opacity-90 ";
+          sectionClasses += "italic pl-6 opacity-90 border-l border-[var(--border)] ";
         } else if (section.type === 'intro') {
           sectionClasses += "opacity-60 text-[13px] ";
         } else {
-          sectionClasses += "opacity-80 ";
+          // Standard Stanza: Simple interactive reading block
+          // Adds a subtle hover state to make reading raw text feel polished
+          sectionClasses += "opacity-85 hover:opacity-100 pl-4 border-l-2 border-transparent hover:border-[var(--border-focus)] transition-all py-1 -ml-4 ";
         }
 
         return (

@@ -50,7 +50,7 @@ export default function SongLoading() {
               const randomWidth = widths[i % widths.length];
               return (
                 <div key={i}>
-                  <span className={`bg-[var(--border)] rounded inline-block ${randomWidth}`}>
+                  <span className={`bg-[var(--border)] mb-2 rounded inline-block ${randomWidth}`}>
                     Lyric line placeholder
                   </span>
                 </div>

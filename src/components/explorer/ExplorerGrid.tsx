@@ -71,7 +71,7 @@ function AlbumCard({ album, index }: { album: Album; index: number }) {
 
         {/* Content */}
         <div className="p-5">
-          <h3 className="font-display text-lg font-semibold text-[var(--foreground)] tracking-tight mb-2 -mt-2">
+          <h3 className="font-display text-lg font-semibold text-[var(--foreground-light)] mb-2 -mt-2 tracking-wide">
             {album.title}
           </h3>
           <div className="flex items-center gap-2 font-body text-xs text-[var(--foreground-muted)] mb-3">
