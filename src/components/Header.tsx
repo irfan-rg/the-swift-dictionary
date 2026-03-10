@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Search, Menu, X, ArrowLeft, User, LogOut, Heart, Sun, MoonStar } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import BrandLogo from '@/components/BrandLogo';
 import { createClient } from '@/lib/supabase/client';
 import { useTheme } from 'next-themes';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
@@ -157,9 +158,7 @@ export default function Header() {
               >
                 {/* Logo */}
                 <Link href="/" className="shrink-0 flex items-center gap-2">
-                  <span className="font-branding font-semibold text-2xl tracking-wide text-[var(--accent)]">
-                    TSD
-                  </span>
+                  <BrandLogo short className="text-[1.35rem] sm:text-2xl text-[var(--accent)] hover:opacity-80 transition-opacity" />
                 </Link>
 
                 {/* Desktop Nav — absolutely centered in the bar */}

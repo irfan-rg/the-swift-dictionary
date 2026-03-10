@@ -20,7 +20,14 @@ export default function TopSongs({ songs }: { songs?: SongWithAlbum[] }) {
     <div className="w-full flex pt-4 relative">
 
       {/* The Diary Page Form Factor */}
-      <div className="w-full bg-[var(--surface-raised)] border border-[var(--border)] rounded-sm p-6 sm:p-8 flex flex-col relative overflow-hidden shadow-sm group/journal rotate-[-0.5deg]">
+      <div className="w-full bg-[var(--surface-raised)] border border-[var(--border)] rounded-sm py-6 sm:py-8 pr-6 sm:pr-8 pl-12 sm:pl-16 flex flex-col relative overflow-hidden shadow-sm group/journal rotate-[-0.5deg]">
+
+        {/* Spiral Binder Holes */}
+        <div className="absolute top-0 left-0 bottom-0 w-8 sm:w-10 border-r border-[var(--border)] flex flex-col justify-evenly py-6 opacity-60 z-20">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <div key={i} className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full bg-[var(--background)] border border-[var(--border)] mx-auto shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]" />
+          ))}
+        </div>
 
         {/* Scrapbook Tape — taped to the scrapbook wall */}
         <div className="scrapbook-tape absolute -top-4 right-12 w-24 rotate-[4deg] opacity-80 z-10" />
@@ -51,7 +58,7 @@ export default function TopSongs({ songs }: { songs?: SongWithAlbum[] }) {
             className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--accent)] border-b border-transparent hover:border-[var(--accent)] pb-0.5 mb-1 hidden sm:block"
             style={{ transition: 'color 0.2s, border-color 0.2s' }}
           >
-            Explore Index
+            Explore Albums
           </Link>
         </div>
 
@@ -70,7 +77,7 @@ export default function TopSongs({ songs }: { songs?: SongWithAlbum[] }) {
                 className="group flex items-center gap-4 border-b border-[var(--border)] py-2 sm:py-3 relative"
               >
                 {/* Index Number */}
-                <span className="font-display italic text-2xl text-[var(--border-focus)] w-6 text-right shrink-0 select-none leading-none opacity-80 group-hover:text-[var(--accent)] transition-colors">
+                <span className="font-display italic text-2xl text-[var(--accent)] w-6 text-right shrink-0 select-none leading-none opacity-80 group-hover:opacity-100 transition-colors">
                   {index + 1}
                 </span>
 

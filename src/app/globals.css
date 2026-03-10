@@ -78,7 +78,6 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
   transition: background-color 0.5s ease-in-out;
 }
 
@@ -101,6 +100,8 @@ body {
 
 .font-branding {
   font-family: var(--font-branding), var(--font-cormorant), serif;
+  /* font-weight: normal; */
+  -webkit-font-smoothing: antialiased;
 }
 
 .font-body {
@@ -157,12 +158,16 @@ body {
   border: 1px solid var(--border);
   position: relative;
   transition:
-    transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
     background-color 0.5s ease-in-out,
     border-color 0.5s ease-in-out,
-    box-shadow 0.5s ease-in-out;
+    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.polaroid-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.06);
+}
 /* Scrapbook Element */
 .scrapbook-tape {
   position: absolute;

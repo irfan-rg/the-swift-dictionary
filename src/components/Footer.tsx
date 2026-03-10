@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import BrandLogo from '@/components/BrandLogo';
 import { ERAS } from '@/lib/constants';
 
 export default function Footer() {
@@ -12,9 +13,7 @@ export default function Footer() {
 
         {/* Ornate Dictionary Title */}
         <div className="text-center mb-12">
-          <h2 className="font-branding text-4xl sm:text-5xl lg:text-6xl font-medium tracking-wide text-[var(--foreground)] mb-4">
-            The Swift Dictionary
-          </h2>
+          <BrandLogo as="h2" className="text-4xl sm:text-5xl lg:text-6xl tracking-wide text-[var(--foreground)] mb-4" />
           <p className="font-handwriting text-xl sm:text-2xl text-[var(--foreground-muted)] opacity-80">
             A curated scrapbook of every lyric & lore...
           </p>

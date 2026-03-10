@@ -30,7 +30,7 @@ export default function HeroSection() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="font-branding text-6xl sm:text-7xl md:text-8xl lg:text-[7rem] font-medium leading-[0.9] tracking-tight md:mt-4 mt-8 mb-8 md:mb-10"
+          className="font-branding [-webkit-text-stroke:0.1px_currentColor] text-6xl sm:text-7xl md:text-8xl lg:text-[7rem] font-medium leading-[0.9] tracking-wide md:mt-4 mt-8 mb-8 md:mb-10"
         >
           The Swift<br />
           <span>Dictionary</span>

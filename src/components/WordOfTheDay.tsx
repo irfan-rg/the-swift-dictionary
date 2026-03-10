@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import BrandLogo from '@/components/BrandLogo';
 import type { WordWithDetails } from '@/lib/types';
 
 const fallback: WordWithDetails = {
@@ -35,15 +36,15 @@ export default function WordOfTheDay({ data }: { data?: WordWithDetails | null }
         style={{ perspective: 1400, transformStyle: 'preserve-3d' }}
       >
         <motion.div
-          className="w-full cursor-pointer grid relative"
+          className="w-full cursor-pointer grid relative will-change-transform"
           animate={{
             rotateY: isFlipped ? 180 : 0,
             rotateZ: isFlipped ? 1.5 : -1,
+            z: isFlipped ? 20 : 0,
           }}
-          transition={{ duration: 0.6, type: 'spring', stiffness: 180, damping: 22 }}
+          transition={{ duration: 0.7, type: 'spring', stiffness: 150, damping: 20 }}
           style={{ transformStyle: 'preserve-3d', transformOrigin: 'center center' }}
           onClick={() => setIsFlipped(!isFlipped)}
-          whileHover={{ scale: isFlipped ? 1 : 1.01 }}
         >
 
           {/* ── FRONT FACE ── */}
@@ -52,7 +53,7 @@ export default function WordOfTheDay({ data }: { data?: WordWithDetails | null }
 
             {/* Polaroid Photo Area */}
             <div className="w-full aspect-square bg-[var(--surface-raised)] border border-[var(--border)] rounded-sm p-6 sm:p-8 flex flex-col justify-center items-center text-center relative overflow-hidden">
-              <div className="absolute top-4 left-4 font-display italic text-4xl text-[var(--foreground)] opacity-[0.04] leading-none select-none pointer-events-none">TSD</div>
+              <BrandLogo short className="absolute top-4 left-4 text-3xl text-[var(--foreground)] opacity-[0.05] leading-none select-none pointer-events-none" />
               <span className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] mb-4">— Word of the Day —</span>
               <h2 className="font-display text-4xl sm:text-5xl font-semibold mb-3 tracking-tight break-words hyphens-auto w-full">{wotd.word}</h2>
               <div className="font-body text-xs tracking-wider text-[var(--accent)] mb-6 uppercase flex items-center justify-center gap-2">
