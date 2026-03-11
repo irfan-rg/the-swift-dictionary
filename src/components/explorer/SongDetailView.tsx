@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowLeft, Music } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import WordModal from "@/components/dictionary/WordModal";
 import LyricsDisplay from "@/components/explorer/LyricsDisplay";
 import { createClient } from "@/lib/supabase/client";

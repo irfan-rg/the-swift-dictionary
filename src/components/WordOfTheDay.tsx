@@ -70,7 +70,7 @@ export default function WordOfTheDay({ data }: { data?: WordWithDetails | null }
                 &quot;{wotd.lyric_snippet}&quot;
               </p>
               <p className="mt-5 font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] opacity-40">
-                tap to flip ↩
+                tap to flip
               </p>
             </div>
           </div>

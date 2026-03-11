@@ -37,7 +37,7 @@ export default function ContributePage() {
             {
               term: "Suggest Missing Words",
               detail:
-                "Spotted a word in Taylor's lyrics that should be in our dictionary? Let us know the word, the song it appears in, and why you think it belongs.",
+                "Spotted a word in Taylor&apos;s lyrics that should be in our dictionary? Let us know the word, the song it appears in, and why you think it belongs.",
             },
             {
               term: "Improve Definitions",
@@ -105,7 +105,7 @@ export default function ContributePage() {
         </span>
         <p className="font-body text-sm text-[var(--foreground-muted)] leading-relaxed">
           Please keep contributions respectful and on-topic. This is an
-          educational project celebrating Taylor Swift's artistry through
+          educational project celebrating Taylor Swift&apos;s artistry through
           language. We welcome constructive feedback, corrections, and new
           vocabulary suggestions that maintain the quality and intent of the
           dictionary.

@@ -11,7 +11,7 @@ export default function NotFound() {
       </h1>
       <div className="w-16 h-px bg-[var(--border-focus)] mx-auto mb-8 opacity-50" />
       <p className="font-body text-base text-[var(--foreground-muted)] mb-10 max-w-md leading-relaxed">
-        This page doesn't exist — like a bridge that was never burned.
+        This page doesn&apos;t exist — like a bridge that was never burned.
       </p>
       <Link
         href="/"

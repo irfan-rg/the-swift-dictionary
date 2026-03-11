@@ -34,7 +34,7 @@ export default function AboutPage() {
         </h2>
         <div className="font-body text-sm text-[var(--foreground-muted)] leading-[1.9] space-y-4">
           <p>
-            Taylor Swift's songwriting is remarkable not just for its emotional depth,
+            Taylor Swift&apos;s songwriting is remarkable not just for its emotional depth,
             but for its vocabulary. Words like <em>iridescent</em>, <em>clandestine</em>,
             and <em>harbored</em> appear naturally in her lyrics, often carrying layers
             of meaning that reward closer reading.
@@ -46,7 +46,7 @@ export default function AboutPage() {
             into a living glossary.
           </p>
           <p>
-            Whether you're a language learner, a curious Swiftie, or someone who
+            Whether you&apos;re a language learner, a curious Swiftie, or someone who
             simply appreciates the craft of songwriting, this project is for you.
           </p>
         </div>
