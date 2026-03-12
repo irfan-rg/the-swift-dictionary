@@ -1,0 +1,66 @@
+name: Daily Word of the Day Image
+
+on:
+  schedule:
+    # Runs at 6 AM UTC every day (adjust for your timezone)
+    - cron: '0 6 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  generate-image:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Download WOTD Images (Front & Back)
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          mkdir -p wotd-images
+          
+          # Replace with your actual deployed URL
+          BASE_URL="https://theswiftdictionary.com"
+          
+          echo "Downloading front side..."
+          curl -o "wotd-images/wotd-${DATE}-front.png" "${BASE_URL}/api/wotd/image?side=front"
+          
+          echo "Downloading back side..."
+          curl -o "wotd-images/wotd-${DATE}-back.png" "${BASE_URL}/api/wotd/image?side=back"
+          
+          echo "Downloaded:"
+          ls -la wotd-images/
+      
+      - name: Send to Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          
+          # Send carousel as album (front & back)
+          curl -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMediaGroup" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "chat_id": "'${TELEGRAM_CHAT_ID}'",
+              "media": [
+                {
+                  "type": "photo",
+                  "media": "attach://front",
+                  "caption": "📖 Word of the Day - '${DATE}' (Front)"
+                },
+                {
+                  "type": "photo",
+                  "media": "attach://back",
+                  "caption": "Word context (Back)"
+                }
+              ]
+            }' \
+            -F "front=@wotd-images/wotd-${DATE}-front.png" \
+            -F "back=@wotd-images/wotd-${DATE}-back.png"
+          
+          echo "✓ Sent to Telegram"
+      
+      - name: Upload as artifact (backup)
+        uses: actions/upload-artifact@v4
+        with:
+          name: wotd-${{ github.run_id }}
+          path: wotd-images/
+          retention-days: 30

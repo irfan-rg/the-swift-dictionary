@@ -38,6 +38,9 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# generated images
+/wotd-images/
 next-env.d.ts
 
 # build/debug artifacts
