@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getAlbums } from "@/lib/queries";
 import ExplorerGrid from "@/components/explorer/ExplorerGrid";
+import type { Album } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: "Explorer",
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ExplorerPage() {
-  let albums;
+  let albums: Album[] = [];
   
   try {
     albums = await getAlbums();
