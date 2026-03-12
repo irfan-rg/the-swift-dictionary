@@ -82,7 +82,7 @@ export default function FavoriteButton({
         className={`${btnPadding} rounded-full transition-all duration-200 hover:scale-110 active:scale-95 disabled:opacity-60 ${
           favorited
             ? "text-red-500 hover:text-red-600"
-            : "text-neutral-400 hover:text-red-400 dark:text-neutral-500 dark:hover:text-red-400"
+            : "text-[var(--foreground-muted)] hover:text-red-400"
         }`}
       >
         <Heart
@@ -100,14 +100,14 @@ export default function FavoriteButton({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 4, scale: 0.95 }}
             transition={{ duration: 0.15 }}
-            className="absolute right-0 top-full mt-2 z-50 w-56 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 shadow-lg p-4"
+            className="absolute right-0 top-full mt-2 z-50 w-56 rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] shadow-lg p-4"
           >
-            <p className="text-sm text-neutral-700 dark:text-neutral-300 mb-3">
+            <p className="font-body text-sm text-[var(--foreground-muted)] mb-3">
               Sign in to save your favorite words
             </p>
             <Link
               href="/auth/login"
-              className="block w-full text-center px-3 py-2 rounded-lg bg-[var(--accent)] text-white text-sm font-medium hover:opacity-90 transition-opacity"
+              className="block w-full text-center px-3 py-2 rounded-sm bg-[var(--accent)] text-white font-body text-sm font-medium hover:bg-[var(--accent-hover)] transition-colors"
             >
               Sign In
             </Link>

@@ -1,36 +1,80 @@
+import React from "react";
+import { ArrowLeft, Music } from "lucide-react";
+
 export default function AlbumLoading() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 animate-pulse">
-      <div className="mb-8 flex items-center space-x-4">
-        <div className="w-10 h-10 rounded-full bg-neutral-200 dark:bg-neutral-800" />
-        <div className="space-y-2">
-          <div className="h-9 w-48 bg-neutral-200 dark:bg-neutral-800 rounded-lg" />
-          <div className="h-[2px] w-28 bg-neutral-200 dark:bg-neutral-800 rounded-full" />
-          <div className="h-4 w-32 bg-neutral-200 dark:bg-neutral-800 rounded" />
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-pulse">
+      {/* Header */}
+      <div className="mb-12">
+        <div className="inline-flex items-center gap-2 font-body text-[10px] tracking-widest uppercase text-transparent bg-[var(--border)] rounded mb-6 select-none">
+          <ArrowLeft className="w-3.5 h-3.5 invisible" />
+          Back to Explorer
         </div>
+
+        {/* Short realistic title like "Lover" or "Folklore" */}
+        <h1 className="font-display text-5xl md:text-6xl font-medium tracking-tight text-transparent bg-[var(--border)] rounded mb-3 w-max select-none">
+          Lover
+        </h1>
+        <div className="flex flex-wrap items-center gap-3 text-transparent select-none">
+          <span className="font-body text-sm bg-[var(--border)] rounded">2019</span>
+          <span className="w-1 h-1 rounded-full bg-[var(--border-focus)] opacity-50" />
+          <span className="font-body text-sm bg-[var(--border)] rounded">18 songs</span>
+          <span className="w-1 h-1 rounded-full bg-[var(--border-focus)] opacity-50" />
+          <span className="font-body text-sm bg-[var(--border)] rounded">81 vocab words</span>
+        </div>
+        <div className="w-16 h-px bg-[var(--border-focus)] mt-6 opacity-50" />
       </div>
 
-      {/* Info card skeleton */}
-      <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white/60 dark:bg-neutral-900/40 overflow-hidden mb-8">
+      {/* Album Info Card */}
+      <div className="rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] overflow-hidden mb-12">
         <div className="flex flex-col md:flex-row">
-          <div className="md:w-64 h-48 bg-neutral-200 dark:bg-neutral-800" />
-          <div className="flex-1 p-8 space-y-4">
-            <div className="h-5 bg-neutral-200 dark:bg-neutral-800 rounded w-3/4" />
-            <div className="h-4 bg-neutral-200 dark:bg-neutral-800 rounded w-1/2" />
+          {/* Cover — exact same sizing as AlbumDetail.tsx */}
+          <div className="md:w-64 h-48 md:h-auto relative shrink-0 overflow-hidden bg-[var(--border)]" />
+          
+          <div className="flex-1 p-8">
+            {/* Short 1-line description like real data */}
+            <p className="font-body text-base leading-relaxed select-none text-transparent">
+              <span className="bg-[var(--border)] rounded">Romantic pop with dreamy vocabulary</span>
+            </p>
           </div>
         </div>
       </div>
 
-      {/* Songs grid skeleton */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Array.from({ length: 12 }).map((_, i) => (
+      {/* Songs List */}
+      <div className="mb-4">
+        <span className="font-body text-[10px] tracking-widest uppercase text-transparent bg-[var(--border)] rounded select-none">
+          Tracklist
+        </span>
+      </div>
+
+      <div className="border-t border-[var(--border)]">
+        {Array.from({ length: 18 }).map((_, index) => (
           <div
-            key={i}
-            className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white/60 dark:bg-neutral-900/40 p-6 space-y-3"
+            key={index}
+            className="flex items-center gap-5 py-4 border-b border-[var(--border)] px-4 -mx-4"
           >
-            <div className="h-5 bg-neutral-200 dark:bg-neutral-800 rounded w-2/3" />
-            <div className="h-4 bg-neutral-200 dark:bg-neutral-800 rounded w-1/3" />
-            <div className="h-4 bg-neutral-200 dark:bg-neutral-800 rounded w-1/2" />
+            {/* Track Number */}
+            <span className="font-display italic text-xl text-transparent bg-[var(--border)] rounded w-6 text-right shrink-0 select-none">
+              {index + 1}
+            </span>
+
+            {/* Song Info */}
+            <div className="flex-1 min-w-0">
+              <h3 className="font-display font-medium text-lg text-transparent bg-[var(--border)] rounded w-max max-w-full select-none inline-block truncate">
+                Song Title Placeholder
+              </h3>
+              <div className="flex items-center gap-2 mt-0.5">
+                <Music className="w-3 h-3 text-[var(--foreground-muted)] opacity-30" />
+                <span className="font-body text-xs text-transparent bg-[var(--border)] rounded select-none">
+                  5 vocab words
+                </span>
+              </div>
+            </div>
+
+            {/* Difficulty */}
+            <span className="font-handwriting text-sm text-transparent bg-[var(--border)] rounded shrink-0 hidden sm:block select-none">
+              Intermediate
+            </span>
           </div>
         ))}
       </div>

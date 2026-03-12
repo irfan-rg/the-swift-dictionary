@@ -1,39 +1,45 @@
 import type { Metadata } from "next";
 import { getAlbums } from "@/lib/queries";
 import ExplorerGrid from "@/components/explorer/ExplorerGrid";
-import type { Album } from "@/lib/types";
+import { Album } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: "Explorer",
-  description: "Browse all 10 Taylor Swift albums and discover vocabulary from every era.",
+  description: "Browse all 12 Taylor Swift eras and discover vocabulary from every album.",
 };
 
 export default async function ExplorerPage() {
-  let albums: Album[] = [];
-  
+  let album: Album[] = [];
+
   try {
-    albums = await getAlbums();
+    album = await getAlbums();
   } catch (error) {
     console.error("Error fetching albums:", error);
-    albums = [];
+    album = [];
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pt-20">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="font-playfair text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-2">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      {/* Page Header */}
+      <div className="mb-12 text-center">
+        <span className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] block mb-2">
+          The Eras Collection
+        </span>
+        <h1 className="font-display text-5xl md:text-6xl font-medium tracking-tight text-[var(--foreground)] mb-4">
           Explorer
         </h1>
-        <div className="h-[2px] w-28 accent-gradient rounded-full opacity-80" />
+        <p className="font-body text-sm text-[var(--foreground-muted)] max-w-md mx-auto">
+          Browse every era, discover the vocabulary woven through her discography.
+        </p>
+        <div className="w-16 h-px bg-[var(--border-focus)] mx-auto mt-6 opacity-50" />
       </div>
 
       {/* Albums Grid */}
-      {albums.length > 0 ? (
-        <ExplorerGrid albums={albums} />
+      {album.length > 0 ? (
+        <ExplorerGrid albums={album} />
       ) : (
         <div className="text-center py-12">
-          <p className="text-neutral-600 dark:text-neutral-400">No albums found. Please check your database connection.</p>
+          <p className="font-body text-sm text-[var(--foreground-muted)]">No albums found. Please check your database connection.</p>
         </div>
       )}
     </div>

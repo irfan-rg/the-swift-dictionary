@@ -1,108 +1,127 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Music, ExternalLink, TrendingUp } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import type { SongWithAlbum } from '@/lib/types';
 
-// Fallback when DB is empty
 const fallbackSongs: SongWithAlbum[] = [
-  { id: "1", album_id: "", slug: "anti-hero", title: "Anti-Hero", track_number: 3, lyrics: null, vocab_count: 12, difficulty: "Intermediate", spotify_embed_url: null, created_at: "", album_slug: "midnights", album_title: "Midnights" },
-  { id: "2", album_id: "", slug: "cardigan", title: "cardigan", track_number: 2, lyrics: null, vocab_count: 15, difficulty: "Advanced", spotify_embed_url: null, created_at: "", album_slug: "folklore", album_title: "Folklore" },
-  { id: "3", album_id: "", slug: "willow", title: "willow", track_number: 1, lyrics: null, vocab_count: 18, difficulty: "Advanced", spotify_embed_url: null, created_at: "", album_slug: "evermore", album_title: "Evermore" },
+  { id: "1", album_id: "", slug: "the-smallest-man-who-ever-lived", title: "The Smallest Man Who Ever Lived", track_number: 1, lyrics: null, vocab_count: 12, difficulty: "Beginner", spotify_embed_url: null, created_at: "", album_slug: "ttpd", album_title: "The Tortured Poets Department" },
+  { id: "2", album_id: "", slug: "so-long-london", title: "So Long, London", track_number: 2, lyrics: null, vocab_count: 12, difficulty: "Intermediate", spotify_embed_url: null, created_at: "", album_slug: "ttpd", album_title: "The Tortured Poets Department" },
+  { id: "3", album_id: "", slug: "dear-john", title: "Dear John", track_number: 3, lyrics: null, vocab_count: 11, difficulty: "Intermediate", spotify_embed_url: null, created_at: "", album_slug: "speaknow", album_title: "Speak Now" },
+  { id: "4", album_id: "", slug: "mean", title: "Mean", track_number: 4, lyrics: null, vocab_count: 10, difficulty: "Intermediate", spotify_embed_url: null, created_at: "", album_slug: "speaknow", album_title: "Speak Now" },
+  { id: "5", album_id: "", slug: "eldest-daughter", title: "Eldest Daughter", track_number: 5, lyrics: null, vocab_count: 10, difficulty: "Intermediate", spotify_embed_url: null, created_at: "", album_slug: "showgirl", album_title: "The Life of a Showgirl" },
 ];
 
 export default function TopSongs({ songs }: { songs?: SongWithAlbum[] }) {
   const list = songs && songs.length > 0 ? songs : fallbackSongs;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="h-full flex flex-col rounded-2xl overflow-hidden border border-neutral-200 dark:border-neutral-800 bg-white/60 dark:bg-neutral-900/40 backdrop-blur"
-    >
-      {/* Header */}
-      <div className="p-6 border-b border-neutral-200 dark:border-neutral-800 bg-white/50 dark:bg-neutral-900/40">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl grid place-items-center border border-neutral-200 dark:border-neutral-800">
-              <TrendingUp className="w-5 h-5" style={{ color: 'var(--accent)' }} />
-            </div>
-            <div className="space-y-2">
-              <h2 className="font-playfair text-2xl font-bold text-neutral-900 dark:text-white">Top Songs</h2>
-              <p className="text-neutral-600 dark:text-neutral-400 text-sm">Most vocabulary-rich tracks</p>
-            </div>
+    <div className="w-full flex pt-4 relative">
+
+      {/* The Diary Page Form Factor */}
+      <div className="w-full bg-[var(--surface-raised)] border border-[var(--border)] rounded-sm py-6 sm:py-8 pr-6 sm:pr-8 pl-12 sm:pl-16 flex flex-col relative overflow-hidden shadow-sm group/journal rotate-[-0.5deg]">
+
+        {/* Spiral Binder Holes */}
+        <div className="absolute top-0 left-0 bottom-0 w-8 sm:w-10 border-r border-[var(--border)] flex flex-col justify-evenly py-6 opacity-60 z-20">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <div key={i} className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full bg-[var(--background)] border border-[var(--border)] mx-auto shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]" />
+          ))}
+        </div>
+
+        {/* Scrapbook Tape — taped to the scrapbook wall */}
+        <div className="scrapbook-tape absolute -top-4 right-12 w-24 rotate-[4deg] opacity-80 z-10" />
+        <div className="scrapbook-tape absolute -bottom-3 left-10 w-20 rotate-[-6deg] opacity-60 z-10" />
+
+        {/* Vintage Notebook Paper Lines Texture */}
+        <div
+          className="absolute inset-x-0 bottom-0 pointer-events-none opacity-[0.03]"
+          style={{
+            top: '84px',
+            backgroundImage: 'repeating-linear-gradient(transparent, transparent 39px, var(--foreground) 40px)',
+            backgroundSize: '100% 40px',
+          }}
+        />
+
+        {/* Journal Header */}
+        <div className="flex items-end justify-between mb-4 relative z-10">
+          <div>
+            <span className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] block mb-1 opacity-80">
+              The Mastermind Collection
+            </span>
+            <h2 className="font-display text-4xl sm:text-[2.75rem] leading-none font-medium tracking-tight">
+              Top Songs
+            </h2>
           </div>
           <Link
             href="/explorer"
-            className="text-neutral-700 dark:text-neutral-300 hover:text-[var(--accent)] font-medium text-sm flex items-center space-x-1 transition-colors"
+            className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--accent)] border-b border-transparent hover:border-[var(--accent)] pb-0.5 mb-1 hidden sm:block"
+            style={{ transition: 'color 0.2s, border-color 0.2s' }}
           >
-            <span>View All</span>
-            <ExternalLink className="w-4 h-4" />
+            Explore Albums
           </Link>
         </div>
-      </div>
 
-      {/* Songs List */}
-      <div className="divide-y divide-gray-200 flex-1">
-        {list.map((song, index) => (
-          <motion.div
-            key={song.id}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4, delay: index * 0.1 }}
-            className="p-6 hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-colors group"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 rounded-lg grid place-items-center border border-neutral-200 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 font-bold">
+        {/* The List — flex-1 + justify-between ensures it statically stretches to EXACTLY match WOTD height */}
+        <div className="flex-1 flex flex-col justify-between relative z-10">
+          {list.map((song, index) => (
+            <motion.div
+              key={song.id}
+              initial={{ opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4, delay: index * 0.07 }}
+              className="flex-1 flex flex-col justify-center"
+            >
+              <Link
+                href={`/explorer/${song.album_slug}/${song.slug}`}
+                className="group flex items-center gap-4 border-b border-[var(--border)] py-2 sm:py-3 relative"
+              >
+                {/* Index Number */}
+                <span className="font-display italic text-2xl text-[var(--accent)] w-6 text-right shrink-0 select-none leading-none opacity-80 group-hover:opacity-100 transition-colors">
                   {index + 1}
-                </div>
-                
-                <div className="flex-1">
-                  <div className="flex items-center space-x-2 mb-1">
-                    <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-colors">
-                      {song.title}
-                    </h3>
-                    <span className="px-2 py-1 rounded-full text-xs font-medium border border-neutral-300 dark:border-neutral-700 text-neutral-600 dark:text-neutral-300">
+                </span>
+
+                {/* Song Info */}
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-display font-medium text-xl sm:text-[1.35rem] text-[var(--foreground)] group-hover:text-[var(--accent)] truncate leading-tight transition-colors">
+                    {song.title}
+                  </h3>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <span className="font-body text-[9px] tracking-widest uppercase text-[var(--foreground-muted)] opacity-80 group-hover:text-[var(--accent)] transition-colors">
                       {song.album_title}
                     </span>
-                  </div>
-                  
-                  <div className="flex items-center space-x-4 text-sm text-neutral-600 dark:text-neutral-400">
-                    <div className="flex items-center space-x-1">
-                      <Music className="w-4 h-4" style={{ color: 'var(--accent)' }} />
-                      <span>{song.vocab_count} vocab words</span>
-                    </div>
+                    <span className="w-1 h-1 rounded-full bg-[var(--border-focus)] opacity-30" />
+                    <span className="font-body text-[10px] text-[var(--foreground-muted)] opacity-70">
+                      {song.vocab_count} words
+                    </span>
                   </div>
                 </div>
-              </div>
-              
-              <div className="flex items-center space-x-2">
-                <Link
-                  href={`/explorer/${song.album_slug}/${song.slug}`}
-                  className="p-2 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors"
-                  aria-label={`View ${song.title}`}
-                >
-                  <ExternalLink className="w-5 h-5" />
-                </Link>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
 
-      {/* Footer */}
-      <div className="px-6 py-4 border-t border-neutral-200 dark:border-neutral-800 bg-white/40 dark:bg-neutral-900/40">
-        <Link
-          href="/explorer"
-          className="w-full bg-[var(--accent)] text-white py-3 px-4 rounded-lg font-medium hover:bg-[var(--accent-hover)] hover:shadow transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center space-x-2"
-        >
-          <Music className="w-5 h-5" />
-          <span>Explore All Songs</span>
-        </Link>
+                {/* Difficulty Annotation */}
+                <span className="font-handwriting text-[15px] sm:text-[17px] text-[var(--foreground-muted)] opacity-50 shrink-0 hidden sm:block group-hover:opacity-80 transition-opacity">
+                  {song.difficulty}
+                </span>
+
+                {/* Arrow */}
+                <div className="shrink-0 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 text-[var(--accent)] transition-all duration-200">
+                  <ArrowRight className="w-4 h-4" />
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Mobile explore link */}
+        <div className="mt-4 text-center sm:hidden relative z-10">
+          <Link
+            href="/explorer"
+            className="font-body text-xs tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--accent)] border-b border-transparent hover:border-[var(--accent)] pb-0.5"
+          >
+            Explore Index
+          </Link>
+        </div>
+
       </div>
-    </motion.div>
+    </div>
   );
 }

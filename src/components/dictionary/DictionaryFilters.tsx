@@ -56,7 +56,6 @@ export default function DictionaryFilters({ album, setAlbum, difficulty, setDiff
           const [activeIndex, setActiveIndex] = useState<number>(() => Math.max(0, options.findIndex((o) => o.key === value)));
           const ref = useRef<HTMLDivElement | null>(null);
 
-          // Close on outside click
           useEffect(() => {
             if (!open) return;
             const onDown = (e: MouseEvent) => {
@@ -66,7 +65,6 @@ export default function DictionaryFilters({ album, setAlbum, difficulty, setDiff
             return () => document.removeEventListener('mousedown', onDown);
           }, [open]);
 
-          // Keyboard interactions
           const onKeyDown = (e: React.KeyboardEvent) => {
             if (e.key === 'ArrowDown') {
               e.preventDefault();
@@ -101,10 +99,10 @@ export default function DictionaryFilters({ album, setAlbum, difficulty, setDiff
                 aria-label={ariaLabel}
                 onClick={() => setOpen((v) => !v)}
                 onKeyDown={onKeyDown}
-                className="h-11 pr-10 pl-4 rounded-full bg-white/70 dark:bg-neutral-950/70 backdrop-blur border border-neutral-200 dark:border-neutral-800 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/60 focus:border-transparent min-w-[10rem] text-left relative"
+                className="h-11 pr-10 pl-4 rounded-sm bg-[var(--surface-raised)] border border-[var(--border)] font-body text-sm text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/40 focus:border-[var(--border-focus)] min-w-[10rem] text-left relative transition-colors"
               >
                 {selected.label}
-                <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden>
+                <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--foreground-muted)] opacity-50" viewBox="0 0 20 20" fill="currentColor" aria-hidden>
                   <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
                 </svg>
               </button>
@@ -114,7 +112,7 @@ export default function DictionaryFilters({ album, setAlbum, difficulty, setDiff
                   role="listbox"
                   tabIndex={-1}
                   aria-label={ariaLabel}
-                  className="absolute z-30 mt-2 w-full rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white/95 dark:bg-neutral-900/95 shadow-xl backdrop-blur overflow-hidden"
+                  className="absolute z-30 mt-2 w-full rounded-sm border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-soft)] overflow-hidden"
                 >
                   <ul className="max-h-64 overflow-auto py-1">
                     {options.map((opt, idx) => {
@@ -131,7 +129,7 @@ export default function DictionaryFilters({ album, setAlbum, difficulty, setDiff
                               onChange(opt.key);
                               setOpen(false);
                             }}
-                            className={`w-full text-left px-4 py-2 text-sm ${isActive ? 'bg-neutral-100 dark:bg-neutral-800' : ''} ${isSelected ? 'font-semibold' : 'font-normal'} text-neutral-800 dark:text-neutral-100`}
+                            className={`w-full text-left px-4 py-2 font-body text-sm transition-colors ${isActive ? 'bg-[var(--surface-raised)]' : ''} ${isSelected ? 'font-semibold text-[var(--accent)]' : 'text-[var(--foreground)]'}`}
                           >
                             {opt.label}
                           </button>
@@ -156,5 +154,3 @@ export default function DictionaryFilters({ album, setAlbum, difficulty, setDiff
     </div>
   );
 }
-
-

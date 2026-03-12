@@ -13,56 +13,53 @@ type Props = {
 export default function WordCard({ item, onOpen }: Props) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.18, ease: "easeOut" }}
-      className="group rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white/60 dark:bg-neutral-900/40 backdrop-blur p-5 flex flex-col gap-4 cursor-pointer hover:-translate-y-0.5 hover:shadow-lg/40 dark:hover:shadow-black/30 transition-transform"
+      className="group rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] p-5 flex flex-col gap-4 cursor-pointer hover:border-[var(--border-focus)] hover:shadow-[var(--shadow-soft)] transition-all"
       onClick={() => onOpen?.(item)}
     >
       <div className="flex items-start justify-between gap-4">
-          <div className="space-y-3">
-            <div>
-              <h3 className="font-playfair text-2xl font-bold tracking-wide text-neutral-900 dark:text-white">{item.word}</h3>
-              <p 
-                className="text-sm mt-1 font-medium"
-                style={{ color: getEraColor(item.album) }}
-              >
-                {item.song}
-              </p>
-            </div>
-            <div className="inline-flex items-center gap-2 text-xs text-neutral-500">
+        <div className="space-y-2">
+          <div>
+            <h3 className="font-display text-2xl font-medium tracking-tight text-[var(--foreground)]">{item.word}</h3>
+            <p
+              className="font-body text-xs font-medium mt-1"
+              style={{ color: getEraColor(item.album) }}
+            >
+              {item.song}
+            </p>
+          </div>
+          <div className="inline-flex items-center gap-2">
             <span
-              className="px-2.5 py-0.5 rounded-full border text-neutral-700 dark:text-neutral-300 uppercase tracking-wide"
+              className="font-body text-[9px] tracking-widest uppercase px-2 py-0.5 rounded-sm border text-[var(--foreground-muted)]"
               style={{ borderColor: getEraColor(item.album) }}
               title={`Era: ${item.album}`}
             >
               {item.album}
             </span>
-            <span className="px-2.5 py-0.5 rounded-full border border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300">
+            <span className="font-handwriting text-sm text-[var(--foreground-muted)] opacity-60">
               {item.difficulty}
             </span>
           </div>
         </div>
-        <div className="flex items-center gap-1">
-          <div className="p-2 rounded-md text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-200 transition-colors">
-            <ArrowRight className="w-4 h-4 transform transition-transform duration-200 ease-out group-hover:translate-x-1" />
-          </div>
+        <div className="p-2 text-[var(--foreground-muted)] opacity-40 group-hover:opacity-100 group-hover:text-[var(--accent)] transition-all">
+          <ArrowRight className="w-4 h-4 transform transition-transform duration-200 ease-out group-hover:translate-x-1" />
         </div>
       </div>
 
       <div>
-        <h4 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-1">Meaning</h4>
-        <p className="text-neutral-700 dark:text-neutral-300 text-sm leading-relaxed line-clamp-2">{item.definition}</p>
+        <h4 className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] opacity-60 mb-1">Meaning</h4>
+        <p className="font-body text-sm text-[var(--foreground)] leading-relaxed line-clamp-2 opacity-80">{item.definition}</p>
       </div>
 
       <div>
-        <h4 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-1">Lyric</h4>
-        <blockquote className="text-neutral-700 dark:text-neutral-300 text-sm italic border-l-2 border-neutral-300 dark:border-neutral-700 pl-3">“{item.lyricSnippet}” — {item.song}</blockquote>
+        <h4 className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] opacity-60 mb-1">Lyric</h4>
+        <blockquote className="font-body text-sm text-[var(--foreground)] italic border-l-2 border-[var(--accent)] opacity-60 pl-3">
+          &ldquo;{item.lyricSnippet}&rdquo; — {item.song}
+        </blockquote>
       </div>
-      {/* Modal moved to page-level to ensure single instance */}
     </motion.div>
   );
 }
-
-
