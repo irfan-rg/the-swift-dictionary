@@ -1,106 +1,161 @@
-# 🎵 The Swift Dictionary
+<p align="center">
+  <img src="src/app/icon.png" alt="The Swift Dictionary" width="80" />
+</p>
 
-*A sophisticated vocabulary exploration tool inspired by Taylor Swift's lyrical genius*
+<h1 align="center">The Swift Dictionary</h1>
 
-Discover the beautiful, complex words hidden within Taylor Swift's discography. From *serendipitous* encounters to *ephemeral* moments, explore how Taylor's vocabulary enhances her storytelling across different eras.
+<p align="center">
+  A curated scrapbook of Taylor Swift's lyrical vocabulary — explore sophisticated words hidden across every era.
+</p>
 
-## ✨ Features
+<p align="center">
+  <a href="https://theswiftdictionary.com">Live Site</a> · <a href="#features">Features</a> · <a href="#getting-started">Get Started</a> · <a href="#contributing">Contribute</a>
+</p>
 
-- **📚 Interactive Dictionary**: Browse words with definitions, lyric snippets, and context
-- **🎯 Word of the Day**: Daily featured vocabulary with detailed explanations
-- **🎵 Era-Based Filtering**: Explore words by album/era (Debut through Midnights)
-- **📊 Difficulty Levels**: Words categorized as Beginner, Intermediate, or Advanced
-- **🔍 Smart Search**: Find words by definition, song, album, or difficulty
-- **📱 Responsive Design**: Beautiful UI that works on all devices
-- **🌙 Dark Mode**: Elegant dark theme support
+---
 
-## 🚀 Tech Stack
+## About
 
-- **Framework**: Next.js 15 with App Router
-- **Styling**: Tailwind CSS 4
-- **Animations**: Framer Motion
-- **Icons**: Lucide React
-- **Database**: Supabase (configured)
-- **Language**: TypeScript
+Taylor Swift's songwriting is remarkable not just for its emotional depth, but for its vocabulary. Words like *iridescent*, *clandestine*, and *harbored* appear naturally in her lyrics, carrying layers of meaning that reward closer reading.
 
-## 🛠️ Getting Started
+**The Swift Dictionary** extracts, defines, and contextualizes the vocabulary that makes her writing distinctive — turning lyrics into a living glossary spanning all 12 eras, from *Taylor Swift* (2006) through *The Life of a Showgirl* (2025).
+
+## Features
+
+- **Dictionary** — Browse, search, and filter vocabulary words across every era with prefix-matched search and difficulty filters
+- **Explorer** — Navigate by album and song; view full lyrics with highlighted vocabulary words in context
+- **Word of the Day** — A daily featured word with definition, lyric snippet, and Taylor's usage context
+- **Era Timeline** — Visual journey through all 12 albums with era-specific color palettes
+- **Top Songs** — Rankings of the most vocabulary-rich tracks in the discography
+- **Favorites** — Sign in to save words and build a personal vocabulary collection
+- **Dark Mode** — Full light/dark theme support
+- **Responsive** — Designed to work beautifully on all screen sizes
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Framework | [Next.js 15](https://nextjs.org) (App Router, Server Components) |
+| Language | TypeScript |
+| Styling | [Tailwind CSS 4](https://tailwindcss.com) |
+| Database | [Supabase](https://supabase.com) (PostgreSQL + Auth + RLS) |
+| Animations | [Framer Motion](https://www.framer.com/motion) |
+| Icons | [Lucide React](https://lucide.dev) |
+| Theme | [next-themes](https://github.com/pacocoursey/next-themes) |
+| Fonts | Cormorant Garamond, Bricolage Grotesque, Cinzel Decorative |
+
+## Getting Started
 
 ### Prerequisites
-- Node.js 18+ 
-- npm
+
+- Node.js 18+
+- A [Supabase](https://supabase.com) project
 
 ### Installation
 
-1. Clone the repository
 ```bash
-git clone https://github.com/irfan-rg/the-swift-dictionary
+git clone https://github.com/irfan-rg/the-swift-dictionary.git
 cd the-swift-dictionary
-```
-
-2. Install dependencies
-```bash
 npm install
-# or
-yarn install
-# or
-pnpm install
 ```
 
-3. Run the development server
+### Environment Variables
+
+Create a `.env.local` file in the project root:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
+
+### Database Setup
+
+Run the schema in your Supabase SQL Editor:
+
+```bash
+# The schema file is at:
+supabase/schema.sql
+```
+
+This creates all tables (albums, songs, words, favorites, profiles), full-text search indexes, and row-level security policies.
+
+### Seed Data
+
+The `pipeline/` directory contains Python scripts for populating the database:
+
+```bash
+cd pipeline
+pip install -r requirements.txt
+python seed_db.py
+```
+
+### Run
+
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+Open [http://localhost:3000](http://localhost:3000).
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/
 ├── app/
-│   ├── dictionary/          # Dictionary page
-│   ├── layout.tsx           # Root layout
-│   └── page.tsx            # Homepage
+│   ├── about/                  # About page
+│   ├── api/
+│   │   ├── favorites/          # Favorite toggle endpoint
+│   │   └── search/             # Search endpoint
+│   ├── auth/                   # Login, signup, OAuth callback
+│   ├── contribute/             # Contribution guide page
+│   ├── dictionary/             # Dictionary browse + search
+│   ├── explorer/               # Album → Song → Lyrics explorer
+│   │   ├── [album]/
+│   │   │   └── [song]/
+│   ├── favorites/              # User's saved words
+│   ├── layout.tsx              # Root layout with theme provider
+│   └── page.tsx                # Homepage
 ├── components/
-│   ├── dictionary/          # Dictionary-specific components
-│   │   ├── DictionaryFilters.tsx
-│   │   ├── WordCard.tsx
-│   │   └── WordModal.tsx
-│   ├── HeroSection.tsx      # Landing hero
-│   ├── WordOfTheDay.tsx    # Featured word component
-│   ├── TopSongs.tsx        # Song recommendations
-│   ├── Header.tsx          # Navigation
-│   └── Footer.tsx          # Site footer
+│   ├── dictionary/             # WordCard, WordModal, DictionaryFilters
+│   ├── explorer/               # AlbumDetail, SongDetailView, LyricsDisplay
+│   ├── BrandLogo.tsx
+│   ├── EraTimeline.tsx
+│   ├── FavoriteButton.tsx
+│   ├── Header.tsx
+│   ├── Footer.tsx
+│   ├── HeroSection.tsx
+│   ├── TopSongs.tsx
+│   └── WordOfTheDay.tsx
+├── lib/
+│   ├── constants.ts            # Era metadata, colors, helpers
+│   ├── queries.ts              # Supabase query functions
+│   ├── types.ts                # Shared TypeScript types
+│   └── supabase/               # Supabase client (browser, server, middleware)
+└── middleware.ts                # Auth session refresh
+
+pipeline/                       # Python data pipeline
+├── albums.py                   # Album metadata
+├── scrape_lyrics.py            # Lyrics scraper
+├── extract_vocab.py            # GPT-powered vocab extraction
+├── seed_db.py                  # Database seeder
+└── data/                       # Raw lyrics + vocab JSON files
+
+supabase/
+└── schema.sql                  # Full database schema with RLS
 ```
 
-## 🎨 Design Philosophy
+## Contributing
 
-The Swift Dictionary embraces Taylor's aesthetic evolution through:
-- **Era-specific color palettes** for each album
-- **Elegant typography** with Playfair Display for headings
-- **Smooth animations** that feel magical and refined
-- **Glassmorphism effects** for a modern, sophisticated look
-- **Responsive layouts** that work beautifully on all devices
+Contributions are welcome! Check the [Contribute page](https://theswiftdictionary.com/contribute) on the site for ways to help — suggest missing words, report issues, or open a PR.
 
-## 📝 Current Status
+## License
 
-This is a **temporary README** for development purposes. The project currently features:
-
-- ✅ Homepage with hero section and era navigation
-- ✅ Dictionary page with search and filtering
-- ✅ Word cards with lyric snippets and definitions
-- ✅ Word of the Day feature
-- ✅ Responsive design with dark mode
-- ✅ Mock data implementation
-  
-
-This is a personal project, but suggestions and feedback are always welcome!
+This is a personal fan project. Not affiliated with Taylor Swift or her management.
 
 ---
+
+<p align="center">
+  <sub>Built with ♡ for Swifties who love words</sub>
+</p>
 
