@@ -5,6 +5,14 @@ import type { EraSlug } from "@/lib/types";
 
 export const runtime = "edge";
 
+// Pre-load fonts
+const cormorantRegular = fetch(new URL('./fonts/CormorantGaramond-Regular.ttf', import.meta.url)).then(res => res.arrayBuffer());
+const cormorantItalic = fetch(new URL('./fonts/CormorantGaramond-Italic.ttf', import.meta.url)).then(res => res.arrayBuffer());
+const cormorantSemiBold = fetch(new URL('./fonts/CormorantGaramond-SemiBold.ttf', import.meta.url)).then(res => res.arrayBuffer());
+const nothingYouCouldDo = fetch(new URL('./fonts/NothingYouCouldDo.ttf', import.meta.url)).then(res => res.arrayBuffer());
+const cinzelDecorative = fetch(new URL('./fonts/CinzelDecorative-Regular.ttf', import.meta.url)).then(res => res.arrayBuffer());
+const bricolageGrotesque = fetch(new URL('./fonts/BricolageGrotesque-Regular.ttf', import.meta.url)).then(res => res.arrayBuffer());
+
 // Instagram square format
 const WIDTH = 1080;
 const HEIGHT = 1080;
@@ -139,7 +147,7 @@ function FrontFace({ wotd, eraColor }: { wotd: WordData; eraColor: string }) {
               left: 24,
               fontSize: 48,
               fontWeight: 400,
-              fontFamily: "serif",
+              fontFamily: 'Cinzel Decorative',
               color: COLORS.foreground,
               opacity: 0.05,
               display: "flex",
@@ -154,6 +162,7 @@ function FrontFace({ wotd, eraColor }: { wotd: WordData; eraColor: string }) {
               fontSize: 16,
               letterSpacing: "0.25em",
               textTransform: "uppercase",
+              fontFamily: 'Bricolage Grotesque',
               color: COLORS.foregroundMuted,
               marginBottom: 32,
             }}
@@ -166,7 +175,7 @@ function FrontFace({ wotd, eraColor }: { wotd: WordData; eraColor: string }) {
             style={{
               fontSize: 88,
               fontWeight: 600,
-              fontFamily: "serif",
+              fontFamily: 'Cormorant Garamond',
               color: COLORS.foreground,
               textAlign: "center",
               marginBottom: 20,
@@ -189,6 +198,7 @@ function FrontFace({ wotd, eraColor }: { wotd: WordData; eraColor: string }) {
                 fontSize: 18,
                 letterSpacing: "0.15em",
                 textTransform: "uppercase",
+                fontFamily: 'Bricolage Grotesque',
                 color: eraColor,
               }}
             >
@@ -208,6 +218,7 @@ function FrontFace({ wotd, eraColor }: { wotd: WordData; eraColor: string }) {
                 fontSize: 18,
                 letterSpacing: "0.15em",
                 textTransform: "uppercase",
+                fontFamily: 'Bricolage Grotesque',
                 color: COLORS.foregroundMuted,
               }}
             >
@@ -219,6 +230,7 @@ function FrontFace({ wotd, eraColor }: { wotd: WordData; eraColor: string }) {
           <span
             style={{
               fontSize: 24,
+              fontFamily: 'Bricolage Grotesque',
               color: COLORS.foregroundMuted,
               textAlign: "center",
               lineHeight: 1.6,
@@ -242,6 +254,7 @@ function FrontFace({ wotd, eraColor }: { wotd: WordData; eraColor: string }) {
             style={{
               fontSize: 36,
               fontStyle: "italic",
+              fontFamily: 'Nothing You Could Do',
               color: COLORS.foreground,
               textAlign: "center",
             }}
@@ -256,6 +269,7 @@ function FrontFace({ wotd, eraColor }: { wotd: WordData; eraColor: string }) {
         style={{
           marginTop: 36,
           fontSize: 20,
+          fontFamily: 'Bricolage Grotesque',
           letterSpacing: "0.1em",
           color: COLORS.foregroundMuted,
           opacity: 0.6,
@@ -341,8 +355,9 @@ function BackFace({ wotd, eraColor }: { wotd: WordData; eraColor: string }) {
           {/* Handwritten heading */}
           <span
             style={{
-              fontSize: 48,
+              fontSize: 60,
               fontStyle: "italic",
+              fontFamily: 'Nothing You Could Do',
               color: eraColor,
               marginBottom: 16,
             }}
@@ -366,6 +381,7 @@ function BackFace({ wotd, eraColor }: { wotd: WordData; eraColor: string }) {
           <span
             style={{
               fontSize: 28,
+              fontFamily: 'Bricolage Grotesque',
               color: COLORS.foreground,
               lineHeight: 1.8,
               letterSpacing: "0.02em",
@@ -396,6 +412,7 @@ function BackFace({ wotd, eraColor }: { wotd: WordData; eraColor: string }) {
                 style={{
                   fontSize: 28,
                   fontStyle: "italic",
+                  fontFamily: 'Cormorant Garamond',
                   color: COLORS.foreground,
                 }}
               >
@@ -406,6 +423,7 @@ function BackFace({ wotd, eraColor }: { wotd: WordData; eraColor: string }) {
                   fontSize: 14,
                   letterSpacing: "0.2em",
                   textTransform: "uppercase",
+                  fontFamily: 'Bricolage Grotesque',
                   color: COLORS.foreground,
                   opacity: 0.5,
                   marginTop: 4,
@@ -419,6 +437,7 @@ function BackFace({ wotd, eraColor }: { wotd: WordData; eraColor: string }) {
                 fontSize: 14,
                 letterSpacing: "0.15em",
                 textTransform: "uppercase",
+                fontFamily: 'Bricolage Grotesque',
                 color: COLORS.foregroundMuted,
               }}
             >
@@ -450,8 +469,62 @@ export async function GET(request: Request) {
       <FrontFace wotd={wotd} eraColor={eraColor} />
     );
 
+  const [
+    cormorantRegularData,
+    cormorantItalicData,
+    cormorantSemiBoldData,
+    nothingData,
+    cinzelData,
+    bricolageData,
+  ] = await Promise.all([
+    cormorantRegular,
+    cormorantItalic,
+    cormorantSemiBold,
+    nothingYouCouldDo,
+    cinzelDecorative,
+    bricolageGrotesque,
+  ]);
+
   return new ImageResponse(content, {
     width: WIDTH,
     height: HEIGHT,
+    fonts: [
+      {
+        name: 'Cormorant Garamond',
+        data: cormorantRegularData,
+        style: 'normal',
+        weight: 400,
+      },
+      {
+        name: 'Cormorant Garamond',
+        data: cormorantItalicData,
+        style: 'italic',
+        weight: 400,
+      },
+      {
+        name: 'Cormorant Garamond',
+        data: cormorantSemiBoldData,
+        style: 'normal',
+        weight: 600,
+      },
+      {
+        name: 'Nothing You Could Do',
+        data: nothingData,
+        style: 'normal',
+        weight: 400,
+      },
+      {
+        name: 'Cinzel Decorative',
+        data: cinzelData,
+        style: 'normal',
+        weight: 400,
+      },
+      {
+        name: 'Bricolage Grotesque',
+        data: bricolageData,
+        style: 'normal',
+        weight: 400,
+      },
+    ],
   });
 }
