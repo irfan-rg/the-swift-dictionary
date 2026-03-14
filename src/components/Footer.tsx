@@ -47,6 +47,13 @@ export default function Footer() {
 
         </div>
 
+        {/* Privacy Policy Link */}
+        <div className="w-full flex justify-center pb-4">
+          <Link href="/privacy" className="font-body text-[10px] tracking-wider uppercase text-[var(--foreground-muted)] opacity-60 hover:opacity-100 hover:text-[var(--accent)] transition-all">
+            Privacy Policy
+          </Link>
+        </div>
+
         {/* End Mark & Copyright */}
         <div className="w-full flex flex-col items-center pt-8 border-t border-[var(--border)] border-opacity-50 text-center">
           <p className="font-body text-[10px] tracking-wider uppercase text-[var(--foreground-muted)] opacity-60 leading-relaxed max-w-md">
