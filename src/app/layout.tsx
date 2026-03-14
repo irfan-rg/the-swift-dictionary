@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     template: "%s | The Swift Dictionary",
   },
   description: "Discover Taylor Swift's sophisticated vocabulary through her lyrics.",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://theswiftdictionary.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.the-swift-dictionary.me"),
   openGraph: {
     title: "The Swift Dictionary",
     description: "A curated scrapbook of Taylor Swift's lyrical vocabulary.",
