@@ -13,17 +13,26 @@ jobs:
     steps:
       - name: Download WOTD Images (Front & Back)
         run: |
+          set -euo pipefail
           DATE=$(date +%Y-%m-%d)
           mkdir -p wotd-images
-          
-          # Replace with your actual deployed URL
+
+          # Update this if your production domain changes.
           BASE_URL="https://theswiftdictionary.com"
+          echo "Using BASE_URL=${BASE_URL}"
           
           echo "Downloading front side..."
-          curl -o "wotd-images/wotd-${DATE}-front.png" "${BASE_URL}/api/wotd/image?side=front"
+          curl --fail --silent --show-error --location \
+            --output "wotd-images/wotd-${DATE}-front.png" \
+            "${BASE_URL}/api/wotd/image?side=front"
           
           echo "Downloading back side..."
-          curl -o "wotd-images/wotd-${DATE}-back.png" "${BASE_URL}/api/wotd/image?side=back"
+          curl --fail --silent --show-error --location \
+            --output "wotd-images/wotd-${DATE}-back.png" \
+            "${BASE_URL}/api/wotd/image?side=back"
+
+          test -s "wotd-images/wotd-${DATE}-front.png"
+          test -s "wotd-images/wotd-${DATE}-back.png"
           
           echo "Downloaded:"
           ls -la wotd-images/
@@ -33,30 +42,27 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
+          set -euo pipefail
           DATE=$(date +%Y-%m-%d)
-          
-          # Send carousel as album (front & back)
-          curl -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMediaGroup" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "chat_id": "'${TELEGRAM_CHAT_ID}'",
-              "media": [
-                {
-                  "type": "photo",
-                  "media": "attach://front",
-                  "caption": "📖 Word of the Day - '${DATE}' (Front)"
-                },
-                {
-                  "type": "photo",
-                  "media": "attach://back",
-                  "caption": "Word context (Back)"
-                }
-              ]
-            }' \
+
+          if [ -z "${TELEGRAM_BOT_TOKEN}" ] || [ -z "${TELEGRAM_CHAT_ID}" ]; then
+            echo "Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID secret"
+            exit 1
+          fi
+
+          MEDIA='[{"type":"photo","media":"attach://front","caption":"Word of the Day - '"${DATE}"' (Front)"},{"type":"photo","media":"attach://back","caption":"Word context (Back)"}]'
+
+          RESPONSE=$(curl --silent --show-error --location \
+            -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMediaGroup" \
+            -F "chat_id=${TELEGRAM_CHAT_ID}" \
+            -F "media=${MEDIA}" \
             -F "front=@wotd-images/wotd-${DATE}-front.png" \
-            -F "back=@wotd-images/wotd-${DATE}-back.png"
-          
-          echo "✓ Sent to Telegram"
+            -F "back=@wotd-images/wotd-${DATE}-back.png")
+
+          echo "Telegram API response: ${RESPONSE}"
+          echo "${RESPONSE}" | grep -q '"ok":true' || (echo "Telegram send failed" && exit 1)
+
+          echo "Sent to Telegram"
       
       - name: Upload as artifact (backup)
         uses: actions/upload-artifact@v4
