@@ -412,7 +412,7 @@ function BackFace({ wotd, eraColor }: { wotd: WordData; eraColor: string }) {
                 style={{
                   fontSize: 28,
                   fontStyle: "italic",
-                  fontFamily: 'Cormorant Garamond',
+                  fontFamily: 'Nothing You Could Do',
                   color: COLORS.foreground,
                 }}
               >
