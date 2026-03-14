@@ -31,11 +31,15 @@ export default function Footer() {
 
           <div className="flex flex-col gap-4 items-center">
             <h3 className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] font-semibold mb-2">Featured Eras</h3>
-            {ERAS.slice(0, 3).map(era => (
-              <Link key={era.slug} href={`/explorer/${era.slug}`} className="font-body text-sm text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors">
-                {era.label}
-              </Link>
-            ))}
+            {['ttpd', 'midnights', 'reputation'].map(slug => {
+              const era = ERAS.find(e => e.slug === slug);
+              if (!era) return null;
+              return (
+                <Link key={era.slug} href={`/explorer/${era.slug}`} className="font-body text-sm text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors">
+                  {era.label}
+                </Link>
+              );
+            })}
           </div>
 
           <div className="flex flex-col gap-4 items-center">

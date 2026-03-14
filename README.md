@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="src/app/icon.png" alt="The Swift Dictionary" width="80" />
+  <img src="public\images\TSD-Promo-Logo-HQ.png" alt="The Swift Dictionary" width="80" />
 </p>
 
 <h1 align="center">The Swift Dictionary</h1>
