@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://theswiftdictionary.com">Live Site</a> · <a href="#features">Features</a> · <a href="#getting-started">Get Started</a> · <a href="#contributing">Contribute</a>
+  <a href="https://www.the-swift-dictionary.me">Live Site</a> · <a href="#features">Features</a> · <a href="#getting-started">Get Started</a> · <a href="#contributing">Contribute</a>
 </p>
 
 ---
@@ -147,7 +147,7 @@ supabase/
 
 ## Contributing
 
-Contributions are welcome! Check the [Contribute page](https://theswiftdictionary.com/contribute) on the site for ways to help — suggest missing words, report issues, or open a PR.
+Contributions are welcome! Check the [Contribute page](https://www.the-swift-dictionary.me/contribute) on the site for ways to help — suggest missing words, report issues, or open a PR.
 
 ## License
 

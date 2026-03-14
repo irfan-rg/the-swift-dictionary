@@ -3,7 +3,7 @@
  * 
  * Usage:
  *   node scripts/download-wotd-image.mjs
- *   node scripts/download-wotd-image.mjs --url https://theswiftdictionary.com
+ *   node scripts/download-wotd-image.mjs --url https://www.the-swift-dictionary.me
  */
 
 import fs from 'fs';

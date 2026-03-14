@@ -261,7 +261,7 @@ function FrontFace({ wotd, eraColor }: { wotd: WordData; eraColor: string }) {
           opacity: 0.6,
         }}
       >
-        theswiftdictionary.com
+        the-swift-dictionary.me
       </span>
     </div>
   );
@@ -422,7 +422,7 @@ function BackFace({ wotd, eraColor }: { wotd: WordData; eraColor: string }) {
                 color: COLORS.foregroundMuted,
               }}
             >
-              theswiftdictionary.com
+              the-swift-dictionary.me
             </span>
           </div>
         </div>

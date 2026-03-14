@@ -18,7 +18,7 @@ jobs:
           mkdir -p wotd-images
 
           # Update this if your production domain changes.
-          BASE_URL="https://theswiftdictionary.com"
+          BASE_URL="https://www.the-swift-dictionary.me"
           echo "Using BASE_URL=${BASE_URL}"
           
           echo "Downloading front side..."
