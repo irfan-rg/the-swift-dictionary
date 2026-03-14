@@ -44,13 +44,20 @@ jobs:
         run: |
           set -euo pipefail
           DATE=$(date +%Y-%m-%d)
+          BASE_URL="https://www.the-swift-dictionary.me"
 
           if [ -z "${TELEGRAM_BOT_TOKEN}" ] || [ -z "${TELEGRAM_CHAT_ID}" ]; then
             echo "Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID secret"
             exit 1
           fi
 
-          MEDIA='[{"type":"photo","media":"attach://front","caption":"Word of the Day - '"${DATE}"' (Front)"},{"type":"photo","media":"attach://back","caption":"Word context (Back)"}]'
+          echo "Fetching custom Instagram caption..."
+          CAPTION_JSON=$(curl --silent --show-error "${BASE_URL}/api/wotd/caption")
+          # Use jq to get the caption text securely
+          export CAPTION_TEXT=$(echo "${CAPTION_JSON}" | jq -r '.caption // "Word of the Day - '"${DATE}"'"')
+
+          echo "Constructing MEDIA JSON for telegram..."
+          MEDIA=$(jq -n --arg caption "$CAPTION_TEXT" '[{"type":"photo","media":"attach://front","caption":$caption},{"type":"photo","media":"attach://back"}]')
 
           RESPONSE=$(curl --silent --show-error --location \
             -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMediaGroup" \

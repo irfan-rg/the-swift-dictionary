@@ -207,7 +207,7 @@ export default async function Image() {
               zIndex: 2,
             }}
           >
-            Discover her lyrical vocabulary
+            Discover the lyrical vocabulary
           </span>
         </div>
 
@@ -268,4 +268,5 @@ export default async function Image() {
     }
   );
 }
+
 
