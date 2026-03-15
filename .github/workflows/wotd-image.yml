@@ -2,13 +2,18 @@ name: Daily Word of the Day Image
 
 on:
   schedule:
-    # Runs at 12:00 PM IST every day (6:30 AM UTC)
+    # Primary + fallback schedule in IST (GitHub cron uses UTC).
+    # 12:00 PM IST -> 06:30 UTC, fallback at 12:08 PM IST -> 06:38 UTC.
     - cron: '30 6 * * *'
+    - cron: '38 6 * * *'
   workflow_dispatch: # Allow manual trigger
 
 jobs:
   generate-image:
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
     
     steps:
       - name: Download WOTD Images (Front & Back)
@@ -41,6 +46,7 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           DATE=$(date +%Y-%m-%d)
@@ -49,6 +55,22 @@ jobs:
           if [ -z "${TELEGRAM_BOT_TOKEN}" ] || [ -z "${TELEGRAM_CHAT_ID}" ]; then
             echo "Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID secret"
             exit 1
+          fi
+
+          # If fallback cron also fires, skip if there is already a successful scheduled run today.
+          if [ "${GITHUB_EVENT_NAME}" = "schedule" ]; then
+            TODAY_UTC=$(date -u +%Y-%m-%d)
+            RUNS_API="https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/wotd-image.yml/runs?branch=${GITHUB_REF_NAME}&event=schedule&status=completed&per_page=30"
+
+            PREV_SUCCESS_COUNT=$(curl --silent --show-error \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+              "${RUNS_API}" | jq -r --arg today "${TODAY_UTC}" --arg run_id "${GITHUB_RUN_ID}" '[.workflow_runs[] | select((.id | tostring) != $run_id) | select(.conclusion == "success") | select((.run_started_at // "") | startswith($today))] | length')
+
+            if [ "${PREV_SUCCESS_COUNT}" -gt 0 ]; then
+              echo "A successful scheduled run already happened today (${TODAY_UTC}). Skipping duplicate run."
+              exit 0
+            fi
           fi
 
           # Re-check images before sending so this step fails fast with a clear reason.
