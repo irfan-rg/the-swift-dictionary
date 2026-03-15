@@ -2,8 +2,8 @@ name: Daily Word of the Day Image
 
 on:
   schedule:
-    # Runs at 9:00 AM IST every day (3:30 AM UTC)
-    - cron: '30 3 * * *'
+    # Runs at 11:30 AM IST every day (6:00 AM UTC)
+    - cron: '0 6 * * *'
   workflow_dispatch: # Allow manual trigger
 
 jobs:
@@ -57,7 +57,7 @@ jobs:
           export CAPTION_TEXT=$(echo "${CAPTION_JSON}" | jq -r '.caption // "Word of the Day - '"${DATE}"'"')
 
           echo "Constructing MEDIA JSON for telegram..."
-          MEDIA=$(jq -n --arg caption "$CAPTION_TEXT" '[{"type":"photo","media":"attach://front","caption":$caption},{"type":"photo","media":"attach://back"}]')
+          MEDIA=$(jq -n -c --arg caption "$CAPTION_TEXT" '[{"type":"photo","media":"attach://front","caption":$caption},{"type":"photo","media":"attach://back"}]')
 
           RESPONSE=$(curl --silent --show-error --location \
             -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMediaGroup" \
