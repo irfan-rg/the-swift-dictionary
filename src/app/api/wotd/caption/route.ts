@@ -42,13 +42,13 @@ export async function GET() {
   const caption = `Today's Swift Dictionary word: ${word.toUpperCase()} ✨
 
 "${w.lyric_snippet}"
-— Taylor Swift, ${song} (${album})
+- Taylor Swift, ${song} (${album})
 
 📖 ${w.definition}
 
 Did you know the meaning of this word? Which era does it fit best? Let us know in the comments! 🤍
 
-#TaylorSwift #TheSwiftDictionary #${albumHashtag} #Swifties #${wordHashtag} #WordOfTheDay #Vocabulary
+#TaylorSwift #TheSwiftDictionary #${albumHashtag} #Swifties #${wordHashtag}
 `;
 
   return new Response(JSON.stringify({ caption }), {

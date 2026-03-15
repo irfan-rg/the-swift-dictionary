@@ -2,8 +2,8 @@ name: Daily Word of the Day Image
 
 on:
   schedule:
-    # Runs at 11:45 AM IST every day (6:15 AM UTC)
-    - cron: '15 6 * * *'
+    # Runs at 12:00 PM IST every day (6:30 AM UTC)
+    - cron: '30 6 * * *'
   workflow_dispatch: # Allow manual trigger
 
 jobs:
@@ -51,18 +51,26 @@ jobs:
             exit 1
           fi
 
+          # Re-check images before sending so this step fails fast with a clear reason.
+          test -s "wotd-images/wotd-${DATE}-front.png"
+          test -s "wotd-images/wotd-${DATE}-back.png"
+
           echo "Fetching custom Instagram caption..."
-          CAPTION_JSON=$(curl --silent --show-error "${BASE_URL}/api/wotd/caption")
-          # Use jq to get the caption text securely
-          export CAPTION_TEXT=$(echo "${CAPTION_JSON}" | jq -r '.caption // "Word of the Day - '"${DATE}"'"')
+          CAPTION_JSON=$(curl --silent --show-error "${BASE_URL}/api/wotd/caption" || true)
+          CAPTION_TEXT=$(echo "${CAPTION_JSON}" | jq -r '.caption // empty' 2>/dev/null || true)
+
+          if [ -z "${CAPTION_TEXT}" ]; then
+            CAPTION_TEXT="Word of the Day - ${DATE}"
+          fi
 
           echo "Constructing MEDIA JSON for telegram..."
-          MEDIA=$(jq -n -c --arg caption "$CAPTION_TEXT" '[{"type":"photo","media":"attach://front","caption":$caption},{"type":"photo","media":"attach://back"}]')
+          MEDIA=$(jq -n -c --arg caption "${CAPTION_TEXT}" '[{"type":"photo","media":"attach://front","caption":$caption},{"type":"photo","media":"attach://back"}]')
+          echo "${MEDIA}" | jq -e 'type == "array" and length == 2 and .[0].media == "attach://front" and .[1].media == "attach://back"' >/dev/null
 
           RESPONSE=$(curl --silent --show-error --location \
             -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMediaGroup" \
-            -F "chat_id=${TELEGRAM_CHAT_ID}" \
-            -F "media=${MEDIA}" \
+            --form-string "chat_id=${TELEGRAM_CHAT_ID}" \
+            --form-string "media=${MEDIA}" \
             -F "front=@wotd-images/wotd-${DATE}-front.png" \
             -F "back=@wotd-images/wotd-${DATE}-back.png")
 
