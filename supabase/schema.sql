@@ -76,8 +76,12 @@ CREATE INDEX IF NOT EXISTS idx_wotd_date ON public.word_of_the_day (featured_dat
 CREATE TABLE IF NOT EXISTS public.profiles (
   id           uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   display_name text,
+  declared_era text,
   created_at   timestamptz NOT NULL DEFAULT now()
 );
+
+-- Note: Run this if the table already exists:
+-- ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS declared_era text;
 
 -- Auto-create profile on signup
 CREATE OR REPLACE FUNCTION public.handle_new_user()
@@ -109,7 +113,28 @@ CREATE TABLE IF NOT EXISTS public.favorites (
 
 CREATE INDEX IF NOT EXISTS idx_favorites_user ON public.favorites (user_id);
 
--- ── 7. Full-text search ────────────────────────────────────────
+-- ── 7. Bracelets ───────────────────────────────────────────────
+
+CREATE TABLE IF NOT EXISTS public.bracelets (
+  id         uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id    uuid NOT NULL UNIQUE REFERENCES auth.users(id) ON DELETE CASCADE,
+  beads      jsonb NOT NULL DEFAULT '[]'::jsonb,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_bracelets_user ON public.bracelets (user_id);
+
+-- Note: Run this if the table already exists:
+-- CREATE TABLE IF NOT EXISTS public.bracelets (
+--   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+--   user_id uuid NOT NULL UNIQUE REFERENCES auth.users(id) ON DELETE CASCADE,
+--   beads jsonb NOT NULL DEFAULT '[]'::jsonb,
+--   created_at timestamptz NOT NULL DEFAULT now(),
+--   updated_at timestamptz NOT NULL DEFAULT now()
+-- );
+
+-- ── 8. Full-text search ────────────────────────────────────────
 
 -- Words search vector
 ALTER TABLE public.words ADD COLUMN IF NOT EXISTS fts tsvector
@@ -127,7 +152,7 @@ ALTER TABLE public.songs ADD COLUMN IF NOT EXISTS fts tsvector
 
 CREATE INDEX IF NOT EXISTS idx_songs_fts ON public.songs USING gin(fts);
 
--- ── 8. Row Level Security ──────────────────────────────────────
+-- ── 9. Row Level Security ──────────────────────────────────────
 
 ALTER TABLE public.albums         ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.songs          ENABLE ROW LEVEL SECURITY;
@@ -135,6 +160,7 @@ ALTER TABLE public.words          ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.word_of_the_day ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.profiles       ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.favorites      ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.bracelets      ENABLE ROW LEVEL SECURITY;
 
 -- Public read for content tables
 CREATE POLICY "Public read albums"  ON public.albums  FOR SELECT USING (true);
@@ -150,3 +176,8 @@ CREATE POLICY "Users update own profile" ON public.profiles FOR UPDATE USING (au
 CREATE POLICY "Users read own favorites"   ON public.favorites FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "Users insert own favorites" ON public.favorites FOR INSERT WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "Users delete own favorites" ON public.favorites FOR DELETE USING (auth.uid() = user_id);
+
+-- Bracelets: authenticated users manage their own
+CREATE POLICY "Users read own bracelets"   ON public.bracelets FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users insert own bracelets" ON public.bracelets FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users update own bracelets" ON public.bracelets FOR UPDATE USING (auth.uid() = user_id);

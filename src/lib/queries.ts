@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import type {
   Album,
   Song,
+  Profile,
   WordWithDetails,
   SongWithAlbum,
   SongDetail,
@@ -332,6 +333,77 @@ export async function getUserFavorites(
       album_title: albums.title as string,
     } as WordWithDetails;
   });
+}
+
+// ── Profile Queries ──────────────────────────────────────────
+
+export async function getUserProfile(userId: string): Promise<Profile | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", userId)
+    .single();
+
+  if (error && error.code !== "PGRST116") {
+    console.error("Error fetching profile:", error);
+    return null;
+  }
+  return data as Profile | null;
+}
+
+// Removed updateUserEra since it's used only on the client side now.
+
+export async function getCalculatedEra(userId: string): Promise<{ slug: EraSlug, count: number } | null> {
+  const favorites = await getUserFavorites(userId);
+  
+  if (!favorites || favorites.length === 0) {
+    return null;
+  }
+
+  // Count the occurrences of each era slug
+  const counts = favorites.reduce((acc, fav) => {
+    const slug = fav.album_slug;
+    acc[slug] = (acc[slug] || 0) + 1;
+    return acc;
+  }, {} as Record<EraSlug, number>);
+
+  // Find the era with the most favorites
+  let topEra: EraSlug | null = null;
+  let maxCount = 0;
+
+  for (const [slug, count] of Object.entries(counts)) {
+    if (count > maxCount) {
+      maxCount = count;
+      topEra = slug as EraSlug;
+    }
+  }
+
+  if (!topEra) return null;
+
+  return { slug: topEra, count: maxCount };
+}
+
+export async function getUserBracelet(userId: string): Promise<string[] | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("bracelets")
+    .select("beads")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (error) {
+    // Keep UI resilient before/while migrations are being applied.
+    if (error.code === "PGRST116") {
+      return null;
+    }
+    console.error("Error fetching bracelet:", error);
+    return null;
+  }
+
+  const raw = (data as { beads?: unknown } | null)?.beads;
+  if (!Array.isArray(raw)) return null;
+  return raw.filter((item): item is string => typeof item === "string");
 }
 
 export async function toggleFavorite(

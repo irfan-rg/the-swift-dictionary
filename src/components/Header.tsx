@@ -3,13 +3,14 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Search, Menu, X, ArrowLeft, User, LogOut, Heart, Sun, MoonStar } from 'lucide-react';
+import { Search, Menu, X, ArrowLeft, User, LogOut, Heart, Sun, MoonStar, Sparkles } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import BrandLogo from '@/components/BrandLogo';
 import { createClient } from '@/lib/supabase/client';
 import { useTheme } from 'next-themes';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 import type { SearchResult } from '@/lib/types';
+import UserDropdown from '@/components/UserDropdown';
 
 export default function Header() {
   const [mounted, setMounted] = useState(false);
@@ -192,14 +193,7 @@ export default function Header() {
                   </button>
 
                   {user ? (
-                    <>
-                      <Link href="/favorites" className="hidden sm:flex p-2 rounded-full text-[var(--foreground-muted)] hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-all">
-                        <Heart className="w-[18px] h-[18px]" strokeWidth={1.5} />
-                      </Link>
-                      <button onClick={handleLogout} className="hidden sm:flex p-2 rounded-full text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:bg-[var(--surface-raised)] transition-all">
-                        <LogOut className="w-[18px] h-[18px]" strokeWidth={1.5} />
-                      </button>
-                    </>
+                    <UserDropdown />
                   ) : scrolled ? (
                     <Link href="/auth/login" className="hidden sm:flex p-2 rounded-full text-[var(--foreground-muted)] hover:text-[var(--accent)] hover:bg-[var(--surface-raised)] transition-all" aria-label="Login">
                       <User className="w-[18px] h-[18px]" strokeWidth={1.5} />
@@ -237,6 +231,9 @@ export default function Header() {
                 <div className="h-px bg-[var(--border)] my-1" />
                 {user ? (
                   <>
+                    <Link href="/profile" onClick={() => setIsMenuOpen(false)} className="font-body text-sm font-medium flex items-center gap-3 text-[var(--foreground-muted)]">
+                      <Sparkles className="w-[18px] h-[18px]" /> Profile
+                    </Link>
                     <Link href="/favorites" onClick={() => setIsMenuOpen(false)} className="font-body text-sm font-medium flex items-center gap-3 text-[var(--foreground-muted)]">
                       <Heart className="w-[18px] h-[18px]" /> Favorites
                     </Link>

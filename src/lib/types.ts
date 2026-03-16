@@ -71,6 +71,7 @@ export interface WordOfTheDayEntry {
 export interface Profile {
   id: string; // = auth.users.id
   display_name: string | null;
+  declared_era: EraSlug | null;
   created_at: string;
 }
 
@@ -79,6 +80,14 @@ export interface Favorite {
   user_id: string;
   word_id: string;
   created_at: string;
+}
+
+export interface Bracelet {
+  id: string;
+  user_id: string;
+  beads: string[];
+  created_at: string;
+  updated_at: string;
 }
 
 // ── Joined / view types used by the frontend ───────────────────
