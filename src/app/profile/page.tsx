@@ -142,11 +142,11 @@ export default async function ProfilePage() {
       </section>
 
       <section className="mt-10">
-        <Top13Composer favorites={favorites} />
+        <BraceletBuilder userId={user.id} initialBeads={braceletBeads ?? []} />
       </section>
 
       <section className="mt-10">
-        <BraceletBuilder userId={user.id} initialBeads={braceletBeads ?? []} />
+        <Top13Composer favorites={favorites} />
       </section>
     </div>
   );

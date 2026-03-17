@@ -89,94 +89,111 @@ export default function BraceletBuilder({ userId, initialBeads }: BraceletBuilde
   };
 
   return (
-    <div className="rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] p-6 md:p-8 space-y-6">
-      <div>
-        <span className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] block mb-2">
-          Create
-        </span>
-        <h3 className="font-display text-2xl md:text-3xl font-medium tracking-tight text-[var(--foreground)]">
-          Bracelet Builder
-        </h3>
-        <p className="font-body text-sm text-[var(--foreground-muted)] mt-2 max-w-2xl">
-          Build your bracelet with up to {MAX_BEADS} beads, then save it to your profile.
-        </p>
-      </div>
-
-      <div className="space-y-3">
-        <div className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)]">
-          Preview ({beads.length}/{MAX_BEADS})
-        </div>
-        {beadPreview}
-      </div>
-
-      <div className="h-px bg-[var(--border)]" />
-
-      <div className="space-y-3">
-        <div className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)]">
-          Palette
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {PALETTE.map((value) => (
-            <button
-              key={value}
-              type="button"
-              onClick={() => addBead(value)}
-              disabled={!canAddMore}
-              className="inline-flex h-9 min-w-9 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] px-2 font-body text-sm text-[var(--foreground)] hover:border-[var(--border-focus)] transition-colors disabled:opacity-40"
-            >
-              {value}
-            </button>
-          ))}
+    <div className="relative rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] p-6 md:p-8 space-y-6 overflow-hidden">
+      {/* Coming Soon Overlay */}
+      <div className="absolute inset-0 z-10 flex min-h-full min-w-full flex-col items-center justify-center bg-black/60 backdrop-blur-sm">
+        <div className="rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] px-6 py-4 shadow-xl text-center">
+          <span className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] block mb-1">
+            Coming Soon
+          </span>
+          <h3 className="font-display text-xl font-medium tracking-tight text-[var(--foreground)]">
+            Custom Friendship Bracelets
+          </h3>
+          <p className="font-body text-xs text-[var(--foreground-muted)] mt-2 max-w-xs mx-auto">
+            We are polishing up the beads! Check back later to build and save your custom digital bracelets.
+          </p>
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-2">
-        <input
-          type="text"
-          maxLength={2}
-          value={customBead}
-          onChange={(event) => setCustomBead(event.target.value)}
-          placeholder="Custom"
-          className="w-full sm:w-36 rounded-sm border border-[var(--border)] bg-[var(--surface)] px-3 py-2 font-body text-sm text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] focus:outline-none focus:border-[var(--border-focus)]"
-        />
-        <button
-          type="button"
-          onClick={addCustomBead}
-          disabled={!canAddMore}
-          className="px-3 py-2 rounded-sm border border-[var(--border)] font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:border-[var(--border-focus)] transition-colors disabled:opacity-40"
-        >
-          Add Custom
-        </button>
-        <button
-          type="button"
-          onClick={removeLast}
-          disabled={beads.length === 0}
-          className="px-3 py-2 rounded-sm border border-transparent font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors disabled:opacity-40"
-        >
-          Remove Last
-        </button>
-        <button
-          type="button"
-          onClick={clearAll}
-          disabled={beads.length === 0}
-          className="px-3 py-2 rounded-sm border border-transparent font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors disabled:opacity-40"
-        >
-          Clear
-        </button>
-      </div>
+      <div className="pointer-events-none opacity-40 blur-[1px]">
+        <div>
+          <span className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] block mb-2">
+            Create
+          </span>
+          <h3 className="font-display text-2xl md:text-3xl font-medium tracking-tight text-[var(--foreground)]">
+            Bracelet Builder
+          </h3>
+          <p className="font-body text-sm text-[var(--foreground-muted)] mt-2 max-w-2xl">
+            Build your bracelet with up to {MAX_BEADS} beads, then save it to your profile.
+          </p>
+        </div>
 
-      <div className="pt-2 flex flex-col sm:flex-row sm:items-center gap-3">
-        <button
-          type="button"
-          onClick={saveBracelet}
-          disabled={isSaving}
-          className="px-5 py-2.5 rounded-sm font-body text-[10px] tracking-widest uppercase text-white bg-[var(--accent)] hover:opacity-90 transition-colors disabled:opacity-60"
-        >
-          {isSaving ? "Saving" : "Save Bracelet"}
-        </button>
-        {status && (
-          <span className="font-body text-sm text-[var(--foreground-muted)]">{status}</span>
-        )}
+        <div className="space-y-3 mt-6">
+          <div className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)]">
+            Preview ({beads.length}/{MAX_BEADS})
+          </div>
+          {beadPreview}
+        </div>
+
+        <div className="h-px bg-[var(--border)] my-6" />
+
+        <div className="space-y-3">
+          <div className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)]">
+            Palette
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {PALETTE.map((value) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => addBead(value)}
+                disabled={!canAddMore}
+                className="inline-flex h-9 min-w-9 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] px-2 font-body text-sm text-[var(--foreground)] hover:border-[var(--border-focus)] transition-colors disabled:opacity-40"
+              >
+                {value}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-2 mt-6">
+          <input
+            type="text"
+            maxLength={2}
+            value={customBead}
+            onChange={(event) => setCustomBead(event.target.value)}
+            placeholder="Custom"
+            className="w-full sm:w-36 rounded-sm border border-[var(--border)] bg-[var(--surface)] px-3 py-2 font-body text-sm text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] focus:outline-none focus:border-[var(--border-focus)]"
+          />
+          <button
+            type="button"
+            onClick={addCustomBead}
+            disabled={!canAddMore}
+            className="px-3 py-2 rounded-sm border border-[var(--border)] font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:border-[var(--border-focus)] transition-colors disabled:opacity-40"
+          >
+            Add Custom
+          </button>
+          <button
+            type="button"
+            onClick={removeLast}
+            disabled={beads.length === 0}
+            className="px-3 py-2 rounded-sm border border-transparent font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors disabled:opacity-40"
+          >
+            Remove Last
+          </button>
+          <button
+            type="button"
+            onClick={clearAll}
+            disabled={beads.length === 0}
+            className="px-3 py-2 rounded-sm border border-transparent font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors disabled:opacity-40"
+          >
+            Clear
+          </button>
+        </div>
+
+        <div className="pt-2 flex flex-col sm:flex-row sm:items-center gap-3 mt-6">
+          <button
+            type="button"
+            onClick={saveBracelet}
+            disabled={isSaving}
+            className="px-5 py-2.5 rounded-sm font-body text-[10px] tracking-widest uppercase text-white bg-[var(--accent)] hover:opacity-90 transition-colors disabled:opacity-60"
+          >
+            {isSaving ? "Saving" : "Save Bracelet"}
+          </button>
+          {status && (
+            <span className="font-body text-sm text-[var(--foreground-muted)]">{status}</span>
+          )}
+        </div>
       </div>
     </div>
   );
