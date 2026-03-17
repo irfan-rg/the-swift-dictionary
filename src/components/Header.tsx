@@ -102,6 +102,16 @@ export default function Header() {
     { href: '/about', label: 'About' },
   ];
 
+  const headerShellTransition = [
+    'max-width 700ms cubic-bezier(0.16, 1, 0.3, 1)',
+    'border-radius 700ms cubic-bezier(0.16, 1, 0.3, 1)',
+    'box-shadow 700ms cubic-bezier(0.16, 1, 0.3, 1)',
+    'backdrop-filter 700ms cubic-bezier(0.16, 1, 0.3, 1)',
+    '-webkit-backdrop-filter 700ms cubic-bezier(0.16, 1, 0.3, 1)',
+    'background-color 500ms ease-in-out',
+    'border-color 500ms ease-in-out',
+  ].join(', ');
+
   return (
     <div className={`fixed top-0 left-0 right-0 z-50 pointer-events-none flex justify-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${scrolled || isSearching || isMenuOpen ? 'px-4 sm:px-6 py-4' : 'px-0 py-0'
       }`}>
@@ -113,7 +123,7 @@ export default function Header() {
           backgroundColor: scrolled || isSearching || isMenuOpen ? 'var(--glass-bg)' : 'transparent',
           backdropFilter: scrolled || isSearching || isMenuOpen ? 'blur(12px)' : 'blur(0px)',
           WebkitBackdropFilter: scrolled || isSearching || isMenuOpen ? 'blur(12px)' : 'blur(0px)',
-          transition: 'all 700ms cubic-bezier(0.16, 1, 0.3, 1)',
+          transition: headerShellTransition,
         }}
         className={`pointer-events-auto border ${scrolled || isSearching || isMenuOpen
           ? 'shadow-md rounded-full w-full max-w-3xl border-[var(--border)]'
@@ -132,7 +142,7 @@ export default function Header() {
                 className="flex-1 flex items-center w-full"
               >
                 <form onSubmit={handleSearchSubmit} className="flex-1 flex items-center gap-3 w-full">
-                  <button type="button" onClick={() => { setIsSearching(false); setSearchQuery(''); }} className="p-2 text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors">
+                  <button type="button" onClick={() => { setIsSearching(false); setSearchQuery(''); }} className="p-2 text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors duration-500">
                     <ArrowLeft className="w-5 h-5" strokeWidth={1.5} />
                   </button>
                   <input
@@ -165,7 +175,7 @@ export default function Header() {
                 {/* Desktop Nav — absolutely centered in the bar */}
                 <nav className="hidden md:flex items-center gap-7 absolute left-1/2 -translate-x-1/2">
                   {navLinks.map(({ href, label }) => (
-                    <Link key={href} href={href} className="font-body text-sm font-medium tracking-wide text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors relative group">
+                    <Link key={href} href={href} className="font-body text-sm font-medium tracking-wide text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors duration-500 relative group">
                       {label}
                       <span className="absolute -bottom-1 left-1/2 w-0 h-px bg-[var(--accent)] group-hover:w-full group-hover:transition-all group-hover:left-0 duration-300" />
                     </Link>
@@ -177,7 +187,7 @@ export default function Header() {
                   {mounted && (
                     <button
                       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                      className="p-2 rounded-full text-[var(--foreground-muted)] hover:text-[var(--accent)] hover:bg-[var(--surface-raised)] transition-all"
+                      className="p-2 rounded-full text-[var(--foreground-muted)] hover:text-[var(--accent)] hover:bg-[var(--surface-raised)] transition-colors duration-500"
                       aria-label="Toggle theme"
                     >
                       {theme === 'dark' ? <Sun className="w-[18px] h-[18px]" strokeWidth={1.5} /> : <MoonStar className="w-[18px] h-[18px]" strokeWidth={1.5} />}
@@ -186,7 +196,7 @@ export default function Header() {
 
                   <button
                     onClick={() => { setIsSearching(true); setShowResults(false); }}
-                    className="p-2 rounded-full text-[var(--foreground-muted)] hover:text-[var(--accent)] hover:bg-[var(--surface-raised)] transition-all"
+                    className="p-2 rounded-full text-[var(--foreground-muted)] hover:text-[var(--accent)] hover:bg-[var(--surface-raised)] transition-colors duration-500"
                     aria-label="Search"
                   >
                     <Search className="w-[18px] h-[18px]" strokeWidth={1.5} />
@@ -195,16 +205,16 @@ export default function Header() {
                   {user ? (
                     <UserDropdown />
                   ) : scrolled ? (
-                    <Link href="/auth/login" className="hidden sm:flex p-2 rounded-full text-[var(--foreground-muted)] hover:text-[var(--accent)] hover:bg-[var(--surface-raised)] transition-all" aria-label="Login">
+                    <Link href="/auth/login" className="hidden sm:flex p-2 rounded-full text-[var(--foreground-muted)] hover:text-[var(--accent)] hover:bg-[var(--surface-raised)] transition-colors duration-500" aria-label="Login">
                       <User className="w-[18px] h-[18px]" strokeWidth={1.5} />
                     </Link>
                   ) : (
-                    <Link href="/auth/login" className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--border)] font-body text-xs font-medium tracking-wide text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:border-[var(--accent)] transition-all">
+                    <Link href="/auth/login" className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--border)] font-body text-xs font-medium tracking-wide text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:border-[var(--accent)] transition-colors duration-500">
                       <User className="w-[14px] h-[14px]" /> Login
                     </Link>
                   )}
 
-                  <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden p-2 rounded-full text-[var(--foreground)]">
+                  <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden p-2 rounded-full text-[var(--foreground)] transition-colors duration-500">
                     {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                   </button>
                 </div>
@@ -266,7 +276,7 @@ export default function Header() {
                 key={`${result.type}-${result.id}`}
                 href={result.href}
                 onClick={() => { setIsSearching(false); setShowResults(false); setSearchQuery(''); }}
-                className="flex items-center gap-4 p-4 hover:bg-[var(--surface-raised)] transition-colors border-b border-[var(--border)] last:border-b-0"
+                className="flex items-center gap-4 p-4 hover:bg-[var(--surface-raised)] transition-colors duration-500 border-b border-[var(--border)] last:border-b-0"
               >
                 <div className="w-8 h-8 rounded-full bg-[var(--surface-raised)] flex items-center justify-center border border-[var(--border)] shrink-0">
                   <span className="font-body text-[10px] uppercase font-semibold text-[var(--accent)]">
