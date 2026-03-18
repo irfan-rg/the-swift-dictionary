@@ -89,56 +89,56 @@ export default function BraceletBuilder({ userId, initialBeads }: BraceletBuilde
   };
 
   return (
-    <div className="relative rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] p-6 md:p-8 space-y-6 overflow-hidden">
+    <div className="relative space-y-8 overflow-hidden">
       {/* Coming Soon Overlay */}
-      <div className="absolute inset-0 z-10 flex min-h-full min-w-full flex-col items-center justify-center bg-black/60 backdrop-blur-sm">
-        <div className="rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] px-6 py-4 shadow-xl text-center">
-          <span className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] block mb-1">
+      <div className="absolute inset-0 z-10 flex min-h-full min-w-full flex-col items-center justify-center bg-[var(--background)]/80 backdrop-blur-sm -mx-4 px-4">
+        <div className="polaroid-card px-8 py-6 text-center max-w-sm w-full mx-auto">
+          <div className="scrapbook-tape" />
+          <span className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] block mb-2 mt-4">
             Coming Soon
           </span>
-          <h3 className="font-display text-xl font-medium tracking-tight text-[var(--foreground)]">
-            Custom Friendship Bracelets
+          <h3 className="font-display text-2xl font-medium tracking-tight text-[var(--foreground)]">
+            Custom Bracelets
           </h3>
-          <p className="font-body text-xs text-[var(--foreground-muted)] mt-2 max-w-xs mx-auto">
-            We are polishing up the beads! Check back later to build and save your custom digital bracelets.
+          <p className="font-body text-xs text-[var(--foreground-muted)] text-balance mt-3 leading-relaxed">
+            We are gathering the perfect beads. Check back later to craft and save your digital friendship bracelets.
           </p>
         </div>
       </div>
 
-      <div className="pointer-events-none opacity-40 blur-[1px]">
+      <div className="pointer-events-none opacity-40 blur-[2px] transition-all">
         <div>
-          <span className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] block mb-2">
+          <span className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] block mb-3">
             Create
           </span>
-          <h3 className="font-display text-2xl md:text-3xl font-medium tracking-tight text-[var(--foreground)]">
+          <h3 className="font-display text-3xl md:text-4xl font-medium tracking-tight text-[var(--foreground)] mb-3">
             Bracelet Builder
           </h3>
-          <p className="font-body text-sm text-[var(--foreground-muted)] mt-2 max-w-2xl">
-            Build your bracelet with up to {MAX_BEADS} beads, then save it to your profile.
+          <p className="font-body text-sm md:text-base text-[var(--foreground-muted)] max-w-xl leading-relaxed">
+            String together up to {MAX_BEADS} beads to capture a moment, a lyric, or a feeling.
           </p>
         </div>
 
-        <div className="space-y-3 mt-6">
-          <div className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)]">
+        <div className="mt-8 relative mb-12">
+          <div className="absolute left-0 top-1/2 w-full h-px border-t-2 border-dashed border-[var(--border-focus)] -z-10" />
+          <div className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] mb-4 bg-[var(--background)] inline-block pr-4">
             Preview ({beads.length}/{MAX_BEADS})
           </div>
           {beadPreview}
         </div>
 
-        <div className="h-px bg-[var(--border)] my-6" />
-
-        <div className="space-y-3">
-          <div className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)]">
+        <div className="space-y-4">
+          <div className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] border-b border-[var(--border)] pb-2 mb-4">
             Palette
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-3">
             {PALETTE.map((value) => (
               <button
                 key={value}
                 type="button"
                 onClick={() => addBead(value)}
                 disabled={!canAddMore}
-                className="inline-flex h-9 min-w-9 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] px-2 font-body text-sm text-[var(--foreground)] hover:border-[var(--border-focus)] transition-colors disabled:opacity-40"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border-2 border-[var(--border)] bg-[var(--surface)] font-body text-base font-medium text-[var(--foreground)] hover:border-[var(--foreground)] hover:text-[var(--foreground)] transition-all shadow-sm disabled:opacity-40"
               >
                 {value}
               </button>
@@ -146,28 +146,29 @@ export default function BraceletBuilder({ userId, initialBeads }: BraceletBuilde
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-2 mt-6">
+        <div className="flex flex-col sm:flex-row gap-3 mt-8">
           <input
             type="text"
             maxLength={2}
             value={customBead}
             onChange={(event) => setCustomBead(event.target.value)}
             placeholder="Custom"
-            className="w-full sm:w-36 rounded-sm border border-[var(--border)] bg-[var(--surface)] px-3 py-2 font-body text-sm text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] focus:outline-none focus:border-[var(--border-focus)]"
+            className="w-full sm:w-32 bg-transparent border-b-2 border-[var(--border)] px-2 py-2 font-display italic text-xl text-center text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] focus:outline-none focus:border-[var(--accent)] transition-colors"
           />
           <button
             type="button"
             onClick={addCustomBead}
             disabled={!canAddMore}
-            className="px-3 py-2 rounded-sm border border-[var(--border)] font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:border-[var(--border-focus)] transition-colors disabled:opacity-40"
+            className="px-4 py-2 border border-[var(--border)] font-body text-[10px] tracking-widest uppercase text-[var(--foreground)] hover:border-[var(--foreground)] transition-colors disabled:opacity-40"
           >
-            Add Custom
+            Add Bead
           </button>
+          <div className="flex-1" />
           <button
             type="button"
             onClick={removeLast}
             disabled={beads.length === 0}
-            className="px-3 py-2 rounded-sm border border-transparent font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors disabled:opacity-40"
+            className="px-4 py-2 text-[var(--foreground-muted)] font-body text-[10px] tracking-widest uppercase hover:text-[var(--foreground)] transition-colors disabled:opacity-40"
           >
             Remove Last
           </button>
@@ -175,24 +176,24 @@ export default function BraceletBuilder({ userId, initialBeads }: BraceletBuilde
             type="button"
             onClick={clearAll}
             disabled={beads.length === 0}
-            className="px-3 py-2 rounded-sm border border-transparent font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors disabled:opacity-40"
+            className="px-4 py-2 text-red-400 font-body text-[10px] tracking-widest uppercase hover:text-red-500 transition-colors disabled:opacity-40"
           >
-            Clear
+            Clear All
           </button>
         </div>
 
-        <div className="pt-2 flex flex-col sm:flex-row sm:items-center gap-3 mt-6">
+        <div className="pt-8 mt-8 border-t border-[var(--border)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          {status && (
+            <span className="font-handwriting text-lg text-[var(--foreground-muted)]">{status}</span>
+          )}
           <button
             type="button"
             onClick={saveBracelet}
             disabled={isSaving}
-            className="px-5 py-2.5 rounded-sm font-body text-[10px] tracking-widest uppercase text-white bg-[var(--accent)] hover:opacity-90 transition-colors disabled:opacity-60"
+            className="sm:ml-auto px-8 py-3 font-body text-[10px] tracking-[0.2em] uppercase text-[var(--foreground)] border border-[var(--border)] hover:border-[var(--foreground)] hover:bg-[var(--foreground)] hover:text-[var(--surface)] transition-all disabled:opacity-60"
           >
-            {isSaving ? "Saving" : "Save Bracelet"}
+            {isSaving ? "Stringing..." : "Save Bracelet"}
           </button>
-          {status && (
-            <span className="font-body text-sm text-[var(--foreground-muted)]">{status}</span>
-          )}
         </div>
       </div>
     </div>

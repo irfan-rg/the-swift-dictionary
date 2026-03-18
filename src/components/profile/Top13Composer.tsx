@@ -69,7 +69,10 @@ export default function Top13Composer({ favorites }: Top13ComposerProps) {
 
   if (favorites.length === 0) {
     return (
-      <div className="rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] p-6 md:p-8">
+      <div className="w-full p-8 border border-[var(--border)] border-dashed border-t-0 border-b-0 space-y-4">
+        <h3 className="font-display text-2xl font-medium tracking-tight text-[var(--foreground)]">
+          Download Your Top 13
+        </h3>
         <p className="font-body text-sm text-[var(--foreground-muted)]">
           You need saved words first. Add favorites from the dictionary, then come back to build your Top 13 card.
         </p>
@@ -78,157 +81,168 @@ export default function Top13Composer({ favorites }: Top13ComposerProps) {
   }
 
   return (
-    <div className="rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] p-6 md:p-8 space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <span className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] block mb-2">
+    <div className="w-full space-y-10">
+      <div className="w-full flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+        <div className="flex-1">
+          <span className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] block mb-3">
             Curate
           </span>
-          <h3 className="font-display text-2xl md:text-3xl font-medium tracking-tight text-[var(--foreground)]">
+          <h3 className="font-display text-3xl md:text-4xl font-medium tracking-tight text-[var(--foreground)] mb-3">
             Download Your Top 13
           </h3>
-          <p className="font-body text-sm text-[var(--foreground-muted)] mt-2 max-w-2xl">
-            Pick up to 13 favorite words and generate a shareable summary card.
+          <p className="font-body text-sm md:text-base text-[var(--foreground-muted)] max-w-xl leading-relaxed">
+            Pick up to {MAX_SELECTION} favorite words to generate your shareable card.
           </p>
         </div>
-        <div className="font-body text-xs tracking-widest uppercase text-[var(--foreground-muted)]">
-          {selectedIds.length} / {MAX_SELECTION} selected
+        <div className="flex items-center gap-3 shrink-0">
+          <div className="text-right">
+            <span className="block font-display italic text-2xl text-[var(--accent)] leading-none mb-1">
+              {selectedIds.length}
+            </span>
+            <span className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)]">
+              of {MAX_SELECTION} Selected
+            </span>
+          </div>
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-3">
-        <input
-          type="text"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder="Find your words."
-          className="w-full md:flex-1 rounded-sm border border-[var(--border)] bg-[var(--surface)] px-3 py-2 font-body text-sm text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] focus:outline-none focus:border-[var(--border-focus)]"
-        />
-        <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={selectRecent13}
-            className="px-3 py-2 rounded-sm border border-[var(--border)] font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:border-[var(--border-focus)] transition-colors"
-          >
-            Use Recent 13
-          </button>
-          <button
-            type="button"
-            onClick={clearSelection}
-            className="px-3 py-2 rounded-sm border border-transparent font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors"
-          >
-            Clear
-          </button>
+      <div className="w-full p-6 md:p-8 border border-[var(--border)] bg-[var(--surface)] relative group">
+        <div className="absolute top-0 left-0 w-full h-px bg-[var(--border)] opacity-0 group-hover:opacity-100 transition-opacity" />
+        
+        <div className="flex flex-col md:flex-row gap-4 mb-8">
+          <input
+            type="text"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Search your favorites..."
+            className="w-full md:flex-1 bg-transparent border-b border-[var(--border)] px-1 py-2 font-body text-lg text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] focus:outline-none focus:border-[var(--accent)] transition-colors"
+          />
+          <div className="flex gap-3 shrink-0 items-end">
+            <button
+              type="button"
+              onClick={selectRecent13}
+              className="px-4 py-2 border border-[var(--border)] font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:border-[var(--border-focus)] transition-colors"
+            >
+              Use Recent 13
+            </button>
+            <button
+              type="button"
+              onClick={clearSelection}
+              className="px-4 py-2 border border-transparent font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors"
+            >
+              Clear
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div className="space-y-4">
-        <div className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] flex justify-between items-center">
-          <span>Saved Words ({filteredFavorites.length})</span>
-          <div className="flex gap-4 items-center">
-            <span>Page {currentPage} of {totalPages}</span>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-                className="px-2 py-1 border border-[var(--border)] rounded-sm hover:border-[var(--border-focus)] disabled:opacity-30 disabled:pointer-events-none transition-colors"
-                aria-label="Previous page"
-              >
-                &larr;
-              </button>
-              <button
-                type="button"
-                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                disabled={currentPage === totalPages}
-                className="px-2 py-1 border border-[var(--border)] rounded-sm hover:border-[var(--border-focus)] disabled:opacity-30 disabled:pointer-events-none transition-colors"
-                aria-label="Next page"
-              >
-                &rarr;
-              </button>
+        <div className="space-y-6">
+          <div className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] flex justify-between items-center border-b border-[var(--border-focus)] border-dashed pb-3 opacity-60">
+            <span>Saved Words ({filteredFavorites.length})</span>
+            <div className="flex gap-4 items-center">
+              <span>Page {currentPage} of {totalPages}</span>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="px-2 py-1 font-display italic text-lg hover:text-[var(--foreground)] text-[var(--foreground-muted)] disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                  aria-label="Previous page"
+                >
+                  &larr;
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className="px-2 py-1 font-display italic text-lg hover:text-[var(--foreground)] text-[var(--foreground-muted)] disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                  aria-label="Next page"
+                >
+                  &rarr;
+                </button>
+              </div>
             </div>
           </div>
+          
+          {currentChunk.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-8">
+              {currentChunk.map((item) => {
+                const selected = selectedSet.has(item.id);
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => toggleWord(item.id)}
+                    className={`group relative text-left py-2 transition-all flex items-center justify-between border-b ${
+                      selected
+                        ? "border-[var(--foreground)] text-[var(--foreground)]"
+                        : "border-[var(--border)] text-[var(--foreground-muted)] hover:border-[var(--border-focus)] hover:text-[var(--foreground)]"
+                    }`}
+                  >
+                    <div className="flex-1 min-w-0 pr-4">
+                      <div className={`font-display text-xl leading-tight truncate transition-colors ${selected ? 'font-medium' : ''}`}>
+                        {item.word}
+                      </div>
+                      <div className={`font-body text-[10px] uppercase tracking-wider mt-1 truncate transition-opacity ${selected ? 'opacity-80' : 'opacity-40 group-hover:opacity-70'}`}>
+                        {item.song_title}
+                      </div>
+                    </div>
+                    <div className="shrink-0 w-5 h-5 border border-current rounded-full flex items-center justify-center transition-colors">
+                      {selected && <div className="w-2.5 h-2.5 bg-current rounded-full" />}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="font-display italic text-xl text-[var(--foreground-muted)] py-6 opacity-60">
+              No matching words found for "{query}".
+            </p>
+          )}
         </div>
-        
-        {currentChunk.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {currentChunk.map((item) => {
-              const selected = selectedSet.has(item.id);
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => toggleWord(item.id)}
-                  className={`rounded-sm border p-3 text-left transition-colors h-full flex flex-col justify-center ${
-                    selected
-                      ? "border-[var(--foreground)] bg-[var(--surface)]"
-                      : "border-[var(--border)] bg-[var(--surface-raised)] hover:border-[var(--border-focus)]"
-                  }`}
-                >
-                  <div className="font-display text-lg font-medium text-[var(--foreground)] leading-tight">
-                    {item.word}
-                  </div>
-                  <div className="font-body text-xs text-[var(--foreground-muted)] mt-1 truncate w-full">
-                    {item.song_title} • {item.album_title}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        ) : (
-          <p className="font-body text-sm text-[var(--foreground-muted)] py-4">
-            No matching words found for "{query}".
-          </p>
-        )}
       </div>
 
-      <div className="h-px bg-[var(--border)]" />
-
-      <div className="space-y-3 bg-[var(--surface)] border border-[var(--border)] rounded-sm p-4">
-        <div className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] flex justify-between">
-          <span>Current Selection</span>
-          <span>{selectedWords.length} / {MAX_SELECTION}</span>
-        </div>
-        {selectedWords.length > 0 ? (
-          <div className="flex flex-wrap gap-2">
+      {selectedWords.length > 0 && (
+        <div className="space-y-4">
+          <div className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] flex items-center gap-4">
+            <span className="whitespace-nowrap">Your Selection Card</span>
+            <div className="h-px bg-[var(--border-focus)] w-full opacity-30" />
+          </div>
+          
+          <div className="flex flex-wrap gap-2 md:gap-3 py-2">
             {selectedWords.map((item) => (
               <button
                 key={`sel-${item.id}`}
                 onClick={() => toggleWord(item.id)}
-                className="group flex items-center gap-1.5 px-3 py-1.5 rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] hover:border-[var(--border-focus)] transition-colors"
+                className="group flex items-center gap-2 px-4 py-2 border border-[var(--border)] bg-transparent hover:border-[var(--border-focus)] hover:bg-[var(--surface-raised)] transition-all"
               >
-                <span className="font-body text-xs text-[var(--foreground)]">{item.word}</span>
-                <span className="text-[var(--foreground-muted)] group-hover:text-red-400">&times;</span>
+                <span className="font-display text-lg text-[var(--foreground)] leading-none">{item.word}</span>
+                <span className="font-body text-xs text-[var(--foreground-muted)] group-hover:text-red-400 opacity-60 transition-colors">&times;</span>
               </button>
             ))}
           </div>
-        ) : (
-          <p className="font-body text-sm text-[var(--foreground-muted)]">
-            No words selected yet. Click words above to build your list.
-          </p>
-        )}
-      </div>
 
-      <div className="pt-2 flex flex-col sm:flex-row sm:items-center gap-4">
-        <a
-          href={downloadHref || undefined}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-disabled={selectedIds.length < MIN_SELECTION}
-          className={`inline-block px-5 py-2.5 rounded-sm font-body text-[10px] tracking-widest uppercase transition-colors ${
-            selectedIds.length >= MIN_SELECTION
-              ? "text-white bg-[var(--accent)] hover:opacity-90"
-              : "text-[var(--foreground-muted)] bg-[var(--surface)] border border-[var(--border)] pointer-events-none"
-          }`}
-        >
-          Generate Image
-        </a>
-        {selectedIds.length > 0 && selectedIds.length < MIN_SELECTION && (
-          <span className="font-body text-[10px] uppercase tracking-widest text-[var(--foreground-muted)]">
-            Select {MIN_SELECTION - selectedIds.length} more to generate
-          </span>
-        )}
-      </div>
+          <div className="pt-6 flex flex-col sm:flex-row sm:items-center gap-4">
+            <a
+              href={downloadHref || undefined}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-disabled={selectedIds.length < MIN_SELECTION}
+              className={`inline-block px-8 py-3.5 font-body text-[10px] tracking-[0.2em] uppercase transition-all duration-300 ${
+                selectedIds.length >= MIN_SELECTION
+                  ? "text-white bg-[var(--accent)] hover:opacity-90 shadow-md transform hover:-translate-y-0.5"
+                  : "text-[var(--foreground-muted)] bg-[var(--surface)] border border-[var(--border)] pointer-events-none opacity-50"
+              }`}
+            >
+              Generate Dossier Image
+            </a>
+            {selectedIds.length > 0 && selectedIds.length < MIN_SELECTION && (
+              <span className="font-body text-[10px] uppercase tracking-widest text-[var(--foreground-muted)] mt-2 sm:mt-0">
+                Requires {MIN_SELECTION - selectedIds.length} more words
+              </span>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

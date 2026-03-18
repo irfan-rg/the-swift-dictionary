@@ -10,7 +10,7 @@ interface EditableNameProps {
   showGreeting?: boolean;
 }
 
-export default function EditableName({ userId, initialName, showGreeting = true }: EditableNameProps) {
+export default function EditableName({ userId, initialName, showGreeting = true, centered = false }: EditableNameProps & { centered?: boolean }) {
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(initialName);
   const [isLoading, setIsLoading] = useState(false);
@@ -48,40 +48,42 @@ export default function EditableName({ userId, initialName, showGreeting = true 
 
   if (isEditing) {
     return (
-      <div className="flex flex-wrap items-center gap-3">
-        {showGreeting && (
-          <span className="font-branding text-3xl md:text-4xl font-medium tracking-tight text-[var(--foreground)]">
-            Hi,
-          </span>
-        )}
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="font-branding text-3xl md:text-4xl font-medium tracking-tight bg-transparent border-b border-[var(--border-focus)] focus:outline-none text-[var(--foreground)] max-w-[220px] md:max-w-[320px]"
-          autoFocus
-          onKeyDown={(e) => {
-            if (e.key === "Enter") handleSave();
-            if (e.key === "Escape") handleCancel();
-          }}
-          disabled={isLoading}
-        />
-        <div className="flex items-center gap-2">
-          <button
-            onClick={handleSave}
+      <div className={`flex flex-col gap-4 w-full ${centered ? 'items-center' : 'items-start'}`}>
+        <div className={`flex flex-col md:flex-row gap-3 ${centered ? 'items-center' : 'items-baseline'}`}>
+          {showGreeting && (
+            <span className="font-display text-4xl leading-none tracking-tight text-[var(--foreground)] md:text-5xl lg:text-6xl">
+              Hi,
+            </span>
+          )}
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className={`max-w-full border-b border-[var(--border-focus)] bg-transparent pb-1 font-display text-4xl leading-[0.92] tracking-[-0.01em] text-[var(--foreground)] focus:outline-none md:text-5xl lg:text-6xl ${centered ? 'text-center' : 'text-left'}`}
+            autoFocus
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSave();
+              if (e.key === "Escape") handleCancel();
+            }}
             disabled={isLoading}
-            className="px-3 py-1.5 rounded-sm border border-[var(--border)] font-body text-[10px] tracking-widest uppercase text-[var(--foreground)] hover:border-[var(--border-focus)] transition-colors disabled:opacity-50"
-            aria-label="Save name"
-          >
-            Save
-          </button>
+          />
+        </div>
+        <div className="flex items-center gap-4 mt-2">
           <button
             onClick={handleCancel}
             disabled={isLoading}
-            className="px-3 py-1.5 rounded-sm border border-transparent font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors disabled:opacity-50"
-            aria-label="Cancel editing"
+            className="-mt-2 font-body text-[10px] tracking-[0.22em] uppercase text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)] disabled:opacity-50"
+            aria-label="Cancel"
           >
             Cancel
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={isLoading}
+            className="-mt-2 font-body text-[10px] tracking-[0.22em] uppercase text-[var(--foreground)] transition-colors hover:text-[var(--accent)] disabled:opacity-50"
+            aria-label="Save name"
+          >
+            Save
           </button>
         </div>
       </div>
@@ -89,17 +91,19 @@ export default function EditableName({ userId, initialName, showGreeting = true 
   }
 
   return (
-    <div className="flex items-center gap-3 group">
-      <h1 className="font-branding text-3xl md:text-4xl font-medium tracking-tight text-[var(--foreground)] truncate max-w-[200px] md:max-w-[280px]">
-        {showGreeting ? `Hi, ${name}` : name}
-      </h1>
-      <button
-        onClick={() => setIsEditing(true)}
-        className="opacity-0 group-hover:opacity-100 px-2 py-1 font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-all"
-        aria-label="Edit name"
-      >
-        Edit
-      </button>
+    <div className={`group w-full ${centered ? 'text-center' : 'text-left'}`}>
+      <div className={`flex items-end gap-3 ${centered ? 'justify-center' : 'justify-start'}`}>
+        <h2 className={`font-display text-5xl leading-[0.92] tracking-[-0.01em] text-[var(--foreground)] md:text-6xl lg:text-7xl ${centered ? 'max-w-[200px] md:max-w-[280px] truncate' : 'break-words'}`}>
+          {showGreeting ? `Hi, ${name}` : name}
+        </h2>
+        <button
+          onClick={() => setIsEditing(true)}
+          className="mb-1 shrink-0 font-body text-[10px] tracking-[0.22em] uppercase text-[var(--foreground-muted)] opacity-0 transition-opacity hover:text-[var(--accent)] group-hover:opacity-100 focus:opacity-100"
+          aria-label="Edit name"
+        >
+          Edit
+        </button>
+      </div>
     </div>
   );
 }

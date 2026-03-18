@@ -1,11 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import type { Profile } from "@/lib/types";
 import EditableName from "@/components/profile/EditableName";
 import EraSelector from "../../components/profile/EraSelector";
-import Top13Composer from "@/components/profile/Top13Composer";
-import BraceletBuilder from "@/components/profile/BraceletBuilder";
-import { getCalculatedEra, getUserBracelet, getUserFavorites } from "@/lib/queries";
+import { getCalculatedEra, getUserFavorites } from "@/lib/queries";
 import { ERAS } from "@/lib/constants";
 
 export const metadata = {
@@ -40,10 +40,9 @@ export default async function ProfilePage() {
 
   const profile = await getUserProfile(user.id);
   const displayName = profile?.display_name || user.email?.split("@")[0] || "Swiftie";
-  const [calculatedEra, favorites, braceletBeads] = await Promise.all([
+  const [calculatedEra, favorites] = await Promise.all([
     getCalculatedEra(user.id),
     getUserFavorites(user.id),
-    getUserBracelet(user.id),
   ]);
   const calculatedEraInfo = calculatedEra ? ERAS.find((e) => e.slug === calculatedEra.slug) : null;
   
@@ -52,102 +51,141 @@ export default async function ProfilePage() {
     : calculatedEraInfo;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <div className="mb-12 text-center">
-        <span className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] block mb-2">
-          Your Collection
-        </span>
-        <h1 className="font-display text-5xl md:text-6xl font-medium tracking-tight text-[var(--foreground)] mb-4">
-          Profile
-        </h1>
-        <p className="font-body text-sm text-[var(--foreground-muted)] max-w-md mx-auto">
-          Manage your profile details and choose the era that feels most like home.
-        </p>
-        <div className="w-16 h-px bg-[var(--border-focus)] mx-auto mt-6 opacity-50" />
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-        <section className="rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] p-6 md:p-8">
-          <span className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] block mb-4">
-            Display Name
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 space-y-20 md:space-y-28">
+      
+      {/* 1. Identity Header: Pure structure, no era colors */}
+      <header className="flex flex-col gap-12 border-b border-[var(--border-focus)] pb-12 md:flex-row md:items-end md:justify-between md:pb-16">
+        <div className="max-w-2xl">
+          <span className="mb-10 block font-body text-[10px] tracking-[0.28em] uppercase text-[var(--accent)]">
+            Curator Identity
           </span>
-          <EditableName userId={user.id} initialName={displayName} showGreeting={false} />
-
-          <div className="h-px bg-[var(--border)] my-6" />
-
-          <div className="space-y-4 font-body text-sm">
-            <div>
-              <span className="block text-[var(--foreground-muted)] mb-1">Email</span>
-              <span className="text-[var(--foreground)] break-all">{user.email}</span>
-            </div>
-            <div>
-              <span className="block text-[var(--foreground-muted)] mb-1">Joined</span>
-              <span className="text-[var(--foreground)]">
-                {new Date(profile?.created_at || user.created_at).toLocaleDateString("en-US", {
-                  month: "long",
-                  year: "numeric",
-                })}
-              </span>
-            </div>
+          <div className="mb-4 font-handwriting text-[1.75rem] leading-none text-[var(--foreground-muted)] md:text-[2rem]">
+            Oh, hi.
           </div>
-        </section>
-
-        <section className="rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] p-6 md:p-8">
-          <span className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] block mb-4">
-            Current Era
-          </span>
-
-          <div className="font-branding text-4xl md:text-5xl mb-3" style={{ color: displayEraInfo?.color || "var(--foreground)" }}>
-            {displayEraInfo?.label || "Undiscovered"}
+          <EditableName userId={user.id} initialName={displayName} showGreeting={false} centered={false} />
+          <div className="mt-4 break-all font-body text-xs tracking-[0.08em] text-[var(--foreground-muted)] md:text-sm">
+            {user.email}
           </div>
+        </div>
+        
+        <div className="shrink-0 border-l border-[var(--border)] pl-8 text-left md:pl-10">
+          <div className="flex gap-10 md:gap-16">
+          <div className="flex flex-col">
+            <span className="mb-2 font-body text-[10px] tracking-[0.2em] uppercase text-[var(--foreground-muted)]">Member Since</span>
+            <span className="font-display text-[1.9rem] leading-none text-[var(--foreground)]">
+              {new Date(profile?.created_at || user.created_at).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
+            </span>
+          </div>
+          <div className="flex flex-col">
+            <span className="mb-2 font-body text-[10px] tracking-[0.2em] uppercase text-[var(--foreground-muted)]">Kept Words</span>
+            <span className="font-display text-[1.9rem] leading-none text-[var(--foreground)] tabular-nums">
+              {favorites.length}
+            </span>
+          </div>
+          </div>
+        </div>
+      </header>
 
-          <p className="font-body text-sm text-[var(--foreground-muted)] leading-relaxed">
-            {profile?.declared_era
-              ? "You manually selected this era."
-              : "This era is calculated from your saved words."}
-          </p>
-
-          <div className="h-px bg-[var(--border)] my-6" />
-
-          {calculatedEra && calculatedEraInfo ? (
-            <p className="font-body text-sm text-[var(--foreground-muted)] leading-relaxed">
-              {calculatedEra.count} favorite word{calculatedEra.count !== 1 ? "s" : ""} currently map to {calculatedEraInfo.label}.
+      {/* 2. The Era Timeline Selector */}
+      <section className="space-y-12">
+        <div className="flex flex-col justify-between gap-6 px-2 md:flex-row md:items-end">
+          <div className="max-w-xl">
+            <h2 className="mb-4 -mt-14 font-display text-4xl leading-[0.95] tracking-tight text-[var(--foreground)] md:text-5xl">
+              Aesthetic Chronology
+            </h2>
+            <p className="max-w-[46ch] font-body text-[0.95rem] leading-[1.55] text-[var(--foreground-muted)]">
+              Select an era to establish your visual identity, or allow your saved words to naturally dictate your current alignment. 
+              {profile?.declared_era ? " Currently manually overridden." : " Currently calculated organically."}
             </p>
-          ) : (
-            <p className="font-body text-sm text-[var(--foreground-muted)] leading-relaxed">
-              You have not saved enough words yet for a calculated era.
-            </p>
-          )}
-        </section>
-      </div>
-
-      <section className="rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] p-6 md:p-8">
-        <div className="mb-6">
-          <span className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] block mb-2">
-            Era Preference
-          </span>
-          <h2 className="font-display text-3xl md:text-4xl font-medium tracking-tight text-[var(--foreground)] mb-3">
-            Declare Your Era
-          </h2>
-          <p className="font-body text-sm text-[var(--foreground-muted)] max-w-2xl leading-relaxed">
-            Select an era to set it manually, or return to your calculated era at any time.
-          </p>
+          </div>
+          
+          <div className="text-left md:text-right">
+            <span className="mb-2 block font-body text-[10px] tracking-[0.2em] uppercase text-[var(--foreground-muted)]">Current Alignment</span>
+            <span
+              className="font-display text-[2.05rem] leading-none md:text-[2.3rem]"
+              style={{ color: displayEraInfo?.color || "var(--foreground)" }}
+            >
+              {displayEraInfo?.label || "Undiscovered"}
+            </span>
+          </div>
         </div>
 
-        <EraSelector
-          userId={user.id}
-          initialEra={profile?.declared_era || null}
-          calculatedEra={calculatedEraInfo?.slug || null}
-        />
+        {/* Timeline Component Wrapper */}
+        <div className="w-full">
+          <EraSelector
+            userId={user.id}
+            initialEra={profile?.declared_era || null}
+            calculatedEra={calculatedEraInfo?.slug || null}
+          />
+        </div>
       </section>
 
-      <section className="mt-10">
-        <BraceletBuilder userId={user.id} initialBeads={braceletBeads ?? []} />
+      {/* 3. Interactive Experiences Section */}
+      <section className="pt-20 border-t border-[var(--border)]">
+        <header className="mb-12 md:mb-16">
+          <span className="font-body text-[10px] tracking-[0.25em] uppercase text-[var(--accent)] block mb-4">
+            Your Studio
+          </span>
+          <h2 className="font-display text-4xl md:text-5xl tracking-tight text-[var(--foreground)]">
+            Interactive Experiences
+          </h2>
+          <p className="font-body text-base text-[var(--foreground-muted)] max-w-xl leading-relaxed mx-auto ml-0 mt-6">
+            Extend the narrative of the pieces you've curated into something tangibly yours.
+          </p>
+        </header>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+          
+          {/* Top 13 Teaser */}
+          <Link 
+            href="/profile/top13"
+            className="group flex flex-col justify-between p-8 md:p-10 border border-[var(--border)] bg-transparent hover:bg-[var(--surface-raised)] transition-all duration-500 min-h-[320px]"
+          >
+            <div>
+              <div className="font-display text-4xl text-[var(--border-focus)] mb-8 transition-colors group-hover:text-[var(--accent)]">
+                13
+              </div>
+              <h3 className="font-body text-[10px] tracking-[0.2em] uppercase text-[var(--foreground)] mb-4">
+                Your Top 13
+              </h3>
+              <p className="font-display text-2xl text-[var(--foreground-muted)] leading-snug group-hover:text-[var(--foreground)] transition-colors">
+                Curate a definitive list of your favorite pieces and generate a typographic dossier.
+              </p>
+            </div>
+            <div className="mt-12 flex items-center gap-3 font-body text-[10px] tracking-[0.2em] uppercase text-[var(--foreground-muted)] group-hover:text-[var(--accent)] transition-colors">
+              Open Composer <ArrowRight className="w-3 h-3 group-hover:translate-x-2 transition-transform duration-500" />
+            </div>
+          </Link>
+
+          {/* Bracelet Builder Teaser */}
+          <Link 
+            href="/profile/bracelets"
+            className="group flex flex-col justify-between p-8 md:p-10 border border-[var(--border)] bg-transparent hover:bg-[var(--surface-raised)] transition-all duration-500 min-h-[320px]"
+          >
+            <div>
+              <div className="flex gap-2 mb-8 items-center h-10">
+                {['T', 'S'].map((bead, i) => (
+                  <div key={i} className="w-8 h-8 rounded-full border border-[var(--border-focus)] bg-[var(--surface)] flex items-center justify-center font-body text-[10px] font-medium text-[var(--foreground)] group-hover:border-[var(--accent)] transition-colors">
+                    {bead}
+                  </div>
+                ))}
+                <div className="w-8 h-[1px] bg-[var(--border-focus)] group-hover:bg-[var(--accent)] transition-colors" />
+              </div>
+              <h3 className="font-body text-[10px] tracking-[0.2em] uppercase text-[var(--foreground)] mb-4">
+                Friendship Bracelets
+              </h3>
+              <p className="font-display text-2xl text-[var(--foreground-muted)] leading-snug group-hover:text-[var(--foreground)] transition-colors">
+                String together virtual beads for the eras, songs, and moments that matter.
+              </p>
+            </div>
+            <div className="mt-12 flex items-center gap-3 font-body text-[10px] tracking-[0.2em] uppercase text-[var(--foreground-muted)] group-hover:text-[var(--accent)] transition-colors">
+              Open Builder <ArrowRight className="w-3 h-3 group-hover:translate-x-2 transition-transform duration-500" />
+            </div>
+          </Link>
+
+        </div>
       </section>
 
-      <section className="mt-10">
-        <Top13Composer favorites={favorites} />
-      </section>
     </div>
   );
 }
