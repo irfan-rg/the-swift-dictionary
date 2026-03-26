@@ -2,16 +2,17 @@ import { ImageResponse } from "next/og";
 import { createClient } from "@/lib/supabase/server";
 import { ERAS } from "@/lib/constants";
 
-// Suppress dev-mode URL parse errors (works fine in production edge)
-function safeFetchFont(url: URL): Promise<ArrayBuffer> {
-  return fetch(url).then(res => res.arrayBuffer()).catch(() => new ArrayBuffer(0));
-}
-const cormorantRegular = safeFetchFont(new URL('../../wotd/image/fonts/CormorantGaramond-Regular.ttf', import.meta.url));
-const cormorantItalic = safeFetchFont(new URL('../../wotd/image/fonts/CormorantGaramond-Italic.ttf', import.meta.url));
-const cormorantSemiBold = safeFetchFont(new URL('../../wotd/image/fonts/CormorantGaramond-SemiBold.ttf', import.meta.url));
-const bricolageGrotesque = safeFetchFont(new URL('../../wotd/image/fonts/BricolageGrotesque-Regular.ttf', import.meta.url));
-const nothingYouCouldDo = safeFetchFont(new URL('../../wotd/image/fonts/NothingYouCouldDo.ttf', import.meta.url));
-const cinzelDecorative = safeFetchFont(new URL('../../wotd/image/fonts/CinzelDecorative-Regular.ttf', import.meta.url));
+import { readFile } from "fs/promises";
+import path from "path";
+
+// Load fonts using fs for the Node.js runtime
+const fontsDir = path.join(process.cwd(), "src/app/api/wotd/image/fonts");
+const cormorantRegular = readFile(path.join(fontsDir, "CormorantGaramond-Regular.ttf"));
+const cormorantItalic = readFile(path.join(fontsDir, "CormorantGaramond-Italic.ttf"));
+const cormorantSemiBold = readFile(path.join(fontsDir, "CormorantGaramond-SemiBold.ttf"));
+const bricolageGrotesque = readFile(path.join(fontsDir, "BricolageGrotesque-Regular.ttf"));
+const nothingYouCouldDo = readFile(path.join(fontsDir, "NothingYouCouldDo.ttf"));
+const cinzelDecorative = readFile(path.join(fontsDir, "CinzelDecorative-Regular.ttf"));
 
 const WIDTH = 1080;
 const HEIGHT = 1350;

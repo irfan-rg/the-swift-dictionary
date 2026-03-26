@@ -3,17 +3,17 @@ import { createClient } from "@/lib/supabase/server";
 import { ERA_MAP } from "@/lib/constants";
 import type { EraSlug } from "@/lib/types";
 
-// Pre-load fonts — wrapped to suppress dev-mode URL parse errors
-// (import.meta.url resolves to a relative path locally but works in production edge)
-function safeFetchFont(url: URL): Promise<ArrayBuffer> {
-  return fetch(url).then(res => res.arrayBuffer()).catch(() => new ArrayBuffer(0));
-}
-const cormorantRegular = safeFetchFont(new URL('./fonts/CormorantGaramond-Regular.ttf', import.meta.url));
-const cormorantItalic = safeFetchFont(new URL('./fonts/CormorantGaramond-Italic.ttf', import.meta.url));
-const cormorantSemiBold = safeFetchFont(new URL('./fonts/CormorantGaramond-SemiBold.ttf', import.meta.url));
-const nothingYouCouldDo = safeFetchFont(new URL('./fonts/NothingYouCouldDo.ttf', import.meta.url));
-const cinzelDecorative = safeFetchFont(new URL('./fonts/CinzelDecorative-Regular.ttf', import.meta.url));
-const bricolageGrotesque = safeFetchFont(new URL('./fonts/BricolageGrotesque-Regular.ttf', import.meta.url));
+import { readFile } from "fs/promises";
+import path from "path";
+
+// Load fonts using fs for the Node.js runtime
+const fontsDir = path.join(process.cwd(), "src/app/api/wotd/image/fonts");
+const cormorantRegular = readFile(path.join(fontsDir, "CormorantGaramond-Regular.ttf"));
+const cormorantItalic = readFile(path.join(fontsDir, "CormorantGaramond-Italic.ttf"));
+const cormorantSemiBold = readFile(path.join(fontsDir, "CormorantGaramond-SemiBold.ttf"));
+const nothingYouCouldDo = readFile(path.join(fontsDir, "NothingYouCouldDo.ttf"));
+const cinzelDecorative = readFile(path.join(fontsDir, "CinzelDecorative-Regular.ttf"));
+const bricolageGrotesque = readFile(path.join(fontsDir, "BricolageGrotesque-Regular.ttf"));
 
 // Instagram square format
 const WIDTH = 1080;

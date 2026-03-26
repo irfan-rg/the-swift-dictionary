@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
-
-export const runtime = "edge";
+import { readFile } from "fs/promises";
+import path from "path";
 
 export const alt = "The Swift Dictionary";
 export const size = {
@@ -9,22 +9,12 @@ export const size = {
 };
 export const contentType = "image/png";
 
-// Load fonts using relative paths
-const cormorantSemiBold = fetch(
-  new URL('./api/wotd/image/fonts/CormorantGaramond-SemiBold.ttf', import.meta.url)
-).then((res) => res.arrayBuffer());
-
-const bricolageGrotesque = fetch(
-  new URL('./api/wotd/image/fonts/BricolageGrotesque-Regular.ttf', import.meta.url)
-).then((res) => res.arrayBuffer());
-
-const nothingYouCouldDo = fetch(
-  new URL('./api/wotd/image/fonts/NothingYouCouldDo.ttf', import.meta.url)
-).then((res) => res.arrayBuffer());
-
-const cinzelDecorative = fetch(
-  new URL('./api/wotd/image/fonts/CinzelDecorative-Regular.ttf', import.meta.url)
-).then((res) => res.arrayBuffer());
+// Load fonts using fs for the Node.js runtime
+const fontsDir = path.join(process.cwd(), "src/app/api/wotd/image/fonts");
+const cormorantSemiBold = readFile(path.join(fontsDir, "CormorantGaramond-SemiBold.ttf"));
+const bricolageGrotesque = readFile(path.join(fontsDir, "BricolageGrotesque-Regular.ttf"));
+const nothingYouCouldDo = readFile(path.join(fontsDir, "NothingYouCouldDo.ttf"));
+const cinzelDecorative = readFile(path.join(fontsDir, "CinzelDecorative-Regular.ttf"));
 
 const COLORS = {
   background: "#0a0a0a",
