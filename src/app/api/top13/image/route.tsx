@@ -2,8 +2,6 @@ import { ImageResponse } from "next/og";
 import { createClient } from "@/lib/supabase/server";
 import { ERAS } from "@/lib/constants";
 
-export const runtime = "edge";
-
 // Suppress dev-mode URL parse errors (works fine in production edge)
 function safeFetchFont(url: URL): Promise<ArrayBuffer> {
   return fetch(url).then(res => res.arrayBuffer()).catch(() => new ArrayBuffer(0));

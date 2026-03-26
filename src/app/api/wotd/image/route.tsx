@@ -3,8 +3,6 @@ import { createClient } from "@/lib/supabase/server";
 import { ERA_MAP } from "@/lib/constants";
 import type { EraSlug } from "@/lib/types";
 
-export const runtime = "edge";
-
 // Pre-load fonts — wrapped to suppress dev-mode URL parse errors
 // (import.meta.url resolves to a relative path locally but works in production edge)
 function safeFetchFont(url: URL): Promise<ArrayBuffer> {
