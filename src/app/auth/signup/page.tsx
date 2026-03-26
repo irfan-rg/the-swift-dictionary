@@ -28,7 +28,7 @@ export default function SignupPage() {
     });
 
     if (error) {
-      setError(error.message);
+      setError("Could not create account. Please check your details and try again.");
       setLoading(false);
     } else {
       setSuccess(true);
@@ -97,7 +97,7 @@ export default function SignupPage() {
                 type="text"
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
-                className="w-full h-11 pl-10 pr-4 rounded-sm bg-[var(--surface)] border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/40 focus:border-[var(--border-focus)] font-body text-sm text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] placeholder:opacity-50"
+                className="w-full h-11 pl-10 pr-4 rounded-sm bg-[var(--surface)] border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/40 focus:border-[var(--border-focus)] font-body text-sm tracking-wide text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] placeholder:opacity-50"
                 placeholder="Your name"
               />
             </div>
@@ -115,7 +115,7 @@ export default function SignupPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full h-11 pl-10 pr-4 rounded-sm bg-[var(--surface)] border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/40 focus:border-[var(--border-focus)] font-body text-sm text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] placeholder:opacity-50"
+                className="w-full h-11 pl-10 pr-4 rounded-sm bg-[var(--surface)] border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/40 focus:border-[var(--border-focus)] font-body text-sm tracking-wide text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] placeholder:opacity-50"
                 placeholder="you@example.com"
               />
             </div>
@@ -133,12 +133,12 @@ export default function SignupPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                minLength={6}
-                className="w-full h-11 pl-10 pr-4 rounded-sm bg-[var(--surface)] border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/40 focus:border-[var(--border-focus)] font-body text-sm text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] placeholder:opacity-50"
+                minLength={8}
+                className="w-full h-11 pl-10 pr-4 rounded-sm bg-[var(--surface)] border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/40 focus:border-[var(--border-focus)] font-body text-xl tracking-wider text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] placeholder:opacity-50"
                 placeholder="••••••••"
               />
             </div>
-            <p className="font-body text-xs text-[var(--foreground-muted)] mt-1 opacity-60">At least 6 characters</p>
+            <p className="font-body text-xs text-[var(--foreground-muted)] mt-1 opacity-60">At least 8 characters</p>
           </div>
 
           {error && (

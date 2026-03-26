@@ -5,13 +5,17 @@ import type { EraSlug } from "@/lib/types";
 
 export const runtime = "edge";
 
-// Pre-load fonts
-const cormorantRegular = fetch(new URL('./fonts/CormorantGaramond-Regular.ttf', import.meta.url)).then(res => res.arrayBuffer());
-const cormorantItalic = fetch(new URL('./fonts/CormorantGaramond-Italic.ttf', import.meta.url)).then(res => res.arrayBuffer());
-const cormorantSemiBold = fetch(new URL('./fonts/CormorantGaramond-SemiBold.ttf', import.meta.url)).then(res => res.arrayBuffer());
-const nothingYouCouldDo = fetch(new URL('./fonts/NothingYouCouldDo.ttf', import.meta.url)).then(res => res.arrayBuffer());
-const cinzelDecorative = fetch(new URL('./fonts/CinzelDecorative-Regular.ttf', import.meta.url)).then(res => res.arrayBuffer());
-const bricolageGrotesque = fetch(new URL('./fonts/BricolageGrotesque-Regular.ttf', import.meta.url)).then(res => res.arrayBuffer());
+// Pre-load fonts — wrapped to suppress dev-mode URL parse errors
+// (import.meta.url resolves to a relative path locally but works in production edge)
+function safeFetchFont(url: URL): Promise<ArrayBuffer> {
+  return fetch(url).then(res => res.arrayBuffer()).catch(() => new ArrayBuffer(0));
+}
+const cormorantRegular = safeFetchFont(new URL('./fonts/CormorantGaramond-Regular.ttf', import.meta.url));
+const cormorantItalic = safeFetchFont(new URL('./fonts/CormorantGaramond-Italic.ttf', import.meta.url));
+const cormorantSemiBold = safeFetchFont(new URL('./fonts/CormorantGaramond-SemiBold.ttf', import.meta.url));
+const nothingYouCouldDo = safeFetchFont(new URL('./fonts/NothingYouCouldDo.ttf', import.meta.url));
+const cinzelDecorative = safeFetchFont(new URL('./fonts/CinzelDecorative-Regular.ttf', import.meta.url));
+const bricolageGrotesque = safeFetchFont(new URL('./fonts/BricolageGrotesque-Regular.ttf', import.meta.url));
 
 // Instagram square format
 const WIDTH = 1080;

@@ -25,7 +25,7 @@ export default function LoginPage() {
     });
 
     if (error) {
-      setError(error.message);
+      setError("Invalid email or password. Please try again.");
       setLoading(false);
     } else {
       router.push("/");
@@ -71,7 +71,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full h-11 pl-10 pr-4 rounded-sm bg-[var(--surface)] border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/40 focus:border-[var(--border-focus)] font-body text-sm text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] placeholder:opacity-50"
+                className="w-full h-11 pl-10 pr-4 rounded-sm bg-[var(--surface)] border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/40 focus:border-[var(--border-focus)] font-body text-sm tracking-wide text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] placeholder:opacity-50"
                 placeholder="you@example.com"
               />
             </div>
@@ -89,7 +89,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full h-11 pl-10 pr-4 rounded-sm bg-[var(--surface)] border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/40 focus:border-[var(--border-focus)] font-body text-sm text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] placeholder:opacity-50"
+                className="w-full h-11 pl-10 pr-4 rounded-sm bg-[var(--surface)] border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/40 focus:border-[var(--border-focus)] font-body text-xl tracking-wider text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] placeholder:opacity-50"
                 placeholder="••••••••"
               />
             </div>

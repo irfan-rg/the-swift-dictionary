@@ -4,12 +4,16 @@ import { ERAS } from "@/lib/constants";
 
 export const runtime = "edge";
 
-const cormorantRegular = fetch(new URL('../../wotd/image/fonts/CormorantGaramond-Regular.ttf', import.meta.url)).then(res => res.arrayBuffer());
-const cormorantItalic = fetch(new URL('../../wotd/image/fonts/CormorantGaramond-Italic.ttf', import.meta.url)).then(res => res.arrayBuffer());
-const cormorantSemiBold = fetch(new URL('../../wotd/image/fonts/CormorantGaramond-SemiBold.ttf', import.meta.url)).then(res => res.arrayBuffer());
-const bricolageGrotesque = fetch(new URL('../../wotd/image/fonts/BricolageGrotesque-Regular.ttf', import.meta.url)).then(res => res.arrayBuffer());
-const nothingYouCouldDo = fetch(new URL('../../wotd/image/fonts/NothingYouCouldDo.ttf', import.meta.url)).then(res => res.arrayBuffer());
-const cinzelDecorative = fetch(new URL('../../wotd/image/fonts/CinzelDecorative-Regular.ttf', import.meta.url)).then(res => res.arrayBuffer());
+// Suppress dev-mode URL parse errors (works fine in production edge)
+function safeFetchFont(url: URL): Promise<ArrayBuffer> {
+  return fetch(url).then(res => res.arrayBuffer()).catch(() => new ArrayBuffer(0));
+}
+const cormorantRegular = safeFetchFont(new URL('../../wotd/image/fonts/CormorantGaramond-Regular.ttf', import.meta.url));
+const cormorantItalic = safeFetchFont(new URL('../../wotd/image/fonts/CormorantGaramond-Italic.ttf', import.meta.url));
+const cormorantSemiBold = safeFetchFont(new URL('../../wotd/image/fonts/CormorantGaramond-SemiBold.ttf', import.meta.url));
+const bricolageGrotesque = safeFetchFont(new URL('../../wotd/image/fonts/BricolageGrotesque-Regular.ttf', import.meta.url));
+const nothingYouCouldDo = safeFetchFont(new URL('../../wotd/image/fonts/NothingYouCouldDo.ttf', import.meta.url));
+const cinzelDecorative = safeFetchFont(new URL('../../wotd/image/fonts/CinzelDecorative-Regular.ttf', import.meta.url));
 
 const WIDTH = 1080;
 const HEIGHT = 1350;

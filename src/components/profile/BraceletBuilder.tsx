@@ -49,7 +49,7 @@ export default function BraceletBuilder({ userId, initialBeads }: BraceletBuilde
   };
 
   const addCustomBead = () => {
-    const normalized = customBead.trim().toUpperCase();
+    const normalized = customBead.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
     if (!normalized || normalized.length > 2 || !canAddMore) return;
     addBead(normalized);
     setCustomBead("");

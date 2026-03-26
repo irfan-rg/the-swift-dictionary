@@ -1,8 +1,19 @@
 import { createClient } from "@/lib/supabase/server";
+import { apiLimiter, getClientIp, checkRateLimit } from "@/lib/rate-limit";
 
 export const runtime = "edge";
 
-export async function GET() {
+export async function GET(request: Request) {
+  // Rate limiting
+  const ip = getClientIp(request);
+  const { success, headers: rlHeaders } = await checkRateLimit(apiLimiter(), ip);
+  if (!success) {
+    return new Response(JSON.stringify({ error: "Too many requests" }), {
+      status: 429,
+      headers: { "Content-Type": "application/json", ...rlHeaders },
+    });
+  }
+
   const supabase = await createClient();
   // Get today's UTC date which matches the CRON run
   const today = new Date().toISOString().split("T")[0];

@@ -21,17 +21,20 @@ export default function EditableName({ userId, initialName, showGreeting = true,
   }, [initialName]);
 
   const handleSave = async () => {
-    if (!name.trim() || name.trim() === initialName) {
+    // Sanitize: strip HTML tags and limit length
+    const sanitized = name.replace(/<[^>]*>/g, "").trim().slice(0, 50);
+    if (!sanitized || sanitized === initialName) {
       setIsEditing(false);
       setName(initialName);
       return;
     }
 
+    setName(sanitized);
     setIsLoading(true);
     const supabase = createClient();
     const { error } = await supabase
       .from("profiles")
-      .update({ display_name: name.trim() })
+      .update({ display_name: sanitized })
       .eq("id", userId);
 
     if (!error) {
@@ -59,6 +62,7 @@ export default function EditableName({ userId, initialName, showGreeting = true,
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            maxLength={50}
             className={`max-w-full border-b border-[var(--border-focus)] bg-transparent pb-1 font-display text-4xl leading-[0.92] tracking-[-0.01em] text-[var(--foreground)] focus:outline-none md:text-5xl lg:text-6xl ${centered ? 'text-center' : 'text-left'}`}
             autoFocus
             onKeyDown={(e) => {
