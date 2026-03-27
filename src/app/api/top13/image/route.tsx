@@ -2,17 +2,14 @@ import { ImageResponse } from "next/og";
 import { createClient } from "@/lib/supabase/server";
 import { ERAS } from "@/lib/constants";
 
-import { readFile } from "fs/promises";
-import path from "path";
+export const runtime = "edge";
 
-// Load fonts using fs for the Node.js runtime
-const fontsDir = path.join(process.cwd(), "src/app/api/wotd/image/fonts");
-const cormorantRegular = readFile(path.join(fontsDir, "CormorantGaramond-Regular.ttf"));
-const cormorantItalic = readFile(path.join(fontsDir, "CormorantGaramond-Italic.ttf"));
-const cormorantSemiBold = readFile(path.join(fontsDir, "CormorantGaramond-SemiBold.ttf"));
-const bricolageGrotesque = readFile(path.join(fontsDir, "BricolageGrotesque-Regular.ttf"));
-const nothingYouCouldDo = readFile(path.join(fontsDir, "NothingYouCouldDo.ttf"));
-const cinzelDecorative = readFile(path.join(fontsDir, "CinzelDecorative-Regular.ttf"));
+const cormorantRegular = fetch(new URL('../../wotd/image/fonts/CormorantGaramond-Regular.ttf', import.meta.url)).then(res => res.arrayBuffer());
+const cormorantItalic = fetch(new URL('../../wotd/image/fonts/CormorantGaramond-Italic.ttf', import.meta.url)).then(res => res.arrayBuffer());
+const cormorantSemiBold = fetch(new URL('../../wotd/image/fonts/CormorantGaramond-SemiBold.ttf', import.meta.url)).then(res => res.arrayBuffer());
+const bricolageGrotesque = fetch(new URL('../../wotd/image/fonts/BricolageGrotesque-Regular.ttf', import.meta.url)).then(res => res.arrayBuffer());
+const nothingYouCouldDo = fetch(new URL('../../wotd/image/fonts/NothingYouCouldDo.ttf', import.meta.url)).then(res => res.arrayBuffer());
+const cinzelDecorative = fetch(new URL('../../wotd/image/fonts/CinzelDecorative-Regular.ttf', import.meta.url)).then(res => res.arrayBuffer());
 
 const WIDTH = 1080;
 const HEIGHT = 1350;

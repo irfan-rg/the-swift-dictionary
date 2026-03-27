@@ -42,16 +42,30 @@ export const metadata: Metadata = {
     default: "The Swift Dictionary",
     template: "%s | The Swift Dictionary",
   },
-  description: "Discover Taylor Swift's sophisticated vocabulary through her lyrics.",
+  description: "Discover Taylor Swift's sophisticated vocabulary through her lyrics. Explore an interactive dictionary of unique words used across all eras.",
+  keywords: [
+    "Taylor Swift",
+    "dictionary",
+    "vocabulary",
+    "lyrics",
+    "Swiftie",
+    "Eras Tour",
+    "meanings",
+    "Taylor Swift words"
+  ],
+  authors: [{ name: "The Swift Dictionary" }],
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.the-swift-dictionary.me"),
   openGraph: {
     title: "The Swift Dictionary",
     description: "A curated scrapbook of Taylor Swift's lyrical vocabulary.",
     siteName: "The Swift Dictionary",
     type: "website",
+    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
+    title: "The Swift Dictionary",
+    description: "Discover Taylor Swift's sophisticated vocabulary through her lyrics.",
   },
 };
 

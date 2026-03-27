@@ -5,7 +5,8 @@ import DictionaryClient from "@/components/dictionary/DictionaryClient";
 
 export const metadata: Metadata = {
   title: "Dictionary",
-  description: "Search and filter vocabulary words discovered in Taylor Swift's lyrics.",
+  description: "Search and filter vocabulary words discovered in Taylor Swift's lyrics. An interactive glossary for Swifties.",
+  keywords: ["Taylor Swift dictionary", "lyrics search", "lyrical vocabulary", "Taylor Swift language"],
 };
 
 type DictionaryPageProps = {

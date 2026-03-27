@@ -1,9 +1,9 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Contribute | The Swift Dictionary",
-  description:
-    "Help grow The Swift Dictionary — contribute words, report issues, or suggest features.",
+  title: "Contribute",
+  description: "Help grow The Swift Dictionary — contribute words, report issues, or suggest features for Taylor Swift's lyrics.",
+  keywords: ["contribute to The Swift Dictionary", "suggest Taylor Swift words", "Swiftie community"],
 };
 
 export default function ContributePage() {

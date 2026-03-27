@@ -5,7 +5,8 @@ import { Album } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: "Explorer",
-  description: "Browse all 12 Taylor Swift eras and discover vocabulary from every album.",
+  description: "Browse all 12 Taylor Swift eras and discover vocabulary from every album. Explore the lyrics of Fearless, 1989, Folklore, and more.",
+  keywords: ["Taylor Swift eras", "lyrics by album", "Taylor Swift discography", "Swiftie vocabulary"],
 };
 
 export default async function ExplorerPage() {

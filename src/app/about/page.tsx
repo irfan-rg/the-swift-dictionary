@@ -1,9 +1,9 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "About | The Swift Dictionary",
-  description:
-    "Learn about The Swift Dictionary — a vocabulary explorer for Taylor Swift's lyrics.",
+  title: "About",
+  description: "Learn about The Swift Dictionary — an interactive vocabulary explorer for Taylor Swift's lyrics.",
+  keywords: ["about The Swift Dictionary", "Taylor Swift project", "fan made Swiftie app"],
 };
 
 export default function AboutPage() {
