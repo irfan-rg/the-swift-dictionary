@@ -360,3 +360,27 @@ body {
 .marquee-label {
   transition: inherit;
 }
+
+/* ── Custom Scrollbars ────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-focus);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-focus) transparent;
+}

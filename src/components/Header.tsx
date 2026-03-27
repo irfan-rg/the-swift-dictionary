@@ -14,7 +14,7 @@ import UserDropdown from '@/components/UserDropdown';
 
 export default function Header() {
   const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const { theme, resolvedTheme, setTheme } = useTheme();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
@@ -186,11 +186,11 @@ export default function Header() {
                 <div className="flex items-center gap-1.5 sm:gap-3 ml-auto">
                   {mounted && (
                     <button
-                      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                      onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
                       className="p-2 rounded-full text-[var(--foreground-muted)] hover:text-[var(--accent)] hover:bg-[var(--surface-raised)] transition-colors duration-500"
                       aria-label="Toggle theme"
                     >
-                      {theme === 'dark' ? <Sun className="w-[18px] h-[18px]" strokeWidth={1.5} /> : <MoonStar className="w-[18px] h-[18px]" strokeWidth={1.5} />}
+                      {resolvedTheme === 'dark' ? <Sun className="w-[18px] h-[18px]" strokeWidth={1.5} /> : <MoonStar className="w-[18px] h-[18px]" strokeWidth={1.5} />}
                     </button>
                   )}
 
@@ -269,7 +269,7 @@ export default function Header() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="pointer-events-auto absolute top-20 left-4 right-4 sm:left-auto sm:right-auto sm:w-[32rem] glass-panel rounded-sm overflow-hidden z-40"
+            className="pointer-events-auto absolute top-20 left-4 right-4 sm:left-auto sm:right-auto sm:w-[32rem] bg-[var(--background)] border border-[var(--border)] shadow-2xl rounded-md z-50 max-h-[60vh] overflow-y-auto overscroll-contain"
           >
             {searchResults.map((result) => (
               <Link

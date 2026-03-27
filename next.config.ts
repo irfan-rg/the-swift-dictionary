@@ -5,12 +5,6 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'res.cloudinary.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
         hostname: 'mldaczwvxawbzapgrwda.supabase.co',
         port: '',
         pathname: '/storage/**',
@@ -55,7 +49,7 @@ const nextConfig: NextConfig = {
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://accounts.google.com",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
-              "img-src 'self' data: blob: https://res.cloudinary.com https://*.supabase.co",
+              "img-src 'self' data: blob: https://*.supabase.co",
               "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://accounts.google.com",
               "frame-src https://accounts.google.com https://open.spotify.com",
               "object-src 'none'",
