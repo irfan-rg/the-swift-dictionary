@@ -20,7 +20,7 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 10, rotate: -2 }}
           animate={{ opacity: 1, y: 0, rotate: -2 }}
           transition={{ duration: 0.8, delay: 0.1 }}
-          className="font-handwriting text-2xl md:text-3xl lg:text-4xl text-[var(--accent)] mb-6 md:mb-10"
+          className="font-handwriting text-2xl md:text-3xl lg:text-4xl max-md:text-xl max-md:mb-3 text-[var(--accent)] mb-6 md:mb-10"
         >
           a vocabulary for every era...
         </motion.p>
@@ -30,7 +30,7 @@ export default function HeroSection() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="font-branding [-webkit-text-stroke:0.1px_currentColor] text-6xl sm:text-7xl md:text-8xl lg:text-[7rem] font-medium leading-[0.9] tracking-wide md:mt-4 mt-8 mb-8 md:mb-10"
+          className="font-branding [-webkit-text-stroke:0.1px_currentColor] text-6xl sm:text-7xl md:text-8xl lg:text-[7rem] max-md:text-5xl font-medium leading-[0.9] tracking-wide md:mt-4 mt-8 mb-8 md:mb-10"
         >
           The Swift<br />
           <span>Dictionary</span>

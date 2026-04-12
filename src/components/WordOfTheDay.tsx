@@ -32,30 +32,26 @@ export default function WordOfTheDay({ data }: { data?: WordWithDetails | null }
     <div className="w-full flex justify-center py-4">
       {/* The Polaroid Container — fixed height 3D space so back face matches perfectly */}
       <div
-        className="relative w-full max-w-sm"
+        className="relative w-full max-w-sm max-md:max-w-[calc(100vw-2rem)]"
         style={{ perspective: 1400, transformStyle: 'preserve-3d' }}
       >
         <motion.div
           className="w-full cursor-pointer grid relative will-change-transform"
-          animate={{
-            rotateY: isFlipped ? 180 : 0,
-            rotateZ: isFlipped ? 1.5 : -1,
-            z: isFlipped ? 20 : 0,
-          }}
-          transition={{ duration: 0.7, type: 'spring', stiffness: 150, damping: 20 }}
+          animate={{ rotateY: isFlipped ? 180 : 0 }}
+          transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
           style={{ transformStyle: 'preserve-3d', transformOrigin: 'center center' }}
           onClick={() => setIsFlipped(!isFlipped)}
         >
 
           {/* ── FRONT FACE ── */}
           <div className="polaroid-card w-full col-start-1 row-start-1 mt-4" style={{ backfaceVisibility: 'hidden' }}>
-            <div className="scrapbook-tape" />
+            <div className="scrapbook-tape max-md:hidden" />
 
             {/* Polaroid Photo Area */}
-            <div className="w-full aspect-square bg-[var(--surface-raised)] border border-[var(--border)] rounded-sm p-6 sm:p-8 flex flex-col justify-center items-center text-center relative overflow-hidden">
+            <div className="w-full aspect-square max-md:aspect-auto bg-[var(--surface-raised)] border border-[var(--border)] rounded-sm p-6 sm:p-8 max-md:py-8 flex flex-col justify-center items-center text-center relative overflow-hidden">
               <BrandLogo short className="absolute top-4 left-4 text-3xl text-[var(--foreground)] opacity-[0.05] leading-none select-none pointer-events-none" />
               <span className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] mb-4">— Word of the Day —</span>
-              <h2 className="font-display text-4xl sm:text-5xl font-semibold mb-3 tracking-tight break-words hyphens-auto w-full">{wotd.word}</h2>
+              <h2 className="font-display text-4xl sm:text-5xl max-md:text-3xl font-semibold mb-3 tracking-tight break-words hyphens-auto w-full">{wotd.word}</h2>
               <div className="font-body text-xs tracking-wider text-[var(--accent)] mb-6 uppercase flex items-center justify-center gap-2">
                 <span>{wotd.album_title}</span>
                 <span className="w-1 h-1 rounded-full bg-[var(--border-focus)]" />
@@ -66,7 +62,7 @@ export default function WordOfTheDay({ data }: { data?: WordWithDetails | null }
 
             {/* Polaroid Chin / Lyric quote */}
             <div className="pt-6 pb-2 px-4 text-center">
-              <p className="font-handwriting text-xl sm:text-2xl leading-relaxed text-[var(--foreground)]">
+              <p className="font-handwriting text-xl sm:text-2xl max-md:text-base leading-relaxed text-[var(--foreground)]">
                 &quot;{wotd.lyric_snippet}&quot;
               </p>
               <p className="mt-5 font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] opacity-40">
@@ -77,7 +73,7 @@ export default function WordOfTheDay({ data }: { data?: WordWithDetails | null }
 
           {/* ── BACK FACE ── */}
           <div
-            className="polaroid-card w-full col-start-1 row-start-1 overflow-hidden mt-4"
+            className="polaroid-card w-full col-start-1 row-start-1 overflow-hidden mt-4 max-md:mt-0"
             style={{
               backfaceVisibility: 'hidden',
               transform: 'rotateY(180deg)',
@@ -96,28 +92,21 @@ export default function WordOfTheDay({ data }: { data?: WordWithDetails | null }
             <div className="scrapbook-tape opacity-60" />
 
             {/* Back content */}
-            <div className="relative z-10 pt-10 pb-6 px-6 flex flex-col h-full min-h-[420px]">
-
-              {/* Stamp in top-right corner */}
-              {/* <div className="absolute top-10 right-5 flex flex-col items-center rotate-12 opacity-40">
-                <div className="w-10 h-10 border border-[var(--accent)] rounded-md flex items-center justify-center">
-                  <span className="font-display text-[8px] font-bold text-[var(--accent)] uppercase tracking-tight text-center leading-tight">TSD<br />✦</span>
-                </div>
-              </div> */}
+            <div className="relative z-10 pt-10 pb-6 px-6 max-md:pt-6 max-md:pb-4 max-md:px-4 flex flex-col h-full min-h-[420px] max-md:min-h-0">
 
               {/* Handwritten heading */}
-              <span className="font-handwriting text-3xl text-[var(--accent)] mb-2 leading-tight block">
+              <span className="font-handwriting text-3xl max-md:text-2xl text-[var(--accent)] mb-2 leading-tight block">
                 about this word...
               </span>
-              <div className="w-8 h-px bg-[var(--accent)] opacity-40 mb-6" />
+              <div className="w-8 h-px bg-[var(--accent)] opacity-40 mb-6 max-md:mb-3" />
 
               {/* Context body — written text feel */}
-              <p className="font-body text-[15px] text-[var(--foreground)] leading-[1.85] tracking-wider flex-1">
+              <p className="font-body text-[15px] max-md:text-sm text-[var(--foreground)] leading-[1.85] max-md:leading-relaxed tracking-wider flex-1">
                 {wotd.context || "No additional context found for this lyric."}
               </p>
 
               {/* Bottom meta strip */}
-              <div className="mt-6 pt-4 border-t border-dashed border-[var(--border)] flex items-center justify-between">
+              <div className="mt-6 max-md:mt-4 pt-4 border-t border-dashed border-[var(--border)] flex items-center justify-between">
                 <div className="flex flex-col">
                   <span className="font-handwriting text-base text-[var(--foreground)]">{wotd.song_title || wotd.song_slug}</span>
                   <span className="font-body text-[10px] uppercase tracking-widest text-[var(--foreground)] opacity-50 mt-0.5">{wotd.album_title}</span>

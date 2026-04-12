@@ -13,14 +13,14 @@ export default function Footer() {
 
         {/* Ornate Dictionary Title */}
         <div className="text-center mb-12">
-          <BrandLogo as="h2" className="text-4xl sm:text-5xl lg:text-6xl tracking-wide text-[var(--foreground)] mb-4" />
+          <BrandLogo as="h2" className="text-3xl sm:text-5xl lg:text-6xl tracking-wide text-[var(--foreground)] mb-4" />
           <p className="font-handwriting text-xl sm:text-2xl text-[var(--foreground-muted)] opacity-80">
             A curated scrapbook of every lyric & lore...
           </p>
         </div>
 
         {/* Elegant Links Grid */}
-        <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-12 text-center mb-16 px-4">
+        <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-12 max-md:gap-8 text-center mb-16 px-4">
 
           <div className="flex flex-col gap-4 items-center">
             <h3 className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] font-semibold mb-2">Volumes</h3>

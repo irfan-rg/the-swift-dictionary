@@ -113,185 +113,308 @@ export default function Header() {
   ].join(', ');
 
   return (
-    <div className={`fixed top-0 left-0 right-0 z-50 pointer-events-none flex justify-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${scrolled || isSearching || isMenuOpen ? 'px-4 sm:px-6 py-4' : 'px-0 py-0'
-      }`}>
-      <motion.header
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        style={{
-          backgroundColor: scrolled || isSearching || isMenuOpen ? 'var(--glass-bg)' : 'transparent',
-          backdropFilter: scrolled || isSearching || isMenuOpen ? 'blur(12px)' : 'blur(0px)',
-          WebkitBackdropFilter: scrolled || isSearching || isMenuOpen ? 'blur(12px)' : 'blur(0px)',
-          transition: headerShellTransition,
-        }}
-        className={`pointer-events-auto border ${scrolled || isSearching || isMenuOpen
-          ? 'shadow-md rounded-full w-full max-w-3xl border-[var(--border)]'
-          : 'shadow-none w-full max-w-7xl rounded-none border-transparent'
-          }`}
-      >
-        <div className={`relative transition-all duration-700  flex items-center h-14 w-full ${scrolled || isSearching || isMenuOpen ? 'px-5 sm:px-6' : 'px-6 sm:px-8 lg:px-12'}`}>
-          <AnimatePresence mode="wait">
-            {isSearching ? (
-              <motion.div
-                key="search-mode"
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.2 }}
-                className="flex-1 flex items-center w-full"
-              >
-                <form onSubmit={handleSearchSubmit} className="flex-1 flex items-center gap-3 w-full">
-                  <button type="button" onClick={() => { setIsSearching(false); setSearchQuery(''); }} className="p-2 text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors duration-500">
-                    <ArrowLeft className="w-5 h-5" strokeWidth={1.5} />
-                  </button>
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    placeholder="Search for a lyric, word, or era..."
-                    value={searchQuery}
-                    onChange={(e) => handleSearchInput(e.target.value)}
-                    className="flex-1 bg-transparent font-body text-sm sm:text-base outline-none text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] placeholder:font-light"
-                  />
-                  <div className="hidden sm:flex items-center text-[var(--foreground-muted)] opacity-50 space-x-1">
-                    <kbd className="font-sans text-[10px] border border-[var(--border)] rounded px-1.5 py-0.5">ESC</kbd>
-                  </div>
-                </form>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="nav-mode"
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.2 }}
-                className="flex flex-1 items-center w-full relative"
-              >
-                {/* Logo */}
-                <Link href="/" className="shrink-0 flex items-center gap-2">
-                  <BrandLogo short className="text-[1.35rem] sm:text-2xl text-[var(--accent)] hover:opacity-80 transition-opacity" />
-                </Link>
-
-                {/* Desktop Nav — absolutely centered in the bar */}
-                <nav className="hidden md:flex items-center gap-7 absolute left-1/2 -translate-x-1/2">
-                  {navLinks.map(({ href, label }) => (
-                    <Link key={href} href={href} className="font-body text-sm font-medium tracking-wide text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors duration-500 relative group">
-                      {label}
-                      <span className="absolute -bottom-1 left-1/2 w-0 h-px bg-[var(--accent)] group-hover:w-full group-hover:transition-all group-hover:left-0 duration-300" />
-                    </Link>
-                  ))}
-                </nav>
-
-                {/* Right Controls */}
-                <div className="flex items-center gap-1.5 sm:gap-3 ml-auto">
-                  {mounted && (
-                    <button
-                      onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-                      className="p-2 rounded-full text-[var(--foreground-muted)] hover:text-[var(--accent)] hover:bg-[var(--surface-raised)] transition-colors duration-500"
-                      aria-label="Toggle theme"
-                    >
-                      {resolvedTheme === 'dark' ? <Sun className="w-[18px] h-[18px]" strokeWidth={1.5} /> : <MoonStar className="w-[18px] h-[18px]" strokeWidth={1.5} />}
-                    </button>
-                  )}
-
-                  <button
-                    onClick={() => { setIsSearching(true); setShowResults(false); }}
-                    className="p-2 rounded-full text-[var(--foreground-muted)] hover:text-[var(--accent)] hover:bg-[var(--surface-raised)] transition-colors duration-500"
-                    aria-label="Search"
+    <>
+      {/* =========================================================
+          DESKTOP HEADER (Strictly Untouched)
+          ========================================================= */}
+      <div className="max-md:hidden">
+        <div className={`fixed top-0 left-0 right-0 z-50 pointer-events-none flex justify-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${scrolled || isSearching || isMenuOpen ? 'px-4 sm:px-6 py-4' : 'px-0 py-0'
+          }`}>
+          <motion.header
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            style={{
+              backgroundColor: scrolled || isSearching || isMenuOpen ? 'var(--glass-bg)' : 'transparent',
+              backdropFilter: scrolled || isSearching || isMenuOpen ? 'blur(12px)' : 'blur(0px)',
+              WebkitBackdropFilter: scrolled || isSearching || isMenuOpen ? 'blur(12px)' : 'blur(0px)',
+              transition: headerShellTransition,
+            }}
+            className={`pointer-events-auto border ${scrolled || isSearching || isMenuOpen
+              ? 'shadow-md rounded-full w-full max-w-3xl border-[var(--border)]'
+              : 'shadow-none w-full max-w-7xl rounded-none border-transparent'
+              }`}
+          >
+            <div className={`relative transition-all duration-700  flex items-center h-14 w-full ${scrolled || isSearching || isMenuOpen ? 'px-5 sm:px-6' : 'px-6 sm:px-8 lg:px-12'}`}>
+              <AnimatePresence mode="wait">
+                {isSearching ? (
+                  <motion.div
+                    key="search-mode-desktop"
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.98 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex-1 flex items-center w-full"
                   >
-                    <Search className="w-[18px] h-[18px]" strokeWidth={1.5} />
-                  </button>
-
-                  {user ? (
-                    <UserDropdown />
-                  ) : scrolled ? (
-                    <Link href="/auth/login" className="hidden sm:flex p-2 rounded-full text-[var(--foreground-muted)] hover:text-[var(--accent)] hover:bg-[var(--surface-raised)] transition-colors duration-500" aria-label="Login">
-                      <User className="w-[18px] h-[18px]" strokeWidth={1.5} />
+                    <form onSubmit={handleSearchSubmit} className="flex-1 flex items-center gap-3 w-full">
+                      <button type="button" onClick={() => { setIsSearching(false); setSearchQuery(''); }} className="p-2 text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors duration-500">
+                        <ArrowLeft className="w-5 h-5" strokeWidth={1.5} />
+                      </button>
+                      <input
+                        ref={inputRef}
+                        type="text"
+                        placeholder="Search for a lyric, word, or era..."
+                        value={searchQuery}
+                        onChange={(e) => handleSearchInput(e.target.value)}
+                        className="flex-1 bg-transparent font-body text-sm sm:text-base outline-none text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] placeholder:font-light"
+                      />
+                      <div className="hidden sm:flex items-center text-[var(--foreground-muted)] opacity-50 space-x-1">
+                        <kbd className="font-sans text-[10px] border border-[var(--border)] rounded px-1.5 py-0.5">ESC</kbd>
+                      </div>
+                    </form>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="nav-mode-desktop"
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.98 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex flex-1 items-center w-full relative"
+                  >
+                    <Link href="/" className="shrink-0 flex items-center gap-2">
+                      <BrandLogo short className="text-[1.35rem] sm:text-2xl text-[var(--accent)] hover:opacity-80 transition-opacity" />
                     </Link>
-                  ) : (
-                    <Link href="/auth/login" className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--border)] font-body text-xs font-medium tracking-wide text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:border-[var(--accent)] transition-colors duration-500">
-                      <User className="w-[14px] h-[14px]" /> Login
-                    </Link>
-                  )}
 
-                  <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden p-2 rounded-full text-[var(--foreground)] transition-colors duration-500">
-                    {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-                  </button>
-                </div>
+                    <nav className="hidden md:flex items-center gap-7 absolute left-1/2 -translate-x-1/2">
+                      {navLinks.map(({ href, label }) => (
+                        <Link key={href} href={href} className="font-body text-sm font-medium tracking-wide text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors duration-500 relative group">
+                          {label}
+                          <span className="absolute -bottom-1 left-1/2 w-0 h-px bg-[var(--accent)] group-hover:w-full group-hover:transition-all group-hover:left-0 duration-300" />
+                        </Link>
+                      ))}
+                    </nav>
+
+                    <div className="flex items-center gap-3 ml-auto">
+                      {mounted && (
+                        <button onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')} className="p-2 rounded-full text-[var(--foreground-muted)] hover:text-[var(--accent)] hover:bg-[var(--surface-raised)] transition-colors duration-500" aria-label="Toggle theme">
+                          {resolvedTheme === 'dark' ? <Sun className="w-[18px] h-[18px]" strokeWidth={1.5} /> : <MoonStar className="w-[18px] h-[18px]" strokeWidth={1.5} />}
+                        </button>
+                      )}
+                      <button onClick={() => { setIsSearching(true); setShowResults(false); }} className="p-2 rounded-full text-[var(--foreground-muted)] hover:text-[var(--accent)] hover:bg-[var(--surface-raised)] transition-colors duration-500" aria-label="Search">
+                        <Search className="w-[18px] h-[18px]" strokeWidth={1.5} />
+                      </button>
+                      {user ? (
+                        <UserDropdown />
+                      ) : scrolled ? (
+                        <Link href="/auth/login" className="flex p-2 rounded-full text-[var(--foreground-muted)] hover:text-[var(--accent)] hover:bg-[var(--surface-raised)] transition-colors duration-500" aria-label="Login">
+                          <User className="w-[18px] h-[18px]" strokeWidth={1.5} />
+                        </Link>
+                      ) : (
+                        <Link href="/auth/login" className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--border)] font-body text-xs font-medium tracking-wide text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:border-[var(--accent)] transition-colors duration-500">
+                          <User className="w-[14px] h-[14px]" /> Login
+                        </Link>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </motion.header>
+
+          <AnimatePresence>
+            {isSearching && showResults && searchResults.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="pointer-events-auto absolute top-20 left-4 right-4 sm:left-auto sm:right-auto sm:w-[32rem] bg-[var(--background)] border border-[var(--border)] shadow-2xl rounded-md z-50 max-h-[60vh] overflow-y-auto overscroll-contain"
+              >
+                {searchResults.map((result) => (
+                  <Link
+                    key={`${result.type}-${result.id}`}
+                    href={result.href}
+                    onClick={() => { setIsSearching(false); setShowResults(false); setSearchQuery(''); }}
+                    className="flex items-center gap-4 p-4 hover:bg-[var(--surface-raised)] transition-colors duration-500 border-b border-[var(--border)] last:border-b-0"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-[var(--surface-raised)] flex items-center justify-center border border-[var(--border)] shrink-0">
+                      <span className="font-body text-[10px] uppercase font-semibold text-[var(--accent)]">{result.type[0]}</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-display font-medium text-lg leading-snug truncate text-[var(--foreground)]">{result.title}</p>
+                      <p className="font-body text-xs text-[var(--foreground-muted)] truncate">{result.subtitle}</p>
+                    </div>
+                  </Link>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+
+      {/* =========================================================
+          MOBILE HEADER (Bespoke layout for small screens)
+          ========================================================= */}
+      <div className="md:hidden">
+        {/* The fixed header bar */}
+        <div className="fixed top-0 left-0 right-0 z-50 bg-[var(--glass-bg)] backdrop-blur-[12px] border-b border-[var(--border)] shadow-sm">
+          <div className="flex items-center justify-between h-16 w-full px-4">
+            <AnimatePresence mode="wait">
+              {isSearching ? (
+                <motion.div
+                  key="search-mode-mobile"
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                  className="flex-1 flex items-center w-full"
+                >
+                  <form onSubmit={handleSearchSubmit} className="flex-1 flex items-center gap-3 w-full">
+                    <button type="button" onClick={() => { setIsSearching(false); setSearchQuery(''); }} className="p-2.5 -ml-2 text-[var(--foreground-muted)] hover:text-[var(--foreground)]">
+                      <ArrowLeft className="w-5 h-5" strokeWidth={1.5} />
+                    </button>
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      placeholder="Search..."
+                      value={searchQuery}
+                      onChange={(e) => handleSearchInput(e.target.value)}
+                      className="flex-1 bg-transparent font-body text-base outline-none text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] placeholder:font-light"
+                      autoFocus
+                    />
+                  </form>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="nav-mode-mobile"
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                  className="flex flex-1 items-center justify-between w-full"
+                >
+                  <Link href="/" className="shrink-0 flex items-center gap-2">
+                    <BrandLogo short className="text-xl text-[var(--accent)]" />
+                  </Link>
+
+                  <div className="flex items-center gap-1">
+                    {mounted && (
+                      <button onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')} className="p-2.5 rounded-full text-[var(--foreground-muted)]" aria-label="Toggle theme">
+                        {resolvedTheme === 'dark' ? <Sun className="w-[18px] h-[18px]" strokeWidth={1.5} /> : <MoonStar className="w-[18px] h-[18px]" strokeWidth={1.5} />}
+                      </button>
+                    )}
+                    <button onClick={() => { setIsSearching(true); setShowResults(false); }} className="p-2.5 rounded-full text-[var(--foreground-muted)]" aria-label="Search">
+                      <Search className="w-[18px] h-[18px]" strokeWidth={1.5} />
+                    </button>
+                    <button
+                      onClick={() => setIsMenuOpen(!isMenuOpen)}
+                      className="px-2 py-1.5 text-[var(--foreground)] relative flex items-center justify-center min-w-[64px] h-[36px]"
+                      aria-label="Toggle menu"
+                    >
+                      <AnimatePresence mode="popLayout" initial={false}>
+                        <motion.span
+                          key={isMenuOpen ? 'close' : 'menu'}
+                          initial={{ opacity: 0, filter: 'blur(4px)', y: isMenuOpen ? -8 : 8 }}
+                          animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
+                          exit={{ opacity: 0, filter: 'blur(4px)', y: isMenuOpen ? 8 : -8 }}
+                          transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+                          className="font-handwriting text-xl tracking-wide absolute"
+                        >
+                          {isMenuOpen ? 'close.' : 'menu.'}
+                        </motion.span>
+                      </AnimatePresence>
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Mobile Search Results — inside header bar so it drops down */}
+          <AnimatePresence>
+            {isSearching && showResults && searchResults.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                className="border-t border-[var(--border)] bg-[var(--background)] max-h-[80vh] overflow-y-auto"
+              >
+                {searchResults.map((result) => (
+                  <Link
+                    key={`${result.type}-${result.id}`}
+                    href={result.href}
+                    onClick={() => { setIsSearching(false); setShowResults(false); setSearchQuery(''); }}
+                    className="flex items-center gap-4 p-4 border-b border-[var(--border)]"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-[var(--surface-raised)] flex items-center justify-center border border-[var(--border)] shrink-0">
+                      <span className="font-body text-[10px] uppercase font-semibold text-[var(--accent)]">{result.type[0]}</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-display font-medium text-lg leading-snug truncate text-[var(--foreground)]">{result.title}</p>
+                      <p className="font-body text-xs text-[var(--foreground-muted)] truncate">{result.subtitle}</p>
+                    </div>
+                  </Link>
+                ))}
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        {/* Mobile Menu Dropdown */}
+        {/* Mobile Menu — Full-Screen Takeover (sibling of header bar) */}
         <AnimatePresence>
           {isMenuOpen && !isSearching && (
             <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="md:hidden border-t border-[var(--border)] overflow-hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="fixed inset-0 top-16 z-40 bg-[var(--background)] overflow-y-auto"
             >
-              <nav className="flex flex-col p-6 gap-5">
-                {navLinks.map(({ href, label }) => (
-                  <Link key={href} href={href} onClick={() => setIsMenuOpen(false)} className="font-display italic text-2xl text-[var(--foreground)]">
-                    {label}
-                  </Link>
-                ))}
-                <div className="h-px bg-[var(--border)] my-1" />
-                {user ? (
-                  <>
-                    <Link href="/profile" onClick={() => setIsMenuOpen(false)} className="font-body text-sm font-medium flex items-center gap-3 text-[var(--foreground-muted)]">
-                      <Sparkles className="w-[18px] h-[18px]" /> Profile
+              <div className="flex flex-col justify-between min-h-full px-6 pt-10 pb-10">
+                {/* Primary Navigation */}
+                <nav className="flex flex-col gap-2">
+                  {navLinks.map(({ href, label }, i) => (
+                    <motion.div
+                      key={href}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3, delay: i * 0.06 }}
+                    >
+                      <Link
+                        href={href}
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex items-center gap-5 py-4 group"
+                      >
+                        <span className="font-body text-xs tracking-widest text-[var(--accent)] opacity-50 w-5 text-right tabular-nums select-none">
+                          {String(i + 1).padStart(2, '0')}
+                        </span>
+                        <span className="font-body text-xl font-semibold tracking-wide text-[var(--foreground)] group-active:text-[var(--accent)] transition-colors">
+                          {label}
+                        </span>
+                      </Link>
+                    </motion.div>
+                  ))}
+                </nav>
+
+                {/* Bottom Account Section */}
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35, delay: 0.3 }}
+                  className="mt-auto pt-8"
+                >
+                  <div className="h-px bg-[var(--border)] mb-8" />
+                  {user ? (
+                    <div className="flex flex-col gap-1">
+                      <Link href="/profile" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-4 py-3 font-body text-[15px] font-medium text-[var(--foreground-muted)] active:text-[var(--foreground)] transition-colors">
+                        <Sparkles className="w-[18px] h-[18px]" /> Profile
+                      </Link>
+                      <Link href="/favorites" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-4 py-3 font-body text-[15px] font-medium text-[var(--foreground-muted)] active:text-[var(--foreground)] transition-colors">
+                        <Heart className="w-[18px] h-[18px]" /> Favorites
+                      </Link>
+                      <button onClick={handleLogout} className="flex items-center gap-4 py-3 font-body text-[15px] font-medium text-[var(--foreground-muted)] active:text-[var(--foreground)] transition-colors text-left">
+                        <LogOut className="w-[18px] h-[18px]" /> Sign Out
+                      </button>
+                    </div>
+                  ) : (
+                    <Link
+                      href="/auth/login"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="flex items-center justify-center gap-2 w-full py-3.5 rounded-full border border-[var(--border)] font-body text-sm font-medium tracking-wide text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors"
+                    >
+                      <User className="w-4 h-4" /> Login / Register
                     </Link>
-                    <Link href="/favorites" onClick={() => setIsMenuOpen(false)} className="font-body text-sm font-medium flex items-center gap-3 text-[var(--foreground-muted)]">
-                      <Heart className="w-[18px] h-[18px]" /> Favorites
-                    </Link>
-                    <button onClick={handleLogout} className="font-body text-sm font-medium flex items-center gap-3 text-[var(--foreground-muted)]">
-                      <LogOut className="w-[18px] h-[18px]" /> Sign Out
-                    </button>
-                  </>
-                ) : (
-                  <Link href="/auth/login" onClick={() => setIsMenuOpen(false)} className="font-body text-sm font-medium flex items-center gap-3 text-[var(--foreground-muted)]">
-                    <User className="w-[18px] h-[18px]" /> Login / Register
-                  </Link>
-                )}
-              </nav>
+                  )}
+                </motion.div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.header>
-
-      {/* Floating Search Results */}
-      <AnimatePresence>
-        {isSearching && showResults && searchResults.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="pointer-events-auto absolute top-20 left-4 right-4 sm:left-auto sm:right-auto sm:w-[32rem] bg-[var(--background)] border border-[var(--border)] shadow-2xl rounded-md z-50 max-h-[60vh] overflow-y-auto overscroll-contain"
-          >
-            {searchResults.map((result) => (
-              <Link
-                key={`${result.type}-${result.id}`}
-                href={result.href}
-                onClick={() => { setIsSearching(false); setShowResults(false); setSearchQuery(''); }}
-                className="flex items-center gap-4 p-4 hover:bg-[var(--surface-raised)] transition-colors duration-500 border-b border-[var(--border)] last:border-b-0"
-              >
-                <div className="w-8 h-8 rounded-full bg-[var(--surface-raised)] flex items-center justify-center border border-[var(--border)] shrink-0">
-                  <span className="font-body text-[10px] uppercase font-semibold text-[var(--accent)]">
-                    {result.type[0]}
-                  </span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-display font-medium text-lg leading-snug truncate text-[var(--foreground)]">{result.title}</p>
-                  <p className="font-body text-xs text-[var(--foreground-muted)] truncate">{result.subtitle}</p>
-                </div>
-              </Link>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+      </div>
+    </>
   );
 }

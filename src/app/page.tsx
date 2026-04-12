@@ -12,7 +12,7 @@ export default async function Home() {
   ]);
 
   return (
-    <div className="flex flex-col w-full max-w-5xl mx-auto gap-12 lg:gap-20">
+    <div className="flex flex-col w-full max-w-5xl mx-auto gap-12 lg:gap-20 max-md:px-4">
 
       {/* Elegant Hero */}
       <div className="w-full relative">
@@ -20,7 +20,7 @@ export default async function Home() {
       </div>
 
       {/* The Scrapbook Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 w-full max-md:gap-6">
 
         {/* WOTD - Polaroid Card */}
         <div className="lg:col-span-5 flex items-center h-full">
