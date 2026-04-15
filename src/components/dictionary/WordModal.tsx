@@ -49,7 +49,7 @@ export default function WordModal({ open, onClose, item, isFavorited = false, us
           <motion.div
             role="dialog"
             aria-modal="true"
-            className="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"
+            className="absolute inset-0 flex items-center justify-center p-4 pointer-events-none max-md:items-end max-md:p-0"
             ref={dialogRef}
             tabIndex={-1}
             initial={{ opacity: 0, scale: 0.98, y: 8 }}
@@ -57,10 +57,14 @@ export default function WordModal({ open, onClose, item, isFavorited = false, us
             exit={{ opacity: 0, scale: 0.98, y: 8 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
           >
-            <div className="w-full max-w-2xl rounded-sm border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-polaroid)] max-h-[85vh] overflow-hidden pointer-events-auto">
+            <div className="w-full max-w-2xl rounded-sm border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-polaroid)] max-h-[85vh] overflow-hidden pointer-events-auto flex flex-col max-md:max-w-none max-md:rounded-t-2xl max-md:rounded-b-none max-md:border-b-0 max-md:max-h-[88vh]">
+              {/* Drag handle — mobile only */}
+              <div className="flex justify-center pt-3 pb-1 md:hidden">
+                <div className="w-9 h-1 rounded-full bg-[var(--foreground-muted)] opacity-25" />
+              </div>
               {/* Header */}
               <div
-                className="p-6 border-b border-[var(--border)] relative"
+                className="p-6 max-md:p-4 border-b border-[var(--border)] relative"
                 style={{ borderLeftWidth: '4px', borderLeftColor: getEraColor(item.album) }}
               >
                 <button
@@ -77,7 +81,7 @@ export default function WordModal({ open, onClose, item, isFavorited = false, us
               </div>
 
               {/* Body */}
-              <div className="p-6 overflow-y-auto max-h-[calc(85vh-140px)]">
+              <div className="p-6 max-md:p-4 flex-1 min-h-0 overflow-y-auto">
                 <div className="mb-6">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)]">Definition</h3>

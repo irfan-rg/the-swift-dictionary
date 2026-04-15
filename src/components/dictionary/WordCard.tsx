@@ -17,13 +17,13 @@ export default function WordCard({ item, onOpen }: Props) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.18, ease: "easeOut" }}
-      className="group rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] p-5 flex flex-col gap-4 cursor-pointer hover:border-[var(--border-focus)] hover:shadow-[var(--shadow-soft)] transition-all"
+      className="group rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] p-5 max-md:p-4 flex flex-col gap-4 max-md:gap-3 cursor-pointer hover:border-[var(--border-focus)] hover:shadow-[var(--shadow-soft)] transition-all"
       onClick={() => onOpen?.(item)}
     >
       <div className="flex items-start justify-between gap-4">
         <div className="space-y-2">
           <div>
-            <h3 className="font-display text-2xl font-medium tracking-tight text-[var(--foreground)]">{item.word}</h3>
+            <h3 className="font-display text-2xl max-md:text-xl font-medium tracking-tight text-[var(--foreground)]">{item.word}</h3>
             <p
               className="font-body text-xs font-medium mt-1"
               style={{ color: getEraColor(item.album) }}
@@ -44,7 +44,7 @@ export default function WordCard({ item, onOpen }: Props) {
             </span>
           </div>
         </div>
-        <div className="p-2 text-[var(--foreground-muted)] opacity-40 group-hover:opacity-100 group-hover:text-[var(--accent)] transition-all">
+        <div className="p-2 text-[var(--foreground-muted)] opacity-40 group-hover:opacity-100 group-hover:text-[var(--accent)] transition-all max-md:hidden">
           <ArrowRight className="w-4 h-4 transform transition-transform duration-200 ease-out group-hover:translate-x-1" />
         </div>
       </div>
@@ -54,7 +54,7 @@ export default function WordCard({ item, onOpen }: Props) {
         <p className="font-body text-sm text-[var(--foreground)] leading-relaxed line-clamp-2 opacity-80">{item.definition}</p>
       </div>
 
-      <div>
+      <div className="max-md:hidden">
         <h4 className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] opacity-60 mb-1">Lyric</h4>
         <blockquote className="font-body text-sm text-[var(--foreground)] italic border-l-2 border-[var(--accent)] opacity-60 pl-3">
           &ldquo;{item.lyricSnippet}&rdquo; — {item.song}

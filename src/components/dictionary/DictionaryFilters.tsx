@@ -43,7 +43,7 @@ const sortOptions = [
 
 export default function DictionaryFilters({ album, setAlbum, difficulty, setDifficulty, sort, setSort }: Props) {
   return (
-    <div className="flex items-center gap-3 md:gap-4">
+    <div className="flex items-center gap-3 md:gap-4 max-md:flex-wrap max-md:gap-2">
       {(() => {
         type Option = { key: string; label: string };
         function Dropdown({
@@ -91,7 +91,7 @@ export default function DictionaryFilters({ album, setAlbum, difficulty, setDiff
           const selected = options.find((o) => o.key === value) || options[0];
 
           return (
-            <div className="relative" ref={ref}>
+            <div className="relative max-md:flex-1" ref={ref}>
               <button
                 type="button"
                 aria-haspopup="listbox"
@@ -99,7 +99,7 @@ export default function DictionaryFilters({ album, setAlbum, difficulty, setDiff
                 aria-label={ariaLabel}
                 onClick={() => setOpen((v) => !v)}
                 onKeyDown={onKeyDown}
-                className="h-11 pr-10 pl-4 rounded-sm bg-[var(--surface-raised)] border border-[var(--border)] font-body text-sm text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/40 focus:border-[var(--border-focus)] min-w-[10rem] text-left relative transition-colors"
+                className="h-11 pr-10 pl-4 rounded-sm bg-[var(--surface-raised)] border border-[var(--border)] font-body text-sm text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/40 focus:border-[var(--border-focus)] min-w-[10rem] max-md:min-w-0 max-md:w-full text-left relative transition-colors"
               >
                 {selected.label}
                 <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--foreground-muted)] opacity-50" viewBox="0 0 20 20" fill="currentColor" aria-hidden>

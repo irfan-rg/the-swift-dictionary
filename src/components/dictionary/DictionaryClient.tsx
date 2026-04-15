@@ -118,13 +118,13 @@ export default function DictionaryClient({
   const items = words.map(toCardItem);
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 max-md:py-14">
       {/* Header */}
-      <div className="mb-8 text-center">
+      <div className="mb-8 max-md:mb-5 text-center">
         <span className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] block mb-2">
           The Full Index
         </span>
-        <h1 className="font-display text-5xl md:text-6xl font-medium tracking-tight text-[var(--foreground)] mb-4">
+        <h1 className="font-display text-5xl md:text-6xl max-md:text-4xl font-medium tracking-tight text-[var(--foreground)] mb-4 max-md:mb-2">
           Dictionary
         </h1>
         <p className="font-body text-sm text-[var(--foreground-muted)] max-w-md mx-auto">
@@ -171,7 +171,7 @@ export default function DictionaryClient({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-md:gap-3"
       >
         {items.map((w) => (
           <WordCard
