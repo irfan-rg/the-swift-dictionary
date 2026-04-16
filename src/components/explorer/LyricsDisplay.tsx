@@ -93,20 +93,20 @@ export default function LyricsDisplay({ lyrics, vocabWords, albumSlug, onWordCli
 
         // Apply distinct styling based on section type
         if (section.type === 'chorus') {
-          sectionClasses += "pl-4 py-2 border-l-2 rounded-r-sm ";
+          sectionClasses += "pl-4 max-md:pl-3 py-2 border-l-2 rounded-r-sm ";
           wrapperStyle = { 
             borderColor: eraColor,
             backgroundColor: `color-mix(in srgb, ${eraColor} 5%, transparent)`
           };
           headerClasses = "font-body text-[10px] tracking-widest uppercase mb-2 opacity-80 font-medium";
         } else if (section.type === 'bridge') {
-          sectionClasses += "italic pl-6 opacity-90 border-l border-[var(--border)] ";
+          sectionClasses += "italic pl-6 max-md:pl-4 opacity-90 border-l border-[var(--border)] ";
         } else if (section.type === 'intro') {
           sectionClasses += "opacity-60 text-[13px] ";
         } else {
           // Standard Stanza: Simple interactive reading block
           // Adds a subtle hover state to make reading raw text feel polished
-          sectionClasses += "opacity-85 hover:opacity-100 pl-4 border-l-2 border-transparent hover:border-[var(--border-focus)] transition-all py-1 -ml-4 ";
+          sectionClasses += "opacity-85 hover:opacity-100 pl-4 max-md:pl-2 border-l-2 border-transparent hover:border-[var(--border-focus)] transition-all py-1 -ml-4 max-md:-ml-2 ";
         }
 
         return (

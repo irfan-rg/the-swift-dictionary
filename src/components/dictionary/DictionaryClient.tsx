@@ -136,7 +136,7 @@ export default function DictionaryClient({
       {/* Search + Filters */}
       <form
         onSubmit={handleSearch}
-        className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 mb-8"
+        className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 mb-8 max-md:mb-4 max-md:sticky max-md:top-16 max-md:z-30 max-md:bg-[var(--background)]/95 max-md:backdrop-blur-md max-md:-mx-4 max-md:px-4 max-md:py-3 max-md:border-b max-md:border-[var(--border)] max-md:shadow-[var(--shadow-polaroid)]"
       >
         <div className="relative flex-1">
           <Search

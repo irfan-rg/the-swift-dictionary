@@ -70,23 +70,30 @@ function AlbumCard({ album, index }: { album: Album; index: number }) {
         </div>
 
         {/* Content */}
-        <div className="p-5">
-          <h3 className="font-display text-lg font-semibold text-[var(--foreground-light)] mb-2 -mt-2 tracking-wide">
+        <div className="p-5 max-md:p-3">
+          <h3 
+            className="font-body text-[17px] max-md:text-sm md:font-semibold text-[var(--foreground-light)] mb-2 max-md:mb-1 -mt-2 tracking-tight truncate"
+            title={album.title}
+          >
             {album.title}
           </h3>
-          <div className="flex items-center gap-2 font-body text-xs text-[var(--foreground-muted)] mb-3">
+          {/* Desktop: full stats row. Mobile: year only */}
+          <div className="hidden md:flex items-center gap-2 font-body text-xs text-[var(--foreground-muted)] mb-3">
             <span>{album.year}</span>
             <span className="w-1 h-1 rounded-full bg-[var(--border-focus)] opacity-50" />
             <span>{album.song_count} songs</span>
             <span className="w-1 h-1 rounded-full bg-[var(--border-focus)] opacity-50" />
             <span>{album.vocab_count} words</span>
           </div>
+          <div className="md:hidden font-body text-[10px] text-[var(--foreground-muted)] opacity-60 mb-1">
+            {album.year}
+          </div>
 
-          <p className="font-body text-sm text-[var(--foreground-muted)] leading-relaxed mb-4 line-clamp-2">
+          <p className="font-body text-sm text-[var(--foreground-muted)] leading-relaxed mb-4 line-clamp-2 max-md:hidden">
             {album.description}
           </p>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between max-md:hidden">
             <span className="font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] group-hover:text-[var(--accent)] transition-colors">
               View Album →
             </span>
@@ -103,7 +110,7 @@ export default function ExplorerGrid({ albums }: { albums: Album[] }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-md:grid-cols-2 max-md:gap-3"
     >
       {albums.map((album, index) => (
         <AlbumCard key={album.slug} album={album} index={index} />

@@ -25,6 +25,7 @@ function wordToCardItem(word: Word, song: SongDetail): WordCardItem {
 
 export default function SongDetailView({ song }: { song: SongDetail }) {
   const [selectedWord, setSelectedWord] = useState<WordCardItem | null>(null);
+  const [activeTab, setActiveTab] = useState<'lyrics' | 'vocab'>('lyrics');
   const [userId, setUserId] = useState<string | null>(null);
   const [favIds, setFavIds] = useState<Set<string>>(new Set());
 
@@ -53,21 +54,21 @@ export default function SongDetailView({ song }: { song: SongDetail }) {
   }, []);
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 max-md:py-10">
       {/* Header */}
-      <div className="mb-12">
+      <div className="mb-12 max-md:mb-6">
         <Link
           href={`/explorer/${song.album_slug}`}
-          className="inline-flex items-center gap-2 font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--accent)] mb-6 transition-colors"
+          className="max-md:hidden inline-flex items-center gap-2 font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--accent)] mb-6 transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           Back to {song.album_title}
         </Link>
 
-        <h1 className="font-display text-5xl md:text-6xl font-medium tracking-tight text-[var(--foreground)] mb-3">
+        <h1 className="font-display text-5xl md:text-6xl max-md:text-4xl font-medium tracking-tight text-[var(--foreground)] mb-3 max-md:mb-2 max-md:leading-tight">
           {song.title}
         </h1>
-        <div className="flex items-center gap-3 text-[var(--foreground-muted)]">
+        <div className="flex items-center gap-3 max-md:gap-2 max-md:flex-wrap text-[var(--foreground-muted)] max-md:text-xs">
           <span className="font-body text-sm">{song.album_title}</span>
           <span className="w-1 h-1 rounded-full bg-[var(--border-focus)]" />
           <span className="font-body text-sm">Track {song.track_number}</span>
@@ -83,7 +84,7 @@ export default function SongDetailView({ song }: { song: SongDetail }) {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-12"
+          className="mb-12 max-md:mb-8"
         >
           <iframe
             src={song.spotify_embed_url}
@@ -97,6 +98,22 @@ export default function SongDetailView({ song }: { song: SongDetail }) {
         </motion.div>
       )}
 
+      {/* Mobile Tab Switcher */}
+      <div className="md:hidden flex p-1 bg-[var(--surface-raised)] rounded-full border border-[var(--border)] mb-6 shadow-[var(--shadow-polaroid)]">
+        <button
+          onClick={() => setActiveTab('lyrics')}
+          className={`flex-1 py-2.5 text-[10px] font-body tracking-widest uppercase rounded-full transition-all ${activeTab === 'lyrics' ? 'bg-[var(--foreground)] text-[var(--surface)] shadow-md' : 'text-[var(--foreground-muted)] hover:text-[var(--foreground)]'}`}
+        >
+          Lyrics
+        </button>
+        <button
+          onClick={() => setActiveTab('vocab')}
+          className={`flex-1 py-2.5 text-[10px] font-body tracking-widest uppercase rounded-full transition-all ${activeTab === 'vocab' ? 'bg-[var(--foreground)] text-[var(--surface)] shadow-md' : 'text-[var(--foreground-muted)] hover:text-[var(--foreground)]'}`}
+        >
+          Vocabulary
+        </button>
+      </div>
+
       {/* Lyrics and Vocabulary Side by Side */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Lyrics Section */}
@@ -104,16 +121,20 @@ export default function SongDetailView({ song }: { song: SongDetail }) {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="bg-[var(--surface-raised)] rounded-sm border border-[var(--border)] p-8"
+          className={`bg-[var(--surface-raised)] rounded-sm border border-[var(--border)] p-8 max-md:p-5 ${activeTab === 'vocab' ? 'max-md:hidden' : ''}`}
         >
           <div className="flex items-center justify-between mb-6">
             <div>
               <span className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] block mb-1">
                 Full Text
               </span>
-              <h2 className="font-display text-2xl font-medium text-[var(--foreground)]">
+              <h2 className="font-display text-2xl max-md:text-xl font-medium text-[var(--foreground)]">
                 Lyrics
               </h2>
+            </div>
+            <div className="md:hidden flex items-center gap-1.5 px-2 py-1 rounded-full bg-[var(--accent)]/5 border border-[var(--accent)]/10 text-[var(--accent)] opacity-80 text-[8px] uppercase font-body tracking-wider whitespace-nowrap">
+              <span className="w-1 h-1 rounded-full bg-[var(--accent)] animate-pulse" />
+              Tap to define
             </div>
           </div>
 
@@ -136,13 +157,13 @@ export default function SongDetailView({ song }: { song: SongDetail }) {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex flex-col"
+          className={`flex flex-col ${activeTab === 'lyrics' ? 'max-md:hidden' : ''}`}
         >
           <div className="mb-4">
             <span className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] block mb-1">
               Discovered Words
             </span>
-            <h3 className="font-display text-2xl font-medium text-[var(--foreground)]">
+            <h3 className="font-display text-2xl max-md:text-xl font-medium text-[var(--foreground)]">
               Vocabulary
             </h3>
           </div>
@@ -163,7 +184,7 @@ export default function SongDetailView({ song }: { song: SongDetail }) {
                   onClick={() => setSelectedWord(wordToCardItem(word, song))}
                 >
                   <div className="flex items-start justify-between mb-1">
-                    <h4 className="font-display text-lg font-medium text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors">
+                    <h4 className="font-display text-lg max-md:text-base font-medium text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors">
                       {word.word}
                     </h4>
                     <span className="font-handwriting text-sm text-[var(--foreground-muted)] opacity-50 shrink-0">

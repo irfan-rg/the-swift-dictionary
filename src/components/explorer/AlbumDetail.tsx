@@ -16,18 +16,18 @@ export default function AlbumDetail({
   const totalVocab = songs.reduce((sum, s) => sum + s.vocab_count, 0);
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 max-md:py-10">
       {/* Header */}
-      <div className="mb-12">
+      <div className="mb-12 max-md:mb-6">
         <Link
           href="/explorer"
-          className="inline-flex items-center gap-2 font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--accent)] mb-6 transition-colors"
+          className="max-md:hidden inline-flex items-center gap-2 font-body text-[10px] tracking-widest uppercase text-[var(--foreground-muted)] hover:text-[var(--accent)] mb-6 transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           Back to Explorer
         </Link>
 
-        <h1 className="font-display text-5xl md:text-6xl font-medium tracking-tight text-[var(--foreground)] mb-3">
+        <h1 className="font-display text-5xl md:text-6xl max-md:text-4xl font-medium tracking-tight text-[var(--foreground)] mb-3 max-md:mb-2">
           {album.title}
         </h1>
         <div className="flex items-center gap-3 text-[var(--foreground-muted)]">
@@ -45,11 +45,11 @@ export default function AlbumDetail({
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] overflow-hidden mb-12"
+        className="rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] overflow-hidden mb-12 max-md:mb-8"
       >
         <div className="flex flex-col md:flex-row">
           {/* Album Cover */}
-          <div className="md:w-64 h-48 md:h-auto relative shrink-0 overflow-hidden">
+          <div className="md:w-64 max-md:aspect-square md:h-auto relative shrink-0 overflow-hidden max-md:border-b border-[var(--border)]">
             {album.animated_cover_url ? (
               <video
                 src={album.animated_cover_url}
@@ -57,6 +57,7 @@ export default function AlbumDetail({
                 muted
                 loop
                 playsInline
+                poster={album.cover_url || undefined}
                 className="w-full h-full object-cover"
               />
             ) : album.cover_url ? (
@@ -75,8 +76,8 @@ export default function AlbumDetail({
           </div>
 
           {/* Album Info */}
-          <div className="flex-1 p-8">
-            <p className="font-body text-base text-[var(--foreground-muted)] leading-relaxed">
+          <div className="flex-1 p-8 max-md:p-5">
+            <p className="font-body text-base text-[var(--foreground-muted)] max-md:text-sm leading-relaxed">
               {album.description}
             </p>
           </div>
@@ -105,7 +106,7 @@ export default function AlbumDetail({
           >
             <Link
               href={`/explorer/${album.slug}/${song.slug}`}
-              className="group flex items-center gap-5 py-4 border-b border-[var(--border)] hover:bg-[var(--surface-raised)] px-4 -mx-4 transition-colors"
+              className="group flex items-center gap-5 max-md:gap-3 py-4 max-md:py-3 border-b border-[var(--border)] hover:bg-[var(--surface-raised)] px-4 -mx-4 transition-colors"
             >
               {/* Track Number */}
               <span className="font-display italic text-xl text-[var(--border-focus)] w-6 text-right shrink-0 opacity-60 group-hover:text-[var(--accent)] transition-colors">

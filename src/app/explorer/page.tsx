@@ -20,13 +20,13 @@ export default async function ExplorerPage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 max-md:py-14">
       {/* Page Header */}
-      <div className="mb-12 text-center">
+      <div className="mb-12 max-md:mb-6 text-center">
         <span className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] block mb-2">
           The Eras Collection
         </span>
-        <h1 className="font-display text-5xl md:text-6xl font-medium tracking-tight text-[var(--foreground)] mb-4">
+        <h1 className="font-display text-5xl md:text-6xl max-md:text-4xl font-medium tracking-tight text-[var(--foreground)] mb-4 max-md:mb-2">
           Explorer
         </h1>
         <p className="font-body text-sm text-[var(--foreground-muted)] max-w-md mx-auto">

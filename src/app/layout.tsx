@@ -78,10 +78,10 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         suppressHydrationWarning
-        className={`${cormorant.variable} ${nothingYouCouldDo.variable} ${bricolage.variable} ${cinzel.variable} font-body antialiased selection:bg-[var(--accent)] selection:text-[var(--background)]`}
+        className={`${cormorant.variable} ${nothingYouCouldDo.variable} ${bricolage.variable} ${cinzel.variable} font-body antialiased selection:bg-[var(--accent)] selection:text-[var(--background)] overflow-x-hidden`}
       >
         <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem>
-          <div className="flex flex-col min-h-screen relative overflow-x-hidden">
+          <div className="flex flex-col min-h-screen relative overflow-x-clip">
             {/* Soft background glow decoration */}
             <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[var(--accent)] opacity-[0.03] blur-[120px] pointer-events-none -z-10" />
             <div className="absolute top-[40%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[var(--accent-muted)] opacity-[0.03] blur-[100px] pointer-events-none -z-10" />
