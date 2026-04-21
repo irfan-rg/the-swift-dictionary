@@ -200,7 +200,7 @@ export default function EraSelector({ userId, initialEra, calculatedEra }: EraSe
         onMouseLeave={handleMouseLeave}
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
-        className={`w-full select-none overflow-x-auto pb-4 pt-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${isDragging ? "cursor-grabbing" : "cursor-grab"}`}
+        className={`w-full select-none overflow-x-auto pb-4 pt-2 [contain:inline-size] hide-scrollbar ${isDragging ? "cursor-grabbing" : "cursor-grab"}`}
       >
         <div className={`relative flex min-w-max items-stretch gap-4 px-2 pb-6 pt-2 sm:px-3 snap-x ${isDragging ? "snap-none" : "snap-mandatory"}`}>
           {ERAS.map((era) => {

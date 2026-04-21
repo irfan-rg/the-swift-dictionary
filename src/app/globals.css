@@ -394,3 +394,14 @@ body {
   scrollbar-width: thin;
   scrollbar-color: var(--border-focus) transparent;
 }
+
+/* Fully hide scrollbar — for elements with custom scroll UX */
+.hide-scrollbar {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}

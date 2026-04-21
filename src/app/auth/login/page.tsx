@@ -44,8 +44,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4 py-16">
-      <div className="w-full max-w-md rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] p-8">
+    <div className="flex items-center justify-center min-h-screen py-16 px-4 max-md:items-start max-md:px-0 max-md:py-0 max-md:pt-6">
+      <div className="w-full max-w-md max-md:max-w-none rounded-sm max-md:rounded-none border border-[var(--border)] max-md:border-0 max-md:border-b bg-[var(--surface-raised)] max-md:bg-transparent p-8 max-md:px-6 max-md:py-8">
         <div className="text-center mb-8">
           <span className="font-body text-[10px] tracking-widest uppercase text-[var(--accent)] block mb-2">
             Welcome Back

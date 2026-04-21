@@ -121,25 +121,25 @@ export default async function ProfilePage() {
       </section>
 
       {/* 3. Interactive Experiences Section */}
-      <section className="pt-20 border-t border-[var(--border)]">
-        <header className="mb-12 md:mb-16">
+      <section className="pt-12 md:pt-20 border-t border-[var(--border)] overflow-hidden">
+        <header className="mb-10 md:mb-16">
           <span className="font-body text-[10px] tracking-[0.25em] uppercase text-[var(--accent)] block mb-4">
             Your Studio
           </span>
-          <h2 className="font-display text-4xl md:text-5xl tracking-tight text-[var(--foreground)]">
+          <h2 className="font-display text-3xl md:text-5xl tracking-tight text-[var(--foreground)]">
             Interactive Experiences
           </h2>
-          <p className="font-body text-base text-[var(--foreground-muted)] max-w-xl leading-relaxed mx-auto ml-0 mt-6">
-            Extend the narrative of the pieces you've curated into something tangibly yours.
+          <p className="font-body text-base text-[var(--foreground-muted)] max-w-xl leading-relaxed mx-auto ml-0 mt-4">
+            Extend the narrative of the pieces you&apos;ve curated into something tangibly yours.
           </p>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
           
           {/* Top 13 Teaser */}
           <Link 
             href="/profile/top13"
-            className="group flex flex-col justify-between p-8 md:p-10 border border-[var(--border)] bg-transparent hover:bg-[var(--surface-raised)] transition-all duration-500 min-h-[320px]"
+            className="group flex flex-col justify-between p-6 md:p-10 border border-[var(--border)] bg-transparent hover:bg-[var(--surface-raised)] transition-all duration-500 min-h-[220px] md:min-h-[320px]"
           >
             <div>
               <div className="font-display text-4xl text-[var(--border-focus)] mb-8 transition-colors group-hover:text-[var(--accent)]">
@@ -148,7 +148,7 @@ export default async function ProfilePage() {
               <h3 className="font-body text-[10px] tracking-[0.2em] uppercase text-[var(--foreground)] mb-4">
                 Your Top 13
               </h3>
-              <p className="font-display text-2xl text-[var(--foreground-muted)] leading-snug group-hover:text-[var(--foreground)] transition-colors">
+              <p className="font-body text-sm md:text-base text-[var(--foreground-muted)] leading-relaxed group-hover:text-[var(--foreground)] transition-colors">
                 Curate a definitive list of your favorite pieces and generate a typographic dossier.
               </p>
             </div>
@@ -160,7 +160,7 @@ export default async function ProfilePage() {
           {/* Bracelet Builder Teaser */}
           <Link 
             href="/profile/bracelets"
-            className="group flex flex-col justify-between p-8 md:p-10 border border-[var(--border)] bg-transparent hover:bg-[var(--surface-raised)] transition-all duration-500 min-h-[320px]"
+            className="group flex flex-col justify-between p-6 md:p-10 border border-[var(--border)] bg-transparent hover:bg-[var(--surface-raised)] transition-all duration-500 min-h-[220px] md:min-h-[320px]"
           >
             <div>
               <div className="flex gap-2 mb-8 items-center h-10">
@@ -174,7 +174,7 @@ export default async function ProfilePage() {
               <h3 className="font-body text-[10px] tracking-[0.2em] uppercase text-[var(--foreground)] mb-4">
                 Friendship Bracelets
               </h3>
-              <p className="font-display text-2xl text-[var(--foreground-muted)] leading-snug group-hover:text-[var(--foreground)] transition-colors">
+              <p className="font-body text-sm md:text-base text-[var(--foreground-muted)] leading-relaxed group-hover:text-[var(--foreground)] transition-colors">
                 String together virtual beads for the eras, songs, and moments that matter.
               </p>
             </div>
