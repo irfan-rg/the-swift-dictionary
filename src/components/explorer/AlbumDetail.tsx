@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Music } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import type { Album, Song } from "@/lib/types";
 
 export default function AlbumDetail({
@@ -118,12 +118,9 @@ export default function AlbumDetail({
                 <h3 className="font-display font-medium text-lg text-[var(--foreground)] group-hover:text-[var(--accent)] truncate transition-colors">
                   {song.title}
                 </h3>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <Music className="w-3 h-3 text-[var(--foreground-muted)] opacity-50" />
-                  <span className="font-body text-xs text-[var(--foreground-muted)]">
-                    {song.vocab_count} vocab words
-                  </span>
-                </div>
+                <span className="font-body text-xs text-[var(--foreground-muted)] mt-0.5 block">
+                  {song.vocab_count} vocab words
+                </span>
               </div>
 
               {/* Difficulty */}

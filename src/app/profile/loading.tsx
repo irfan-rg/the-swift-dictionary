@@ -23,8 +23,8 @@ export default function ProfileLoading() {
           </div>
         </div>
 
-        {/* Stats block — right side */}
-        <div className="shrink-0 border-l border-[var(--border)] pl-8 md:pl-10">
+        {/* Stats block — on mobile: stacked below with top border instead of left border */}
+        <div className="shrink-0 border-l border-[var(--border)] pl-8 md:pl-10 max-md:border-l-0 max-md:pl-0 max-md:border-t max-md:border-[var(--border)] max-md:pt-8">
           <div className="flex gap-10 md:gap-16">
             <div className="flex flex-col">
               <span className="mb-2 font-body text-[10px] tracking-[0.2em] uppercase text-transparent bg-[var(--border)] rounded w-fit select-none">
@@ -68,29 +68,29 @@ export default function ProfileLoading() {
             </span>
           </div>
         </div>
-        {/* Era selector component placeholder */}
+        {/* Era selector placeholder — matches EraSelector height */}
         <div className="w-full h-32 bg-[var(--surface-raised)] border border-[var(--border)] rounded-sm" />
       </section>
 
-      {/* 3. Interactive Experiences */}
-      <section className="pt-20 border-t border-[var(--border)]">
-        <header className="mb-12 md:mb-16">
+      {/* 3. Interactive Experiences — pt-12 md:pt-20 matches real */}
+      <section className="pt-12 md:pt-20 border-t border-[var(--border)]">
+        <header className="mb-10 md:mb-16">
           <span className="font-body text-[10px] tracking-[0.25em] uppercase text-transparent bg-[var(--border)] rounded w-fit block mb-4 select-none">
             Your Studio
           </span>
-          <h2 className="font-display text-4xl md:text-5xl tracking-tight text-transparent bg-[var(--border)] rounded w-fit select-none">
+          <h2 className="font-display text-3xl md:text-5xl tracking-tight text-transparent bg-[var(--border)] rounded w-fit select-none">
             Interactive Experiences
           </h2>
-          <p className="font-body text-base text-transparent leading-relaxed mx-auto ml-0 mt-6 select-none max-w-xl">
-            <span className="bg-[var(--border)] rounded">Extend the narrative of the pieces you've curated</span>{" "}
+          <p className="font-body text-base text-transparent leading-relaxed mx-auto ml-0 mt-4 select-none max-w-xl">
+            <span className="bg-[var(--border)] rounded">Extend the narrative of the pieces you&apos;ve curated</span>{" "}
             <span className="bg-[var(--border)] rounded">into something tangibly yours.</span>
           </p>
         </header>
 
-        {/* Two tall bordered cards — exact same min-h and padding as real */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+        {/* Two cards — p-6 md:p-10 and min-h-[220px] md:min-h-[320px] matches real */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
           {/* Top 13 card */}
-          <div className="flex flex-col justify-between p-8 md:p-10 border border-[var(--border)] min-h-[320px]">
+          <div className="flex flex-col justify-between p-6 md:p-10 border border-[var(--border)] min-h-[220px] md:min-h-[320px]">
             <div>
               <div className="font-display text-4xl text-transparent bg-[var(--border)] rounded w-fit mb-8 select-none">
                 13
@@ -98,7 +98,7 @@ export default function ProfileLoading() {
               <h3 className="font-body text-[10px] tracking-[0.2em] uppercase text-transparent bg-[var(--border)] rounded w-fit mb-4 select-none">
                 Your Top 13
               </h3>
-              <p className="font-display text-2xl text-transparent leading-snug select-none">
+              <p className="font-body text-sm md:text-base text-transparent leading-relaxed select-none">
                 <span className="bg-[var(--border)] rounded">Curate a definitive list of</span>{" "}
                 <span className="bg-[var(--border)] rounded">your favorite pieces.</span>
               </p>
@@ -109,7 +109,7 @@ export default function ProfileLoading() {
           </div>
 
           {/* Bracelets card */}
-          <div className="flex flex-col justify-between p-8 md:p-10 border border-[var(--border)] min-h-[320px]">
+          <div className="flex flex-col justify-between p-6 md:p-10 border border-[var(--border)] min-h-[220px] md:min-h-[320px]">
             <div>
               <div className="flex gap-2 mb-8 items-center h-10">
                 {["T", "S"].map((_, i) => (
@@ -120,7 +120,7 @@ export default function ProfileLoading() {
               <h3 className="font-body text-[10px] tracking-[0.2em] uppercase text-transparent bg-[var(--border)] rounded w-fit mb-4 select-none">
                 Friendship Bracelets
               </h3>
-              <p className="font-display text-2xl text-transparent leading-snug select-none">
+              <p className="font-body text-sm md:text-base text-transparent leading-relaxed select-none">
                 <span className="bg-[var(--border)] rounded">String together virtual beads</span>{" "}
                 <span className="bg-[var(--border)] rounded">for your eras and moments.</span>
               </p>
