@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { useLiteAnimations } from '@/lib/useIsMobile';
 import type { SongWithAlbum } from '@/lib/types';
 
 const fallbackSongs: SongWithAlbum[] = [
@@ -14,6 +15,7 @@ const fallbackSongs: SongWithAlbum[] = [
 ];
 
 export default function TopSongs({ songs }: { songs?: SongWithAlbum[] }) {
+  const lite = useLiteAnimations();
   const list = songs && songs.length > 0 ? songs : fallbackSongs;
 
   return (
@@ -67,9 +69,14 @@ export default function TopSongs({ songs }: { songs?: SongWithAlbum[] }) {
           {list.map((song, index) => (
             <motion.div
               key={song.id}
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4, delay: index * 0.07 }}
+              {...(lite
+                ? {}
+                : {
+                    initial: { opacity: 0, x: -8 },
+                    animate: { opacity: 1, x: 0 },
+                    transition: { duration: 0.4, delay: index * 0.07 },
+                  }
+              )}
               className="flex-1 flex flex-col justify-center"
             >
               <Link

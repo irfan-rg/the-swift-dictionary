@@ -246,8 +246,8 @@ export default function Header() {
           MOBILE HEADER (Bespoke layout for small screens)
           ========================================================= */}
       <div className="md:hidden">
-        {/* The fixed header bar */}
-        <div className="fixed top-0 left-0 right-0 z-50 bg-[var(--glass-bg)] backdrop-blur-[12px] border-b border-[var(--border)] shadow-sm">
+        {/* The fixed header bar — solid bg on mobile (backdrop-blur is GPU-expensive on phones) */}
+        <div className="fixed top-0 left-0 right-0 z-50 bg-[var(--background)] border-b border-[var(--border)] shadow-sm">
           <div className="flex items-center justify-between h-16 w-full px-4">
             <AnimatePresence mode="wait">
               {isSearching ? (

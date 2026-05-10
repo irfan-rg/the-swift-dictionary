@@ -84,13 +84,16 @@ body {
 }
 
 /* ── Global theme transition — only surfaces/borders, NOT transforms ── */
-*,
-*::before,
-*::after {
-  transition:
-    background-color 0.5s ease-in-out,
-    border-color 0.5s ease-in-out,
-    box-shadow 0.5s ease-in-out;
+/* Desktop only: on mobile GPUs this hammers compositing across hundreds of elements */
+@media (min-width: 768px) {
+  *,
+  *::before,
+  *::after {
+    transition:
+      background-color 0.5s ease-in-out,
+      border-color 0.5s ease-in-out,
+      box-shadow 0.5s ease-in-out;
+  }
 }
 
 

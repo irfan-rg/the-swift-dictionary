@@ -3,8 +3,10 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ERAS } from '@/lib/constants';
+import { useLiteAnimations } from '@/lib/useIsMobile';
 
 export default function HeroSection() {
+  const lite = useLiteAnimations();
   const doubled = [...ERAS, ...ERAS];
 
   return (
@@ -17,9 +19,9 @@ export default function HeroSection() {
       <div className="flex flex-col items-center text-center">
         {/* Handwriting Sub-Label */}
         <motion.p
-          initial={{ opacity: 0, y: 10, rotate: -2 }}
-          animate={{ opacity: 1, y: 0, rotate: -2 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
+          initial={lite ? { opacity: 0 } : { opacity: 0, y: 10, rotate: -2 }}
+          animate={lite ? { opacity: 1 } : { opacity: 1, y: 0, rotate: -2 }}
+          transition={{ duration: lite ? 0.3 : 0.8, delay: lite ? 0 : 0.1 }}
           className="font-handwriting text-2xl md:text-3xl lg:text-4xl max-md:text-xl max-md:mb-3 text-[var(--accent)] mb-6 md:mb-10"
         >
           a vocabulary for every era...
@@ -27,9 +29,9 @@ export default function HeroSection() {
 
         {/* Hero Title */}
         <motion.h1
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          initial={lite ? { opacity: 0 } : { opacity: 0, scale: 0.95 }}
+          animate={lite ? { opacity: 1 } : { opacity: 1, scale: 1 }}
+          transition={{ duration: lite ? 0.3 : 1, ease: [0.16, 1, 0.3, 1] }}
           className="font-branding [-webkit-text-stroke:0.1px_currentColor] text-6xl sm:text-7xl md:text-8xl lg:text-[7rem] max-md:text-5xl font-medium leading-[0.9] tracking-wide md:mt-4 mt-8 mb-8 md:mb-10"
         >
           The Swift<br />
@@ -40,7 +42,7 @@ export default function HeroSection() {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.4 }}
+          transition={{ duration: lite ? 0.3 : 1, delay: lite ? 0 : 0.4 }}
           className="font-body text-base md:text-lg max-w-xl text-[var(--foreground-muted)] font-light leading-relaxed md:-mb-8 md:mt-8"
         >
           Every lyric tells a story. Every word carries a meaning.
@@ -55,7 +57,7 @@ export default function HeroSection() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.6 }}
+        transition={{ duration: lite ? 0.2 : 0.8, delay: lite ? 0 : 0.6 }}
         className="w-full max-w-4xl mx-auto overflow-hidden marquee-mask pb-8 "
       >
         <div className="marquee-track">

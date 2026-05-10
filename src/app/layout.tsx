@@ -9,7 +9,7 @@ import Footer from "@/components/Footer";
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
   style: ["normal", "italic"],
   display: "swap",
 });
@@ -33,7 +33,7 @@ const bricolage = Bricolage_Grotesque({
 const cinzel = Cinzel_Decorative({
   variable: "--font-branding",
   subsets: ["latin"],
-  weight: ["400", "700", "900"],
+  weight: ["400", "700"],
   display: "swap",
 });
 
@@ -83,8 +83,8 @@ export default function RootLayout({
         <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem>
           <div className="flex flex-col min-h-screen relative overflow-x-clip">
             {/* Soft background glow decoration */}
-            <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[var(--accent)] opacity-[0.03] blur-[120px] pointer-events-none -z-10" />
-            <div className="absolute top-[40%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[var(--accent-muted)] opacity-[0.03] blur-[100px] pointer-events-none -z-10" />
+            <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[var(--accent)] opacity-[0.03] blur-[120px] pointer-events-none -z-10 max-md:hidden" />
+            <div className="absolute top-[40%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[var(--accent-muted)] opacity-[0.03] blur-[100px] pointer-events-none -z-10 max-md:hidden" />
 
             <Header />
             <main className="flex-1 w-full flex flex-col pt-8 pb-16">

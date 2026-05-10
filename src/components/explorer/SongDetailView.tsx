@@ -7,6 +7,7 @@ import { ArrowLeft } from "lucide-react";
 import WordModal from "@/components/dictionary/WordModal";
 import LyricsDisplay from "@/components/explorer/LyricsDisplay";
 import { createClient } from "@/lib/supabase/client";
+import { useLiteAnimations } from "@/lib/useIsMobile";
 import type { SongDetail, Word, WordCardItem } from "@/lib/types";
 
 function wordToCardItem(word: Word, song: SongDetail): WordCardItem {
@@ -28,6 +29,7 @@ export default function SongDetailView({ song }: { song: SongDetail }) {
   const [activeTab, setActiveTab] = useState<'lyrics' | 'vocab'>('lyrics');
   const [userId, setUserId] = useState<string | null>(null);
   const [favIds, setFavIds] = useState<Set<string>>(new Set());
+  const lite = useLiteAnimations();
 
   useEffect(() => {
     const supabase = createClient();
@@ -81,9 +83,14 @@ export default function SongDetailView({ song }: { song: SongDetail }) {
       {/* Spotify Embed */}
       {song.spotify_embed_url && (
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          {...(lite
+            ? {}
+            : {
+                initial: { opacity: 0, y: 16 },
+                animate: { opacity: 1, y: 0 },
+                transition: { duration: 0.5 },
+              }
+          )}
           className="mb-12 max-md:mb-8"
         >
           <iframe
@@ -118,9 +125,14 @@ export default function SongDetailView({ song }: { song: SongDetail }) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Lyrics Section */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          {...(lite
+            ? {}
+            : {
+                initial: { opacity: 0, y: 16 },
+                animate: { opacity: 1, y: 0 },
+                transition: { duration: 0.5, delay: 0.1 },
+              }
+          )}
           className={`bg-[var(--surface-raised)] rounded-sm border border-[var(--border)] p-8 max-md:p-5 ${activeTab === 'vocab' ? 'max-md:hidden' : ''}`}
         >
           <div className="flex items-center justify-between mb-6">
@@ -154,9 +166,14 @@ export default function SongDetailView({ song }: { song: SongDetail }) {
 
         {/* Vocabulary Words List */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          {...(lite
+            ? {}
+            : {
+                initial: { opacity: 0, y: 16 },
+                animate: { opacity: 1, y: 0 },
+                transition: { duration: 0.5, delay: 0.2 },
+              }
+          )}
           className={`flex flex-col ${activeTab === 'lyrics' ? 'max-md:hidden' : ''}`}
         >
           <div className="mb-4">
@@ -177,9 +194,14 @@ export default function SongDetailView({ song }: { song: SongDetail }) {
               {song.vocab_words.map((word, index) => (
                 <motion.div
                   key={word.id}
-                  initial={{ opacity: 0, x: -8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.04 }}
+                  {...(lite
+                    ? {}
+                    : {
+                        initial: { opacity: 0, x: -8 },
+                        animate: { opacity: 1, x: 0 },
+                        transition: { duration: 0.3, delay: index * 0.04 },
+                      }
+                  )}
                   className="border-b border-[var(--border)] py-4 cursor-pointer hover:bg-[var(--surface-raised)] px-4 -mx-4 transition-colors group"
                   onClick={() => setSelectedWord(wordToCardItem(word, song))}
                 >

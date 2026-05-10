@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { getEraColor } from "@/lib/constants";
+import { useLiteAnimations } from "@/lib/useIsMobile";
 import type { WordCardItem } from "@/lib/types";
 
 type Props = {
@@ -11,12 +12,19 @@ type Props = {
 };
 
 export default function WordCard({ item, onOpen }: Props) {
+  const lite = useLiteAnimations();
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.18, ease: "easeOut" }}
+      {...(lite
+        ? {}
+        : {
+            initial: { opacity: 0, y: 12 },
+            whileInView: { opacity: 1, y: 0 },
+            viewport: { once: true, amount: 0.3 },
+            transition: { duration: 0.18, ease: "easeOut" },
+          }
+      )}
       className="group rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] p-5 max-md:p-4 flex flex-col gap-4 max-md:gap-3 cursor-pointer hover:border-[var(--border-focus)] hover:shadow-[var(--shadow-soft)] transition-all"
       onClick={() => onOpen?.(item)}
     >

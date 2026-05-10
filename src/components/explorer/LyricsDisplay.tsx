@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { getEraColor } from '@/lib/constants';
+import { useLiteAnimations } from '@/lib/useIsMobile';
 import type { Word } from '@/lib/types';
 
 interface LyricsDisplayProps {
@@ -14,6 +15,7 @@ interface LyricsDisplayProps {
 
 export default function LyricsDisplay({ lyrics, vocabWords, albumSlug, onWordClick }: LyricsDisplayProps) {
   const eraColor = getEraColor(albumSlug);
+  const lite = useLiteAnimations();
 
   // Group lyrics into stanzas separated by empty lines
   const sections = useMemo(() => {
@@ -112,10 +114,15 @@ export default function LyricsDisplay({ lyrics, vocabWords, albumSlug, onWordCli
         return (
           <motion.div 
             key={secIdx}
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-20px' }}
-            transition={{ duration: 0.4, delay: secIdx * 0.05 }}
+            {...(lite
+              ? {}
+              : {
+                  initial: { opacity: 0, y: 10 },
+                  whileInView: { opacity: 1, y: 0 },
+                  viewport: { once: true, margin: '-20px' },
+                  transition: { duration: 0.4, delay: secIdx * 0.05 },
+                }
+            )}
             className={sectionClasses}
             style={wrapperStyle}
           >

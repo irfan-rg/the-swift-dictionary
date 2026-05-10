@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
+import { useLiteAnimations } from "@/lib/useIsMobile";
 import type { Album, Song } from "@/lib/types";
 
 export default function AlbumDetail({
@@ -14,6 +15,7 @@ export default function AlbumDetail({
   songs: Song[];
 }) {
   const totalVocab = songs.reduce((sum, s) => sum + s.vocab_count, 0);
+  const lite = useLiteAnimations();
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 max-md:py-10">
@@ -42,15 +44,20 @@ export default function AlbumDetail({
 
       {/* Album Info Card */}
       <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        {...(lite
+          ? {}
+          : {
+              initial: { opacity: 0, y: 16 },
+              animate: { opacity: 1, y: 0 },
+              transition: { duration: 0.5 },
+            }
+        )}
         className="rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] overflow-hidden mb-12 max-md:mb-8"
       >
         <div className="flex flex-col md:flex-row">
-          {/* Album Cover */}
+          {/* Album Cover — on mobile, skip heavy autoplay video and show static image */}
           <div className="md:w-64 max-md:aspect-square md:h-auto relative shrink-0 overflow-hidden max-md:border-b border-[var(--border)]">
-            {album.animated_cover_url ? (
+            {album.animated_cover_url && !lite ? (
               <video
                 src={album.animated_cover_url}
                 autoPlay
@@ -92,17 +99,27 @@ export default function AlbumDetail({
       </div>
 
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
+        {...(lite
+          ? {}
+          : {
+              initial: { opacity: 0 },
+              animate: { opacity: 1 },
+              transition: { duration: 0.6 },
+            }
+        )}
         className="border-t border-[var(--border)]"
       >
         {songs.map((song, index) => (
           <motion.div
             key={song.id}
-            initial={{ opacity: 0, x: -8 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.04 }}
+            {...(lite
+              ? {}
+              : {
+                  initial: { opacity: 0, x: -8 },
+                  animate: { opacity: 1, x: 0 },
+                  transition: { duration: 0.3, delay: index * 0.04 },
+                }
+            )}
           >
             <Link
               href={`/explorer/${album.slug}/${song.slug}`}

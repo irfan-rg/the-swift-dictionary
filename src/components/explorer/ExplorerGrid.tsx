@@ -4,10 +4,11 @@ import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
+import { useLiteAnimations } from "@/lib/useIsMobile";
 
 import type { Album } from "@/lib/types";
 
-function AlbumCard({ album, index }: { album: Album; index: number }) {
+function AlbumCard({ album, index, lite }: { album: Album; index: number; lite: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hovering, setHovering] = useState(false);
 
@@ -28,9 +29,14 @@ function AlbumCard({ album, index }: { album: Album; index: number }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.06 }}
+      {...(lite
+        ? {}
+        : {
+            initial: { opacity: 0, y: 16 },
+            animate: { opacity: 1, y: 0 },
+            transition: { duration: 0.4, delay: index * 0.06 },
+          }
+      )}
       className="group"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -105,15 +111,22 @@ function AlbumCard({ album, index }: { album: Album; index: number }) {
 }
 
 export default function ExplorerGrid({ albums }: { albums: Album[] }) {
+  const lite = useLiteAnimations();
+
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
+      {...(lite
+        ? {}
+        : {
+            initial: { opacity: 0 },
+            animate: { opacity: 1 },
+            transition: { duration: 0.6 },
+          }
+      )}
       className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-md:grid-cols-2 max-md:gap-3"
     >
       {albums.map((album, index) => (
-        <AlbumCard key={album.slug} album={album} index={index} />
+        <AlbumCard key={album.slug} album={album} index={index} lite={lite} />
       ))}
     </motion.div>
   );
