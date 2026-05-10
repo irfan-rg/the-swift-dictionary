@@ -54,7 +54,12 @@ export default function AlbumDetail({
           <div className="md:w-64 max-md:aspect-square md:h-auto relative shrink-0 overflow-hidden max-md:border-b border-[var(--border)]">
             {album.animated_cover_url ? (
               <video
-                ref={(el) => { if (el) el.play().catch(() => {}); }}
+                ref={(el) => {
+                  if (!el) return;
+                  const tryPlay = () => { el.play().catch(() => { el.style.display = 'none'; }); };
+                  if (el.readyState >= 3) tryPlay();
+                  else el.addEventListener('canplay', tryPlay, { once: true });
+                }}
                 src={album.animated_cover_url}
                 autoPlay
                 muted

@@ -81,6 +81,14 @@ body {
   color: var(--foreground);
   -webkit-font-smoothing: antialiased;
   transition: background-color 0.5s ease-in-out;
+  -webkit-tap-highlight-color: transparent; /* Remove gray flash on tap (iOS/Android) */
+}
+
+/* Mobile touch responsiveness: eliminate double-tap-to-zoom delay on interactive elements */
+@media (max-width: 767px) {
+  a, button, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+  }
 }
 
 /* ── Global theme transition — only surfaces/borders, NOT transforms ── */

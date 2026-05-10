@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Nothing_You_Could_Do, Bricolage_Grotesque, Cinzel_Decorative } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
@@ -67,6 +67,13 @@ export const metadata: Metadata = {
     title: "The Swift Dictionary",
     description: "Discover Taylor Swift's sophisticated vocabulary through her lyrics.",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,       // Prevents iOS Safari from zooming into inputs with font-size < 16px
+  userScalable: false,
 };
 
 export default function RootLayout({

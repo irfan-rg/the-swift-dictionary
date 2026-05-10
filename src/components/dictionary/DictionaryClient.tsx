@@ -147,7 +147,7 @@ export default function DictionaryClient({
             value={searchInput}
             onChange={(e) => handleSearchInput(e.target.value)}
             placeholder="Search words, songs, or albums..."
-            className="w-full h-11 pl-10 pr-4 rounded-sm bg-[var(--surface-raised)] border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/40 focus:border-[var(--border-focus)] font-body text-sm text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] placeholder:opacity-50"
+            className="w-full h-11 pl-10 pr-4 rounded-sm bg-[var(--surface-raised)] border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/40 focus:border-[var(--border-focus)] font-body text-sm max-md:text-base text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] placeholder:opacity-50"
           />
         </div>
         <DictionaryFilters
