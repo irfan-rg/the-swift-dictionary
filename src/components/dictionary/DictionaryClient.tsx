@@ -136,9 +136,9 @@ export default function DictionaryClient({
       {/* Search + Filters */}
       <form
         onSubmit={handleSearch}
-        className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 mb-8 max-md:mb-4 max-md:sticky max-md:top-16 max-md:z-30 max-md:bg-[var(--background)]/95 max-md:backdrop-blur-md max-md:-mx-4 max-md:px-4 max-md:py-3 max-md:border-b max-md:border-[var(--border)] max-md:shadow-[var(--shadow-polaroid)]"
+        className="flex flex-wrap items-center gap-3 md:gap-4 mb-8 max-md:sticky max-md:top-16 max-md:z-30 max-md:bg-[var(--background)] max-md:-mx-4 max-md:px-4 max-md:py-3 max-md:border-b max-md:border-[var(--border)] max-md:shadow-sm"
       >
-        <div className="relative flex-1">
+        <div className="relative flex-1 min-w-0">
           <Search
             aria-hidden
             className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--foreground-muted)] opacity-60 z-10"

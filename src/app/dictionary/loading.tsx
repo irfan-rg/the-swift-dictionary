@@ -19,18 +19,22 @@ export default function DictionaryLoading() {
         <div className="w-16 h-px bg-[var(--border-focus)] mx-auto mt-6 opacity-30" />
       </div>
 
-      {/* Search + Filters — sticky on mobile, mirrors DictionaryClient sticky bar */}
-      <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 mb-8 max-md:mb-4 max-md:sticky max-md:top-16 max-md:z-30 max-md:bg-[var(--background)]/95 max-md:backdrop-blur-md max-md:-mx-4 max-md:px-4 max-md:py-3 max-md:border-b max-md:border-[var(--border)] max-md:shadow-[var(--shadow-polaroid)]">
-        {/* Search Input */}
-        <div className="relative flex-1">
-          <Search className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-transparent z-10" />
-          <div className="w-full h-11 bg-[var(--surface-raised)] border border-[var(--border)] rounded-sm" />
+      {/* Search + Filters */}
+      <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 mb-8">
+        <div className="flex gap-3 flex-1">
+          {/* Search Input */}
+          <div className="relative flex-1">
+            <Search className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-transparent z-10" />
+            <div className="w-full h-11 bg-[var(--surface-raised)] border border-[var(--border)] rounded-sm" />
+          </div>
+          {/* Mobile: icon-only filter button */}
+          <div className="md:hidden w-11 h-11 shrink-0 rounded-sm border border-[var(--border)] bg-[var(--surface-raised)]" />
         </div>
-        {/* Filter Dropdowns — full-width on mobile (max-md:flex-1), matches DictionaryFilters.tsx */}
-        <div className="flex gap-3 max-md:gap-2 max-md:flex-wrap">
-          <div className="h-11 min-w-[10rem] max-md:min-w-0 max-md:flex-1 rounded-sm border border-[var(--border)] bg-[var(--surface-raised)]" />
-          <div className="h-11 min-w-[10rem] max-md:min-w-0 max-md:flex-1 rounded-sm border border-[var(--border)] bg-[var(--surface-raised)]" />
-          <div className="h-11 min-w-[10rem] max-md:min-w-0 max-md:flex-1 rounded-sm border border-[var(--border)] bg-[var(--surface-raised)]" />
+        {/* Desktop: 3 dropdowns */}
+        <div className="hidden md:flex gap-4">
+          <div className="h-11 w-40 rounded-sm border border-[var(--border)] bg-[var(--surface-raised)]" />
+          <div className="h-11 w-40 rounded-sm border border-[var(--border)] bg-[var(--surface-raised)]" />
+          <div className="h-11 w-40 rounded-sm border border-[var(--border)] bg-[var(--surface-raised)]" />
         </div>
       </div>
 

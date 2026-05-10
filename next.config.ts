@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const isDev = process.env.NODE_ENV === 'development';
 
 const nextConfig: NextConfig = {
-  allowedDevOrigins: ['192.168.0.108'],
+  allowedDevOrigins: ['192.168.0.105', '192.168.0.108', '192.168.56.1'],
 
   images: {
     remotePatterns: [
