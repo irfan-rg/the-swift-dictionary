@@ -62,7 +62,7 @@ export default function Header() {
 
   useEffect(() => {
     if (isSearching) {
-      const t = setTimeout(() => inputRef.current?.focus(), 320);
+      const t = setTimeout(() => inputRef.current?.focus({ preventScroll: true }), 50);
       return () => clearTimeout(t);
     }
   }, [isSearching]);
@@ -277,7 +277,7 @@ export default function Header() {
                   initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                   className="flex flex-1 items-center justify-between w-full"
                 >
-                  <Link href="/" className="shrink-0 flex items-center gap-2">
+                  <Link href="/" className="shrink-0 flex items-center gap-2 active:scale-95 active:opacity-70 transition-transform duration-100">
                     <BrandLogo short className="text-xl text-[var(--accent)]" />
                   </Link>
 
