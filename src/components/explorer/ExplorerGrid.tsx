@@ -29,14 +29,9 @@ function AlbumCard({ album, index, lite }: { album: Album; index: number; lite: 
 
   return (
     <motion.div
-      {...(lite
-        ? {}
-        : {
-            initial: { opacity: 0, y: 16 },
-            animate: { opacity: 1, y: 0 },
-            transition: { duration: 0.4, delay: index * 0.06 },
-          }
-      )}
+      initial={lite ? false : { opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={lite ? { duration: 0 } : { duration: 0.4, delay: index * 0.06 }}
       className="group"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -115,14 +110,9 @@ export default function ExplorerGrid({ albums }: { albums: Album[] }) {
 
   return (
     <motion.div
-      {...(lite
-        ? {}
-        : {
-            initial: { opacity: 0 },
-            animate: { opacity: 1 },
-            transition: { duration: 0.6 },
-          }
-      )}
+      initial={lite ? false : { opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={lite ? { duration: 0 } : { duration: 0.6 }}
       className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-md:grid-cols-2 max-md:gap-3"
     >
       {albums.map((album, index) => (

@@ -114,15 +114,15 @@ export default function LyricsDisplay({ lyrics, vocabWords, albumSlug, onWordCli
         return (
           <motion.div 
             key={secIdx}
+            initial={lite ? false : { opacity: 0, y: 10 }}
             {...(lite
-              ? {}
+              ? { animate: { opacity: 1, y: 0 } }
               : {
-                  initial: { opacity: 0, y: 10 },
                   whileInView: { opacity: 1, y: 0 },
                   viewport: { once: true, margin: '-20px' },
-                  transition: { duration: 0.4, delay: secIdx * 0.05 },
                 }
             )}
+            transition={lite ? { duration: 0 } : { duration: 0.4, delay: secIdx * 0.05 }}
             className={sectionClasses}
             style={wrapperStyle}
           >

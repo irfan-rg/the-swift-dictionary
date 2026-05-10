@@ -83,14 +83,9 @@ export default function SongDetailView({ song }: { song: SongDetail }) {
       {/* Spotify Embed */}
       {song.spotify_embed_url && (
         <motion.div
-          {...(lite
-            ? {}
-            : {
-                initial: { opacity: 0, y: 16 },
-                animate: { opacity: 1, y: 0 },
-                transition: { duration: 0.5 },
-              }
-          )}
+          initial={lite ? false : { opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={lite ? { duration: 0 } : { duration: 0.5 }}
           className="mb-12 max-md:mb-8"
         >
           <iframe
@@ -125,14 +120,9 @@ export default function SongDetailView({ song }: { song: SongDetail }) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Lyrics Section */}
         <motion.div
-          {...(lite
-            ? {}
-            : {
-                initial: { opacity: 0, y: 16 },
-                animate: { opacity: 1, y: 0 },
-                transition: { duration: 0.5, delay: 0.1 },
-              }
-          )}
+          initial={lite ? false : { opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={lite ? { duration: 0 } : { duration: 0.5, delay: 0.1 }}
           className={`bg-[var(--surface-raised)] rounded-sm border border-[var(--border)] p-8 max-md:p-5 ${activeTab === 'vocab' ? 'max-md:hidden' : ''}`}
         >
           <div className="flex items-center justify-between mb-6">
@@ -166,14 +156,9 @@ export default function SongDetailView({ song }: { song: SongDetail }) {
 
         {/* Vocabulary Words List */}
         <motion.div
-          {...(lite
-            ? {}
-            : {
-                initial: { opacity: 0, y: 16 },
-                animate: { opacity: 1, y: 0 },
-                transition: { duration: 0.5, delay: 0.2 },
-              }
-          )}
+          initial={lite ? false : { opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={lite ? { duration: 0 } : { duration: 0.5, delay: 0.2 }}
           className={`flex flex-col ${activeTab === 'lyrics' ? 'max-md:hidden' : ''}`}
         >
           <div className="mb-4">
@@ -194,14 +179,9 @@ export default function SongDetailView({ song }: { song: SongDetail }) {
               {song.vocab_words.map((word, index) => (
                 <motion.div
                   key={word.id}
-                  {...(lite
-                    ? {}
-                    : {
-                        initial: { opacity: 0, x: -8 },
-                        animate: { opacity: 1, x: 0 },
-                        transition: { duration: 0.3, delay: index * 0.04 },
-                      }
-                  )}
+                  initial={lite ? false : { opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={lite ? { duration: 0 } : { duration: 0.3, delay: index * 0.04 }}
                   className="border-b border-[var(--border)] py-4 cursor-pointer hover:bg-[var(--surface-raised)] px-4 -mx-4 transition-colors group"
                   onClick={() => setSelectedWord(wordToCardItem(word, song))}
                 >

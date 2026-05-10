@@ -84,7 +84,18 @@ body {
 }
 
 /* ── Global theme transition — only surfaces/borders, NOT transforms ── */
-/* Desktop only: on mobile GPUs this hammers compositing across hundreds of elements */
+/* Mobile: lightweight color-only transition for coherent theme toggle (no box-shadow — that's expensive) */
+@media (max-width: 767px) {
+  *,
+  *::before,
+  *::after {
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease;
+  }
+}
+
+/* Desktop: full smooth transition including box-shadow */
 @media (min-width: 768px) {
   *,
   *::before,

@@ -69,14 +69,9 @@ export default function TopSongs({ songs }: { songs?: SongWithAlbum[] }) {
           {list.map((song, index) => (
             <motion.div
               key={song.id}
-              {...(lite
-                ? {}
-                : {
-                    initial: { opacity: 0, x: -8 },
-                    animate: { opacity: 1, x: 0 },
-                    transition: { duration: 0.4, delay: index * 0.07 },
-                  }
-              )}
+              initial={lite ? false : { opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={lite ? { duration: 0 } : { duration: 0.4, delay: index * 0.07 }}
               className="flex-1 flex flex-col justify-center"
             >
               <Link

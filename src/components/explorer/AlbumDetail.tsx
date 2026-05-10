@@ -44,20 +44,15 @@ export default function AlbumDetail({
 
       {/* Album Info Card */}
       <motion.div
-        {...(lite
-          ? {}
-          : {
-              initial: { opacity: 0, y: 16 },
-              animate: { opacity: 1, y: 0 },
-              transition: { duration: 0.5 },
-            }
-        )}
+        initial={lite ? false : { opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={lite ? { duration: 0 } : { duration: 0.5 }}
         className="rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] overflow-hidden mb-12 max-md:mb-8"
       >
         <div className="flex flex-col md:flex-row">
-          {/* Album Cover — on mobile, skip heavy autoplay video and show static image */}
+          {/* Album Cover */}
           <div className="md:w-64 max-md:aspect-square md:h-auto relative shrink-0 overflow-hidden max-md:border-b border-[var(--border)]">
-            {album.animated_cover_url && !lite ? (
+            {album.animated_cover_url ? (
               <video
                 src={album.animated_cover_url}
                 autoPlay
@@ -99,27 +94,17 @@ export default function AlbumDetail({
       </div>
 
       <motion.div
-        {...(lite
-          ? {}
-          : {
-              initial: { opacity: 0 },
-              animate: { opacity: 1 },
-              transition: { duration: 0.6 },
-            }
-        )}
+        initial={lite ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={lite ? { duration: 0 } : { duration: 0.6 }}
         className="border-t border-[var(--border)]"
       >
         {songs.map((song, index) => (
           <motion.div
             key={song.id}
-            {...(lite
-              ? {}
-              : {
-                  initial: { opacity: 0, x: -8 },
-                  animate: { opacity: 1, x: 0 },
-                  transition: { duration: 0.3, delay: index * 0.04 },
-                }
-            )}
+            initial={lite ? false : { opacity: 0, x: -8 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={lite ? { duration: 0 } : { duration: 0.3, delay: index * 0.04 }}
           >
             <Link
               href={`/explorer/${album.slug}/${song.slug}`}

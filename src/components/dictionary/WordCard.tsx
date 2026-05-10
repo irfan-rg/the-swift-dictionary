@@ -16,15 +16,15 @@ export default function WordCard({ item, onOpen }: Props) {
 
   return (
     <motion.div
+      initial={lite ? false : { opacity: 0, y: 12 }}
       {...(lite
-        ? {}
+        ? { animate: { opacity: 1, y: 0 } }
         : {
-            initial: { opacity: 0, y: 12 },
             whileInView: { opacity: 1, y: 0 },
             viewport: { once: true, amount: 0.3 },
-            transition: { duration: 0.18, ease: "easeOut" },
           }
       )}
+      transition={lite ? { duration: 0 } : { duration: 0.18, ease: "easeOut" }}
       className="group rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] p-5 max-md:p-4 flex flex-col gap-4 max-md:gap-3 cursor-pointer hover:border-[var(--border-focus)] hover:shadow-[var(--shadow-soft)] transition-all"
       onClick={() => onOpen?.(item)}
     >
