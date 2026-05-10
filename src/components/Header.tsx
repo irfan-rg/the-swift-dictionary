@@ -21,7 +21,8 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [showResults, setShowResults] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);           // desktop
+  const mobileInputRef = useRef<HTMLInputElement>(null);     // mobile (always mounted)
 
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const router = useRouter();
@@ -60,43 +61,20 @@ export default function Header() {
     } catch { setSearchResults([]); }
   }, []);
 
+  // Desktop: focus search input after AnimatePresence swap
   useEffect(() => {
     if (isSearching) {
-      // Desktop fallback: focus after AnimatePresence swap
-      const raf = requestAnimationFrame(() => inputRef.current?.focus({ preventScroll: true }));
-      return () => cancelAnimationFrame(raf);
+      const t = setTimeout(() => inputRef.current?.focus(), 100);
+      return () => clearTimeout(t);
     }
   }, [isSearching]);
 
-  // Mobile keyboard fix (iOS + Android):
-  // Both platforms require focus() to be initiated synchronously within a user
-  // gesture to open the keyboard. Since AnimatePresence swaps the nav → search
-  // view asynchronously, the real input doesn't exist yet when the button is tapped.
-  // Fix: focus a temporary input immediately (opens keyboard), then transfer focus
-  // to the real input when it mounts. The keyboard stays open during focus transfer.
+  // Mobile: focus the always-mounted input synchronously in the tap handler
   const handleSearchOpen = () => {
-    const tmp = document.createElement('input');
-    tmp.setAttribute('type', 'text');
-    tmp.setAttribute('inputmode', 'search');
-    tmp.setAttribute('style', 'position:fixed;opacity:0;top:0;left:0;width:10px;height:10px;padding:0;border:none;z-index:-1;');
-    document.body.appendChild(tmp);
-    tmp.focus();
     setIsSearching(true);
     setShowResults(false);
-    // Retry focus transfer until the real input mounts (handles variable render times)
-    let attempts = 0;
-    const transfer = () => {
-      if (inputRef.current) {
-        inputRef.current.focus({ preventScroll: true });
-        tmp.remove();
-      } else if (attempts < 10) {
-        attempts++;
-        requestAnimationFrame(transfer);
-      } else {
-        tmp.remove(); // Cleanup if input never mounted
-      }
-    };
-    requestAnimationFrame(transfer);
+    // Input is always in the DOM (just hidden) so this works synchronously
+    mobileInputRef.current?.focus();
   };
 
   // Close search on ESC
@@ -281,53 +259,43 @@ export default function Header() {
         {/* The fixed header bar — solid bg on mobile (backdrop-blur is GPU-expensive on phones) */}
         <div className="fixed top-0 left-0 right-0 z-50 bg-[var(--background)] border-b border-[var(--border)] shadow-sm">
           <div className="flex items-center justify-between h-16 w-full px-4">
-            <AnimatePresence mode="wait">
-              {isSearching ? (
-                <motion.div
-                  key="search-mode-mobile"
-                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                  className="flex-1 flex items-center w-full"
-                >
-                  <form onSubmit={handleSearchSubmit} className="flex-1 flex items-center gap-3 w-full">
-                    <button type="button" onClick={() => { setIsSearching(false); setSearchQuery(''); }} className="p-2.5 -ml-2 text-[var(--foreground-muted)] hover:text-[var(--foreground)]">
-                      <ArrowLeft className="w-5 h-5" strokeWidth={1.5} />
-                    </button>
-                    <input
-                      ref={inputRef}
-                      type="text"
-                      placeholder="Search..."
-                      value={searchQuery}
-                      onChange={(e) => handleSearchInput(e.target.value)}
-                      className="flex-1 bg-transparent font-body text-base outline-none text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] placeholder:font-light"
-                      autoFocus
-                    />
-                  </form>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="nav-mode-mobile"
-                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                  className="flex flex-1 items-center justify-between w-full"
-                >
-                  <Link href="/" className="shrink-0 flex items-center gap-2 active:scale-95 active:opacity-70 transition-transform duration-100">
-                    <BrandLogo short className="text-xl text-[var(--accent)]" />
-                  </Link>
+            {/* Search mode — always mounted, hidden when not active */}
+            <div className={`flex-1 flex items-center w-full ${isSearching ? '' : 'hidden'}`}>
+              <form onSubmit={handleSearchSubmit} className="flex-1 flex items-center gap-3 w-full">
+                <button type="button" onClick={() => { setIsSearching(false); setSearchQuery(''); }} className="p-2.5 -ml-2 text-[var(--foreground-muted)] hover:text-[var(--foreground)]">
+                  <ArrowLeft className="w-5 h-5" strokeWidth={1.5} />
+                </button>
+                <input
+                  ref={mobileInputRef}
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => handleSearchInput(e.target.value)}
+                  className="flex-1 bg-transparent font-body text-base outline-none text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] placeholder:font-light"
+                />
+              </form>
+            </div>
 
-                  <div className="flex items-center gap-1">
-                    {mounted && (
-                      <button onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')} className="p-2.5 rounded-full text-[var(--foreground-muted)]" aria-label="Toggle theme">
-                        {resolvedTheme === 'dark' ? <Sun className="w-[18px] h-[18px]" strokeWidth={1.5} /> : <MoonStar className="w-[18px] h-[18px]" strokeWidth={1.5} />}
-                      </button>
-                    )}
-                    <button onClick={handleSearchOpen} className="p-2.5 rounded-full text-[var(--foreground-muted)]" aria-label="Search">
-                      <Search className="w-[18px] h-[18px]" strokeWidth={1.5} />
-                    </button>
-                    <button
-                      onClick={() => setIsMenuOpen(!isMenuOpen)}
-                      className="px-2 py-1.5 text-[var(--foreground)] relative flex items-center justify-center min-w-[64px] h-[36px]"
-                      aria-label="Toggle menu"
-                    >
-                      <AnimatePresence mode="popLayout" initial={false}>
+            {/* Nav mode — hidden when searching */}
+            <div className={`flex flex-1 items-center justify-between w-full ${isSearching ? 'hidden' : ''}`}>
+              <Link href="/" className="shrink-0 flex items-center gap-2 active:scale-95 active:opacity-70 transition-transform duration-100">
+                <BrandLogo short className="text-xl text-[var(--accent)]" />
+              </Link>
+
+              <div className="flex items-center gap-1">
+                {mounted && (
+                  <button onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')} className="p-2.5 rounded-full text-[var(--foreground-muted)]" aria-label="Toggle theme">
+                    {resolvedTheme === 'dark' ? <Sun className="w-[18px] h-[18px]" strokeWidth={1.5} /> : <MoonStar className="w-[18px] h-[18px]" strokeWidth={1.5} />}
+                  </button>
+                )}
+                <button onClick={handleSearchOpen} className="p-2.5 rounded-full text-[var(--foreground-muted)]" aria-label="Search">
+                  <Search className="w-[18px] h-[18px]" strokeWidth={1.5} />
+                </button>
+                <button
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  className="px-2 py-1.5 text-[var(--foreground)] relative flex items-center justify-center min-w-[64px] h-[36px]"
+                  aria-label="Toggle menu">
+                  <AnimatePresence mode="popLayout" initial={false}>
                         <motion.span
                           key={isMenuOpen ? 'close' : 'menu'}
                           initial={{ opacity: 0, filter: 'blur(4px)', y: isMenuOpen ? -8 : 8 }}
@@ -341,9 +309,7 @@ export default function Header() {
                       </AnimatePresence>
                     </button>
                   </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            </div>
           </div>
 
           {/* Mobile Search Results — inside header bar so it drops down */}
