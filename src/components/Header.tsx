@@ -61,13 +61,7 @@ export default function Header() {
     } catch { setSearchResults([]); }
   }, []);
 
-  // Desktop: focus search input after AnimatePresence swap
-  useEffect(() => {
-    if (isSearching) {
-      const t = setTimeout(() => inputRef.current?.focus({ preventScroll: true }), 100);
-      return () => clearTimeout(t);
-    }
-  }, [isSearching]);
+  // Note: Desktop uses autoFocus on the input itself. Mobile uses the transparent overlay native focus.
 
   // Close search on ESC
   useEffect(() => {
@@ -154,6 +148,7 @@ export default function Header() {
                       </button>
                       <input
                         ref={inputRef}
+                        autoFocus
                         type="text"
                         placeholder="Search for a lyric, word, or era..."
                         value={searchQuery}
