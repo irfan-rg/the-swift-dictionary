@@ -62,10 +62,42 @@ export default function Header() {
 
   useEffect(() => {
     if (isSearching) {
-      const t = setTimeout(() => inputRef.current?.focus({ preventScroll: true }), 50);
-      return () => clearTimeout(t);
+      // Desktop fallback: focus after AnimatePresence swap
+      const raf = requestAnimationFrame(() => inputRef.current?.focus({ preventScroll: true }));
+      return () => cancelAnimationFrame(raf);
     }
   }, [isSearching]);
+
+  // Mobile keyboard fix (iOS + Android):
+  // Both platforms require focus() to be initiated synchronously within a user
+  // gesture to open the keyboard. Since AnimatePresence swaps the nav → search
+  // view asynchronously, the real input doesn't exist yet when the button is tapped.
+  // Fix: focus a temporary input immediately (opens keyboard), then transfer focus
+  // to the real input when it mounts. The keyboard stays open during focus transfer.
+  const handleSearchOpen = () => {
+    const tmp = document.createElement('input');
+    tmp.setAttribute('type', 'text');
+    tmp.setAttribute('inputmode', 'search');
+    tmp.setAttribute('style', 'position:fixed;opacity:0;top:0;left:0;width:10px;height:10px;padding:0;border:none;z-index:-1;');
+    document.body.appendChild(tmp);
+    tmp.focus();
+    setIsSearching(true);
+    setShowResults(false);
+    // Retry focus transfer until the real input mounts (handles variable render times)
+    let attempts = 0;
+    const transfer = () => {
+      if (inputRef.current) {
+        inputRef.current.focus({ preventScroll: true });
+        tmp.remove();
+      } else if (attempts < 10) {
+        attempts++;
+        requestAnimationFrame(transfer);
+      } else {
+        tmp.remove(); // Cleanup if input never mounted
+      }
+    };
+    requestAnimationFrame(transfer);
+  };
 
   // Close search on ESC
   useEffect(() => {
@@ -287,7 +319,7 @@ export default function Header() {
                         {resolvedTheme === 'dark' ? <Sun className="w-[18px] h-[18px]" strokeWidth={1.5} /> : <MoonStar className="w-[18px] h-[18px]" strokeWidth={1.5} />}
                       </button>
                     )}
-                    <button onClick={() => { setIsSearching(true); setShowResults(false); }} className="p-2.5 rounded-full text-[var(--foreground-muted)]" aria-label="Search">
+                    <button onClick={handleSearchOpen} className="p-2.5 rounded-full text-[var(--foreground-muted)]" aria-label="Search">
                       <Search className="w-[18px] h-[18px]" strokeWidth={1.5} />
                     </button>
                     <button
