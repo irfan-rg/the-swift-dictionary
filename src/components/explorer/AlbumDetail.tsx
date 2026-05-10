@@ -54,11 +54,13 @@ export default function AlbumDetail({
           <div className="md:w-64 max-md:aspect-square md:h-auto relative shrink-0 overflow-hidden max-md:border-b border-[var(--border)]">
             {album.animated_cover_url ? (
               <video
+                ref={(el) => { if (el) el.play().catch(() => {}); }}
                 src={album.animated_cover_url}
                 autoPlay
                 muted
                 loop
                 playsInline
+                preload="auto"
                 poster={album.cover_url || undefined}
                 className="w-full h-full object-cover"
               />

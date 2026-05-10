@@ -25,7 +25,7 @@ export default function WordCard({ item, onOpen }: Props) {
           }
       )}
       transition={lite ? { duration: 0 } : { duration: 0.18, ease: "easeOut" }}
-      className="group rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] p-5 max-md:p-4 flex flex-col gap-4 max-md:gap-3 cursor-pointer hover:border-[var(--border-focus)] hover:shadow-[var(--shadow-soft)] transition-all"
+      className="group rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] p-5 max-md:p-4 flex flex-col gap-4 max-md:gap-3 cursor-pointer hover:border-[var(--border-focus)] hover:shadow-[var(--shadow-soft)] transition-[border-color,box-shadow] duration-200"
       onClick={() => onOpen?.(item)}
     >
       <div className="flex items-start justify-between gap-4">

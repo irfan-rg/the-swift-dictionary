@@ -38,7 +38,7 @@ function AlbumCard({ album, index, lite }: { album: Album; index: number; lite: 
     >
       <Link
         href={`/explorer/${album.slug}`}
-        className="block rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] overflow-hidden hover:shadow-[var(--shadow-soft)] hover:border-[var(--border-focus)] transition-all duration-300"
+        className="block rounded-sm border border-[var(--border)] bg-[var(--surface-raised)] overflow-hidden hover:shadow-[var(--shadow-soft)] hover:border-[var(--border-focus)] transition-[border-color,box-shadow] duration-200"
       >
         {/* Album Cover */}
         <div className="relative aspect-square w-full overflow-hidden">

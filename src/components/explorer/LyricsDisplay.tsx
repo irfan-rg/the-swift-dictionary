@@ -89,7 +89,7 @@ export default function LyricsDisplay({ lyrics, vocabWords, albumSlug, onWordCli
   return (
     <div className="font-body text-sm text-[var(--foreground)] leading-[2] space-y-6">
       {sections.map((section, secIdx) => {
-        let sectionClasses = "transition-all duration-300 ";
+        let sectionClasses = "";
         let headerClasses = "font-body text-[10px] tracking-widest uppercase mb-2 opacity-50";
         let wrapperStyle: React.CSSProperties = {};
 
@@ -108,7 +108,7 @@ export default function LyricsDisplay({ lyrics, vocabWords, albumSlug, onWordCli
         } else {
           // Standard Stanza: Simple interactive reading block
           // Adds a subtle hover state to make reading raw text feel polished
-          sectionClasses += "opacity-85 hover:opacity-100 pl-4 max-md:pl-2 border-l-2 border-transparent hover:border-[var(--border-focus)] transition-all py-1 -ml-4 max-md:-ml-2 ";
+          sectionClasses += "opacity-85 hover:opacity-100 pl-4 max-md:pl-2 border-l-2 border-transparent hover:border-[var(--border-focus)] transition-[border-color,opacity] duration-200 py-1 -ml-4 max-md:-ml-2 ";
         }
 
         return (

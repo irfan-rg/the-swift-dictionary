@@ -84,14 +84,11 @@ body {
 }
 
 /* ── Global theme transition — only surfaces/borders, NOT transforms ── */
-/* Mobile: lightweight color-only transition for coherent theme toggle (no box-shadow — that's expensive) */
+/* Mobile: body-only transition for theme coherence without slowing interactions.
+   Individual components already have targeted transition-colors where needed. */
 @media (max-width: 767px) {
-  *,
-  *::before,
-  *::after {
-    transition:
-      background-color 0.3s ease,
-      border-color 0.3s ease;
+  body {
+    transition: background-color 0.25s ease;
   }
 }
 
