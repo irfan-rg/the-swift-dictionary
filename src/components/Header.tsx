@@ -64,18 +64,10 @@ export default function Header() {
   // Desktop: focus search input after AnimatePresence swap
   useEffect(() => {
     if (isSearching) {
-      const t = setTimeout(() => inputRef.current?.focus(), 100);
+      const t = setTimeout(() => inputRef.current?.focus({ preventScroll: true }), 100);
       return () => clearTimeout(t);
     }
   }, [isSearching]);
-
-  // Mobile: focus the always-mounted input synchronously in the tap handler
-  const handleSearchOpen = () => {
-    setIsSearching(true);
-    setShowResults(false);
-    // Input is always in the DOM (just hidden) so this works synchronously
-    mobileInputRef.current?.focus();
-  };
 
   // Close search on ESC
   useEffect(() => {
@@ -258,58 +250,76 @@ export default function Header() {
       <div className="md:hidden">
         {/* The fixed header bar — solid bg on mobile (backdrop-blur is GPU-expensive on phones) */}
         <div className="fixed top-0 left-0 right-0 z-50 bg-[var(--background)] border-b border-[var(--border)] shadow-sm">
-          <div className="flex items-center justify-between h-16 w-full px-4">
-            {/* Search mode — always mounted, hidden when not active */}
-            <div className={`flex-1 flex items-center w-full ${isSearching ? '' : 'hidden'}`}>
-              <form onSubmit={handleSearchSubmit} className="flex-1 flex items-center gap-3 w-full">
-                <button type="button" onClick={() => { setIsSearching(false); setSearchQuery(''); }} className="p-2.5 -ml-2 text-[var(--foreground-muted)] hover:text-[var(--foreground)]">
-                  <ArrowLeft className="w-5 h-5" strokeWidth={1.5} />
-                </button>
-                <input
-                  ref={mobileInputRef}
-                  type="text"
-                  placeholder="Search..."
-                  value={searchQuery}
-                  onChange={(e) => handleSearchInput(e.target.value)}
-                  className="flex-1 bg-transparent font-body text-base outline-none text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] placeholder:font-light"
-                />
-              </form>
-            </div>
-
-            {/* Nav mode — hidden when searching */}
-            <div className={`flex flex-1 items-center justify-between w-full ${isSearching ? 'hidden' : ''}`}>
+          <div className="flex items-center justify-between h-16 w-full px-4 relative overflow-hidden">
+            
+            {/* Nav mode */}
+            <div className={`flex flex-1 items-center justify-between w-full transition-opacity duration-200 ${isSearching ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
               <Link href="/" className="shrink-0 flex items-center gap-2 active:scale-95 active:opacity-70 transition-transform duration-100">
                 <BrandLogo short className="text-xl text-[var(--accent)]" />
               </Link>
 
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 relative z-10">
                 {mounted && (
                   <button onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')} className="p-2.5 rounded-full text-[var(--foreground-muted)]" aria-label="Toggle theme">
                     {resolvedTheme === 'dark' ? <Sun className="w-[18px] h-[18px]" strokeWidth={1.5} /> : <MoonStar className="w-[18px] h-[18px]" strokeWidth={1.5} />}
                   </button>
                 )}
-                <button onClick={handleSearchOpen} className="p-2.5 rounded-full text-[var(--foreground-muted)]" aria-label="Search">
+                
+                {/* Search Icon Placeholder — the actual input will overlay this */}
+                <div className="w-[38px] h-[38px] flex items-center justify-center text-[var(--foreground-muted)]">
                   <Search className="w-[18px] h-[18px]" strokeWidth={1.5} />
-                </button>
+                </div>
+
                 <button
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
                   className="px-2 py-1.5 text-[var(--foreground)] relative flex items-center justify-center min-w-[64px] h-[36px]"
                   aria-label="Toggle menu">
                   <AnimatePresence mode="popLayout" initial={false}>
-                        <motion.span
-                          key={isMenuOpen ? 'close' : 'menu'}
-                          initial={{ opacity: 0, filter: 'blur(4px)', y: isMenuOpen ? -8 : 8 }}
-                          animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
-                          exit={{ opacity: 0, filter: 'blur(4px)', y: isMenuOpen ? 8 : -8 }}
-                          transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-                          className="font-handwriting text-xl tracking-wide absolute"
-                        >
-                          {isMenuOpen ? 'close.' : 'menu.'}
-                        </motion.span>
-                      </AnimatePresence>
-                    </button>
-                  </div>
+                    <motion.span
+                      key={isMenuOpen ? 'close' : 'menu'}
+                      initial={{ opacity: 0, filter: 'blur(4px)', y: isMenuOpen ? -8 : 8 }}
+                      animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
+                      exit={{ opacity: 0, filter: 'blur(4px)', y: isMenuOpen ? 8 : -8 }}
+                      transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+                      className="font-handwriting text-xl tracking-wide absolute"
+                    >
+                      {isMenuOpen ? 'close.' : 'menu.'}
+                    </motion.span>
+                  </AnimatePresence>
+                </button>
+              </div>
             </div>
+
+            {/* The actual Search Form & Input
+                When NOT searching: positioned transparently over the search icon, allowing native tap-to-focus.
+                When searching: expands to full width and becomes visible. */}
+            <form 
+              onSubmit={handleSearchSubmit} 
+              className={`absolute top-0 bottom-0 flex items-center transition-all duration-300 ease-in-out ${
+                isSearching 
+                  ? 'left-0 right-0 px-4 bg-[var(--background)] z-20' 
+                  // Right offset matches exactly over the Search placeholder: 16px (px-4) + 64px (menu min-w) + 4px (gap-1) = 84px
+                  : 'right-[84px] w-[38px] bg-transparent z-20'
+              }`}
+            >
+              <div className="flex items-center w-full h-full gap-3">
+                {isSearching && (
+                  <button type="button" onClick={() => { setIsSearching(false); setSearchQuery(''); }} className="p-2.5 -ml-2 text-[var(--foreground-muted)] shrink-0 transition-opacity">
+                    <ArrowLeft className="w-5 h-5" strokeWidth={1.5} />
+                  </button>
+                )}
+                <input
+                  ref={mobileInputRef}
+                  type="text"
+                  placeholder={isSearching ? "Search..." : ""}
+                  value={searchQuery}
+                  onChange={(e) => handleSearchInput(e.target.value)}
+                  onFocus={() => { setIsSearching(true); setShowResults(false); }}
+                  className={`flex-1 w-full h-full bg-transparent outline-none text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] placeholder:font-light cursor-pointer ${isSearching ? 'font-body text-base pl-1' : 'opacity-0'}`}
+                />
+              </div>
+            </form>
+
           </div>
 
           {/* Mobile Search Results — inside header bar so it drops down */}

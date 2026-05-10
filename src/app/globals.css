@@ -95,12 +95,8 @@ body {
 /* Mobile: targeted transition for coherent theme toggle without GPU overhead.
    Applied to key surface elements, not the universal * selector. */
 @media (max-width: 767px) {
-  body,
-  header, main, footer, nav, section, article,
-  div, aside {
-    transition:
-      background-color 0.35s ease,
-      border-color 0.35s ease;
+  body {
+    transition: background-color 0.25s ease;
   }
 }
 
@@ -112,6 +108,7 @@ body {
     transition:
       background-color 0.5s ease-in-out,
       border-color 0.5s ease-in-out,
+      color 0.5s ease-in-out,
       box-shadow 0.5s ease-in-out;
   }
 }
