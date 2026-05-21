@@ -71,6 +71,74 @@ CREATE TABLE IF NOT EXISTS public.word_of_the_day (
 
 CREATE INDEX IF NOT EXISTS idx_wotd_date ON public.word_of_the_day (featured_date);
 
+-- Auto-assign a random, non-repeating WOTD for today.
+-- Called via supabase.rpc("assign_wotd_today") from the app.
+-- When all words have been featured, clears history and starts a fresh cycle.
+CREATE OR REPLACE FUNCTION public.assign_wotd_today()
+RETURNS TABLE (
+  word       text,
+  definition text,
+  lyric_snippet text,
+  difficulty text,
+  context    text,
+  album_title text,
+  album_slug  text,
+  song_title  text
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = 'public'
+AS $$
+DECLARE
+  v_today   date := CURRENT_DATE;
+  v_word_id uuid;
+BEGIN
+  -- 1. Check if today already has a WOTD assigned
+  SELECT wotd.word_id INTO v_word_id
+    FROM word_of_the_day wotd
+   WHERE wotd.featured_date = v_today;
+
+  -- 2. If not assigned yet, pick a random unfeatured word
+  IF v_word_id IS NULL THEN
+    SELECT w.id INTO v_word_id
+      FROM words w
+     WHERE w.id NOT IN (SELECT wotd.word_id FROM word_of_the_day wotd)
+     ORDER BY random()
+     LIMIT 1;
+
+    -- 3. Cycle complete — all words featured. Clear history, start fresh.
+    IF v_word_id IS NULL THEN
+      DELETE FROM word_of_the_day;
+
+      SELECT w.id INTO v_word_id
+        FROM words w
+       ORDER BY random()
+       LIMIT 1;
+    END IF;
+
+    -- 4. Insert today's pick (ON CONFLICT handles concurrent requests)
+    INSERT INTO word_of_the_day (word_id, featured_date)
+    VALUES (v_word_id, v_today)
+    ON CONFLICT (featured_date) DO NOTHING;
+
+    -- Re-read in case another request won the race
+    SELECT wotd.word_id INTO v_word_id
+      FROM word_of_the_day wotd
+     WHERE wotd.featured_date = v_today;
+  END IF;
+
+  -- 5. Return the full word data with album/song joins
+  RETURN QUERY
+    SELECT w.word, w.definition, w.lyric_snippet, w.difficulty, w.context,
+           a.title AS album_title, a.slug AS album_slug,
+           s.title AS song_title
+      FROM words w
+      JOIN albums a ON a.id = w.album_id
+      JOIN songs  s ON s.id = w.song_id
+     WHERE w.id = v_word_id;
+END;
+$$;
+
 -- ── 5. User profiles ───────────────────────────────────────────
 
 CREATE TABLE IF NOT EXISTS public.profiles (

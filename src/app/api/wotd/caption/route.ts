@@ -15,37 +15,20 @@ export async function GET(request: Request) {
   }
 
   const supabase = await createClient();
-  // Get today's UTC date which matches the CRON run
-  const today = new Date().toISOString().split("T")[0];
 
-  const { data, error } = await supabase
-    .from("word_of_the_day")
-    .select(
-      `
-      words (
-        word,
-        definition,
-        lyric_snippet,
-        difficulty,
-        albums ( title ),
-        songs ( title )
-      )
-    `
-    )
-    .eq("featured_date", today)
-    .single();
+  const { data, error } = await supabase.rpc("assign_wotd_today").single();
 
-  if (error || !data?.words) {
+  if (error || !data) {
     return new Response(JSON.stringify({ error: "No word found" }), { 
       status: 404,
       headers: { "Content-Type": "application/json" }
     });
   }
 
-  const w = data.words as unknown as Record<string, any>;
+  const w = data as Record<string, any>;
   const word = w.word as string;
-  const album = w.albums.title as string;
-  const song = w.songs.title as string;
+  const album = w.album_title as string;
+  const song = w.song_title as string;
 
   const albumHashtag = album.replace(/[^a-zA-Z0-9]/g, "");
   const wordHashtag = word.replace(/[^a-zA-Z0-9]/g, "");

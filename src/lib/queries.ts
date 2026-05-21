@@ -169,35 +169,25 @@ export async function getDictionaryWords(
 
 export async function getWordOfTheDay(): Promise<WordWithDetails | null> {
   const supabase = await createClient();
-  const today = new Date().toISOString().split("T")[0]; // yyyy-mm-dd
 
-  const { data, error } = await supabase
-    .from("word_of_the_day")
-    .select(
-      `
-      word_id,
-      words (
-        *,
-        songs ( title, slug ),
-        albums ( slug, title )
-      )
-    `
-    )
-    .eq("featured_date", today)
-    .single();
+  // The DB function auto-assigns today's word if not yet assigned.
+  // It picks a random unfeatured word and cycles through all words
+  // before any repeats.
+  const { data, error } = await supabase.rpc("assign_wotd_today").single();
 
-  if (error && error.code !== "PGRST116") throw error;
-  if (!data?.words) return null;
+  if (error || !data) return null;
 
-  const w = data.words as unknown as Record<string, unknown>;
-  const songs = w.songs as Record<string, unknown>;
-  const albums = w.albums as Record<string, unknown>;
+  const row = data as Record<string, unknown>;
   return {
-    ...w,
-    song_title: songs.title as string,
-    song_slug: songs.slug as string,
-    album_slug: albums.slug as EraSlug,
-    album_title: albums.title as string,
+    word: row.word as string,
+    definition: row.definition as string,
+    lyric_snippet: row.lyric_snippet as string,
+    difficulty: row.difficulty as string,
+    context: (row.context as string) || "",
+    song_title: row.song_title as string,
+    song_slug: "", // RPC doesn't return song_slug — not needed for WOTD card
+    album_slug: row.album_slug as EraSlug,
+    album_title: row.album_title as string,
   } as WordWithDetails;
 }
 

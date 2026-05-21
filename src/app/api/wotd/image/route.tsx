@@ -43,42 +43,21 @@ interface WordData {
 
 async function getWordOfTheDayData(): Promise<WordData | null> {
   const supabase = await createClient();
-  const today = new Date().toISOString().split("T")[0];
 
-  const { data, error } = await supabase
-    .from("word_of_the_day")
-    .select(
-      `
-      word_id,
-      words (
-        word,
-        definition,
-        lyric_snippet,
-        difficulty,
-        context,
-        albums ( slug, title ),
-        songs ( title )
-      )
-    `
-    )
-    .eq("featured_date", today)
-    .single();
+  const { data, error } = await supabase.rpc("assign_wotd_today").single();
 
-  if (error || !data?.words) return null;
+  if (error || !data) return null;
 
-  const w = data.words as unknown as Record<string, unknown>;
-  const albums = w.albums as Record<string, unknown>;
-  const songs = w.songs as Record<string, unknown>;
-
+  const row = data as Record<string, unknown>;
   return {
-    word: w.word as string,
-    definition: w.definition as string,
-    lyric_snippet: w.lyric_snippet as string,
-    difficulty: w.difficulty as string,
-    context: (w.context as string) || "",
-    album_title: albums.title as string,
-    album_slug: albums.slug as EraSlug,
-    song_title: songs.title as string,
+    word: row.word as string,
+    definition: row.definition as string,
+    lyric_snippet: row.lyric_snippet as string,
+    difficulty: row.difficulty as string,
+    context: (row.context as string) || "",
+    album_title: row.album_title as string,
+    album_slug: row.album_slug as EraSlug,
+    song_title: row.song_title as string,
   };
 }
 
