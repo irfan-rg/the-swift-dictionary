@@ -46,6 +46,7 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
@@ -89,6 +90,8 @@ jobs:
           MEDIA=$(jq -n -c --arg caption "${CAPTION_TEXT}" '[{"type":"photo","media":"attach://front","caption":$caption},{"type":"photo","media":"attach://back"}]')
           echo "${MEDIA}" | jq -e 'type == "array" and length == 2 and .[0].media == "attach://front" and .[1].media == "attach://back"' >/dev/null
 
+          # Send to private chat (personal copy)
+          echo "Sending to private chat..."
           RESPONSE=$(curl --silent --show-error --location \
             -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMediaGroup" \
             --form-string "chat_id=${TELEGRAM_CHAT_ID}" \
@@ -96,10 +99,26 @@ jobs:
             -F "front=@wotd-images/wotd-${DATE}-front.png" \
             -F "back=@wotd-images/wotd-${DATE}-back.png")
 
-          echo "Telegram API response: ${RESPONSE}"
-          echo "${RESPONSE}" | grep -q '"ok":true' || (echo "Telegram send failed" && exit 1)
+          echo "Private chat response: ${RESPONSE}"
+          echo "${RESPONSE}" | grep -q '"ok":true' || (echo "Telegram send to private chat failed" && exit 1)
+          echo "✓ Sent to private chat"
 
-          echo "Sent to Telegram"
+          # Send to public channel (if configured)
+          if [ -n "${TELEGRAM_CHANNEL_ID}" ]; then
+            echo "Sending to public channel..."
+            CH_RESPONSE=$(curl --silent --show-error --location \
+              -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMediaGroup" \
+              --form-string "chat_id=${TELEGRAM_CHANNEL_ID}" \
+              --form-string "media=${MEDIA}" \
+              -F "front=@wotd-images/wotd-${DATE}-front.png" \
+              -F "back=@wotd-images/wotd-${DATE}-back.png")
+
+            echo "Channel response: ${CH_RESPONSE}"
+            echo "${CH_RESPONSE}" | grep -q '"ok":true' || (echo "Telegram send to channel failed" && exit 1)
+            echo "✓ Sent to public channel"
+          else
+            echo "No TELEGRAM_CHANNEL_ID set, skipping channel post"
+          fi
       
       - name: Upload as artifact (backup)
         uses: actions/upload-artifact@v4
