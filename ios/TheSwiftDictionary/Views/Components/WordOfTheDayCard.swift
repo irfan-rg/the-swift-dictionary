@@ -33,7 +33,7 @@ struct WordOfTheDayCard: View {
                 
                 // The Word itself
                 Text(word.word)
-                    .font(AppFont.dictionaryWord(size: 42))
+                    .font(AppFont.display(size: 42))
                     .foregroundColor(AppColors.foreground(for: colorScheme))
                 
                 // Definition

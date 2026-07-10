@@ -162,7 +162,7 @@ private struct TopSongRow: View {
             
             VStack(alignment: .trailing, spacing: 2) {
                 Text("\(song.vocabCount)")
-                    .font(AppFont.dictionaryWord(size: 20))
+                    .font(AppFont.display(size: 20))
                     .foregroundColor(AppColors.foreground(for: colorScheme))
                 Text("words")
                     .font(.system(size: 10, weight: .medium, design: .serif))
