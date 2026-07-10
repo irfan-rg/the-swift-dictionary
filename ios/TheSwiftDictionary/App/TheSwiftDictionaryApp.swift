@@ -8,6 +8,21 @@ import SwiftUI
 @main
 struct TheSwiftDictionaryApp: App {
 
+    init() {
+        // Disable Liquid Glass / translucent materials (iOS 26+)
+        let navAppearance = UINavigationBarAppearance()
+        navAppearance.configureWithOpaqueBackground()
+        UINavigationBar.appearance().standardAppearance = navAppearance
+        UINavigationBar.appearance().scrollEdgeAppearance = navAppearance
+
+        let tabAppearance = UITabBarAppearance()
+        tabAppearance.configureWithOpaqueBackground()
+        UITabBar.appearance().standardAppearance = tabAppearance
+        if #available(iOS 15.0, *) {
+            UITabBar.appearance().scrollEdgeAppearance = tabAppearance
+        }
+    }
+
     /// Auth service injected as an environment object for the entire app.
     @StateObject private var authService = AuthService()
     
