@@ -160,7 +160,7 @@ final class SupabaseService {
         filters: DictionaryFilters = DictionaryFilters()
     ) async throws -> (words: [WordWithDetails], total: Int) {
 
-        var query = client
+        var filterQuery = client
             .from("words")
             .select(
                 """
@@ -174,31 +174,33 @@ final class SupabaseService {
 
         // Filters
         if let searchQuery = filters.query, !searchQuery.isEmpty {
-            query = query.ilike("word", pattern: "\(searchQuery)%")
+            filterQuery = filterQuery.ilike("word", pattern: "\(searchQuery)%")
         }
         if let album = filters.album {
-            query = query.eq("albums.slug", value: album.rawValue)
+            filterQuery = filterQuery.eq("albums.slug", value: album.rawValue)
         }
         if let difficulty = filters.difficulty {
-            query = query.eq("difficulty", value: difficulty.rawValue)
+            filterQuery = filterQuery.eq("difficulty", value: difficulty.rawValue)
         }
 
         // Sorting
+        var transformQuery: PostgrestTransformBuilder = filterQuery
+        
         switch filters.sort {
         case .az:
-            query = query.order("word", ascending: true)
+            transformQuery = transformQuery.order("word", ascending: true)
         case .za:
-            query = query.order("word", ascending: false)
+            transformQuery = transformQuery.order("word", ascending: false)
         case .difficulty:
-            query = query.order("difficulty")
+            transformQuery = transformQuery.order("difficulty")
         case .relevance:
             break // Natural order from text search
         }
 
         // Pagination
-        query = query.range(from: filters.offset, to: filters.offset + filters.limit - 1)
+        transformQuery = transformQuery.range(from: filters.offset, to: filters.offset + filters.limit - 1)
 
-        let response = try await query.execute()
+        let response = try await transformQuery.execute()
 
         // Decode the joined response
         let decoder = JSONDecoder()
