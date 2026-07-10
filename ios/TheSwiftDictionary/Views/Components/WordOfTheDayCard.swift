@@ -38,7 +38,7 @@ struct WordOfTheDayCard: View {
                 
                 // Definition
                 Text(word.definition)
-                    .font(AppFont.body)
+                    .font(AppFont.bodyRegular)
                     .foregroundColor(AppColors.foreground(for: colorScheme))
                     .fixedSize(horizontal: false, vertical: true)
                 

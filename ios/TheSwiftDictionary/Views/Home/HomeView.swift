@@ -20,7 +20,7 @@ struct HomeView: View {
                         .multilineTextAlignment(.center)
                     
                     Text("A complete lexicon of vocabulary used across all eras of Taylor Swift's discography.")
-                        .font(AppFont.body)
+                        .font(AppFont.bodyRegular)
                         .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, AppSpacing.lg)
@@ -148,7 +148,7 @@ private struct TopSongRow: View {
             
             VStack(alignment: .leading, spacing: 2) {
                 Text(song.title)
-                    .font(AppFont.body)
+                    .font(AppFont.bodyRegular)
                     .fontWeight(.semibold)
                     .foregroundColor(AppColors.foreground(for: colorScheme))
                     .lineLimit(1)
