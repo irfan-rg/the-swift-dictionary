@@ -90,42 +90,8 @@ struct HomeView: View {
             .padding(.bottom, 40)
         }
         .background(AppColors.background(for: colorScheme))
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text("𝒯𝒮𝒟")
-                    .font(AppFont.branding(size: 20))
-                    .foregroundColor(AppColors.accent(for: colorScheme))
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                ThemeToggleButton(colorScheme: colorScheme)
-            }
-        }
         .task {
             await viewModel.loadData()
-        }
-    }
-}
-
-// MARK: - Theme Toggle Button
-
-/// Sun/Moon toggle matching the web header's theme button.
-private struct ThemeToggleButton: View {
-    let colorScheme: ColorScheme
-    @AppStorage("appThemeOverride") private var themeOverride: String = "system"
-    
-    var body: some View {
-        Button {
-            // Toggle between light and dark
-            if colorScheme == .dark {
-                themeOverride = "light"
-            } else {
-                themeOverride = "dark"
-            }
-        } label: {
-            Image(systemName: colorScheme == .dark ? "sun.max" : "moon.stars")
-                .font(.system(size: 16, weight: .light))
-                .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
         }
     }
 }
@@ -179,10 +145,18 @@ private struct HeroSection: View {
 private struct EraMarquee: View {
     let colorScheme: ColorScheme
     
+    // We duplicate the list to create a seamless infinite loop
+    private let doubledEras = allEras + allEras
+    
+    @State private var offset: CGFloat = 0
+    // Approximate width of one full set of eras (11 eras * ~100pt each = ~1100pt). 
+    // We scroll exactly this distance then reset.
+    // A better approach is using GeometryReader but for a simple marquee this works.
+    
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 16) {
-                ForEach(allEras) { era in
+        GeometryReader { geometry in
+            HStack(spacing: 24) {
+                ForEach(Array(doubledEras.enumerated()), id: \.offset) { _, era in
                     HStack(spacing: 6) {
                         Circle()
                             .fill(era.resolvedColor(for: colorScheme))
@@ -192,10 +166,23 @@ private struct EraMarquee: View {
                             .tracking(1)
                             .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
                     }
+                    .fixedSize()
                 }
             }
-            .padding(.horizontal, 16)
+            .offset(x: offset)
+            .onAppear {
+                // Calculate the width of ONE set of eras (half the content)
+                // Roughly: 11 eras * ~90px width each + 24px spacing = ~1250px
+                let singleSetWidth: CGFloat = 1250 
+                
+                // Animate infinitely
+                withAnimation(.linear(duration: 20).repeatForever(autoreverses: false)) {
+                    offset = -singleSetWidth
+                }
+            }
         }
+        .frame(height: 20)
+        .clipped()
     }
 }
 
