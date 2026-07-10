@@ -24,21 +24,21 @@ import Foundation
 ///   - Empty lines (skipped)
 ///   - Values with or without quotes
 ///   - Inline comments after values
-enum Environment {
+enum DotEnv {
 
     /// Parsed key-value store, loaded once on first access.
     private static let values: [String: String] = {
-        guard let url = Bundle.main.url(forResource: ".env", withExtension: nil)
-                ?? Bundle.main.url(forResource: "env", withExtension: "")
+        guard let url = Bundle.main.url(forResource: "Supabase.env", withExtension: nil)
+                ?? Bundle.main.url(forResource: "Supabase", withExtension: "env")
                 ?? findEnvFile()
         else {
-            print("⚠️ [Environment] .env file not found in bundle. Using empty config.")
-            print("   → Copy ios/.env.example to ios/.env and add it to your Xcode target.")
+            print("⚠️ [DotEnv] Supabase.env file not found in bundle. Using empty config.")
+            print("   → Copy ios/Supabase.env.example to ios/TheSwiftDictionary/Resources/Supabase.env")
             return [:]
         }
 
         guard let contents = try? String(contentsOf: url, encoding: .utf8) else {
-            print("⚠️ [Environment] Could not read .env file.")
+            print("⚠️ [DotEnv] Could not read .env file.")
             return [:]
         }
 
@@ -56,7 +56,7 @@ enum Environment {
         guard let value = values[key], !value.isEmpty else {
             fatalError(
                 """
-                ❌ [Environment] Missing required key: \(key)
+                ❌ [DotEnv] Missing required key: \(key)
                 
                 Make sure your ios/.env file contains:
                   \(key)=your_value_here
@@ -74,7 +74,7 @@ enum Environment {
     /// Supabase project URL — `SUPABASE_URL`
     static var supabaseURL: URL {
         guard let url = URL(string: require("SUPABASE_URL")) else {
-            fatalError("❌ [Environment] SUPABASE_URL is not a valid URL.")
+            fatalError("❌ [DotEnv] SUPABASE_URL is not a valid URL.")
         }
         return url
     }

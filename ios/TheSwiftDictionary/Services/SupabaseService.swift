@@ -20,8 +20,8 @@ import Supabase
 ///   2. Fill in your Supabase URL and anon key (same values as the web app's `.env.local`)
 ///   3. In Xcode, drag the `.env` file into the project and add it to the target
 private enum SupabaseConfig {
-    static let url = Environment.supabaseURL
-    static let anonKey = Environment.supabaseAnonKey
+    static let url = DotEnv.supabaseURL
+    static let anonKey = DotEnv.supabaseAnonKey
 }
 
 // MARK: - Supabase Service

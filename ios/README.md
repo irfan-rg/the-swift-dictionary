@@ -64,7 +64,7 @@ Then add them to your Xcode target and register in `Info.plist` under `UIAppFont
 
 1. **Copy the example file:**
    ```bash
-   cp ios/.env.example ios/.env
+   cp ios/Supabase.env.example ios/TheSwiftDictionary/Resources/Supabase.env
    ```
 
 2. **Fill in your real values** (same as your web app's `.env.local`):
@@ -73,12 +73,14 @@ Then add them to your Xcode target and register in `Info.plist` under `UIAppFont
    SUPABASE_ANON_KEY=your-anon-key-here
    ```
 
-3. **Add the `.env` to your Xcode target:**
-   - In Xcode, drag `ios/.env` into the project navigator under `TheSwiftDictionary/Resources`
-   - Make sure **"Copy items if needed"** is checked
-   - Make sure it's added to the **TheSwiftDictionary** target
+3. **Regenerate the project:**
+   Since `Supabase.env` does not start with a dot, XcodeGen will automatically see it and bundle it into your app on the next run:
+   ```bash
+   cd ios/
+   xcodegen generate
+   ```
 
-The `Environment.swift` helper reads this file from the app bundle at runtime — no secrets in code.
+The `DotEnv.swift` helper reads this file from the app bundle at runtime — no secrets in code.
 
 ## OAuth Setup
 
@@ -101,8 +103,7 @@ The `Environment.swift` helper reads this file from the app bundle at runtime �
 
 ```
 ios/
-├── .env.example                         # Template — copy to .env
-├── .env                                 # Your secrets (gitignored)
+├── Supabase.env.example                 # Template config
 ├── project.yml                          # XcodeGen config
 ├── README.md                            # This file
 ├── TheSwiftDictionary/
@@ -126,11 +127,12 @@ ios/
 │   ├── Services/
 │   │   ├── SupabaseService.swift        # Data layer (all queries)
 │   │   ├── AuthService.swift            # Auth state management
-│   │   └── Environment.swift            # .env file reader
+│   │   └── DotEnv.swift                 # .env file reader
 │   ├── ViewModels/                      # Phase 2+
 │   ├── Views/                           # Phase 2+
 │   ├── Extensions/                      # Phase 2+
 │   └── Resources/
+│       ├── Supabase.env                 # Your secrets (gitignored)
 │       ├── Assets.xcassets/             # Create in Xcode
 │       └── Fonts/                       # Google Fonts .ttf files
 └── TheSwiftDictionaryTests/             # Phase 7
