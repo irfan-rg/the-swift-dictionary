@@ -7,17 +7,18 @@ import SwiftUI
 
 struct EraPill: View {
     let slug: EraSlug
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         let info = eraMap[slug] ?? eraMap[.debut]!
         
-        Text(info.title.uppercased())
+        Text(info.label.uppercased())
             .font(AppFont.caption)
             .fontWeight(.semibold)
             .padding(.horizontal, AppSpacing.sm)
             .padding(.vertical, AppSpacing.xs)
-            .background(info.colorTheme.background)
-            .foregroundColor(info.colorTheme.text)
-            .cornerRadius(AppRadius.full)
+            .background(info.resolvedColor(for: colorScheme))
+            .foregroundColor(.white)
+            .cornerRadius(AppCorners.full)
     }
 }

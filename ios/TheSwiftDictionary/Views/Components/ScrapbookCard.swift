@@ -23,9 +23,9 @@ struct ScrapbookCard<Content: View>: View {
             .padding(AppSpacing.lg)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(AppColors.cardBackground(for: colorScheme))
-            .cornerRadius(AppRadius.md)
+            .cornerRadius(AppCorners.md)
             .overlay(
-                RoundedRectangle(cornerRadius: AppRadius.md)
+                RoundedRectangle(cornerRadius: AppCorners.md)
                     .stroke(AppColors.border(for: colorScheme), lineWidth: 1)
             )
             .shadow(

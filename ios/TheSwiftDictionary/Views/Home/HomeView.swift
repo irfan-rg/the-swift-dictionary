@@ -114,16 +114,16 @@ private struct EraTimelineCard: View {
             // Since we don't have album images bundled yet, we use a colored block
             // In Phase 4, we might replace this with actual album art via AsyncImage
             Rectangle()
-                .fill(info.colorTheme.background)
+                .fill(info.resolvedColor(for: colorScheme))
                 .frame(width: 120, height: 120)
-                .cornerRadius(AppRadius.md)
+                .cornerRadius(AppCorners.md)
                 .overlay(
-                    Text(info.title.prefix(1))
+                    Text(info.label.prefix(1))
                         .font(AppFont.branding(size: 48))
-                        .foregroundColor(info.colorTheme.text.opacity(0.3))
+                        .foregroundColor(.white.opacity(0.3))
                 )
             
-            Text(info.title)
+            Text(info.label)
                 .font(AppFont.caption)
                 .foregroundColor(AppColors.foreground(for: colorScheme))
                 .fontWeight(.medium)
@@ -171,9 +171,9 @@ private struct TopSongRow: View {
         }
         .padding()
         .background(AppColors.cardBackground(for: colorScheme))
-        .cornerRadius(AppRadius.md)
+        .cornerRadius(AppCorners.md)
         .overlay(
-            RoundedRectangle(cornerRadius: AppRadius.md)
+            RoundedRectangle(cornerRadius: AppCorners.md)
                 .stroke(AppColors.border(for: colorScheme), lineWidth: 1)
         )
     }
