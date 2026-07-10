@@ -13,16 +13,15 @@ import Supabase
 // MARK: - Configuration
 
 /// Supabase project configuration.
-/// These values come from your `.env.local`:
-///   NEXT_PUBLIC_SUPABASE_URL  → supabaseURL
-///   NEXT_PUBLIC_SUPABASE_ANON_KEY → supabaseAnonKey
+/// Values are read from the bundled `.env` file at runtime.
 ///
-/// ⚠️ IMPORTANT: Replace these with your actual Supabase project values
-///   before building. In production, read from a Config.plist or
-///   environment to avoid hardcoding secrets.
+/// Setup:
+///   1. Copy `ios/.env.example` → `ios/.env`
+///   2. Fill in your Supabase URL and anon key (same values as the web app's `.env.local`)
+///   3. In Xcode, drag the `.env` file into the project and add it to the target
 private enum SupabaseConfig {
-    static let url = URL(string: "https://YOUR_PROJECT.supabase.co")!
-    static let anonKey = "your-anon-key-here"
+    static let url = Environment.supabaseURL
+    static let anonKey = Environment.supabaseAnonKey
 }
 
 // MARK: - Supabase Service

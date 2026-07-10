@@ -62,18 +62,23 @@ Then add them to your Xcode target and register in `Info.plist` under `UIAppFont
 
 ## Supabase Configuration
 
-Edit `TheSwiftDictionary/Services/SupabaseService.swift` and replace the placeholder values:
+1. **Copy the example file:**
+   ```bash
+   cp ios/.env.example ios/.env
+   ```
 
-```swift
-private enum SupabaseConfig {
-    static let url = URL(string: "https://YOUR_PROJECT.supabase.co")!
-    static let anonKey = "your-anon-key-here"
-}
-```
+2. **Fill in your real values** (same as your web app's `.env.local`):
+   ```env
+   SUPABASE_URL=https://YOUR_PROJECT.supabase.co
+   SUPABASE_ANON_KEY=your-anon-key-here
+   ```
 
-Use the same values from your web app's `.env.local`:
-- `NEXT_PUBLIC_SUPABASE_URL` → `url`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY` → `anonKey`
+3. **Add the `.env` to your Xcode target:**
+   - In Xcode, drag `ios/.env` into the project navigator under `TheSwiftDictionary/Resources`
+   - Make sure **"Copy items if needed"** is checked
+   - Make sure it's added to the **TheSwiftDictionary** target
+
+The `Environment.swift` helper reads this file from the app bundle at runtime — no secrets in code.
 
 ## OAuth Setup
 
@@ -96,6 +101,8 @@ Use the same values from your web app's `.env.local`:
 
 ```
 ios/
+├── .env.example                         # Template — copy to .env
+├── .env                                 # Your secrets (gitignored)
 ├── project.yml                          # XcodeGen config
 ├── README.md                            # This file
 ├── TheSwiftDictionary/
@@ -118,7 +125,8 @@ ios/
 │   │   └── Typography.swift             # Custom font system
 │   ├── Services/
 │   │   ├── SupabaseService.swift        # Data layer (all queries)
-│   │   └── AuthService.swift            # Auth state management
+│   │   ├── AuthService.swift            # Auth state management
+│   │   └── Environment.swift            # .env file reader
 │   ├── ViewModels/                      # Phase 2+
 │   ├── Views/                           # Phase 2+
 │   ├── Extensions/                      # Phase 2+

@@ -28,6 +28,10 @@ Package.resolved
 # CocoaPods (not used but just in case)
 Pods/
 
+# Secrets (keep .env.example, ignore actual .env)
+.env
+!.env.example
+
 # macOS
 .DS_Store
 .AppleDouble
