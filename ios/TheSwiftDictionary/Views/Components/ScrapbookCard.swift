@@ -22,7 +22,7 @@ struct ScrapbookCard<Content: View>: View {
         content
             .padding(AppSpacing.lg)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(AppColors.cardBackground(for: colorScheme))
+            .background(AppColors.surfaceRaised(for: colorScheme))
             .cornerRadius(AppCorners.md)
             .overlay(
                 RoundedRectangle(cornerRadius: AppCorners.md)

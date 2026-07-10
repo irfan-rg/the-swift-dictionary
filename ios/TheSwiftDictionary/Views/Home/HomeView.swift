@@ -170,7 +170,7 @@ private struct TopSongRow: View {
             }
         }
         .padding()
-        .background(AppColors.cardBackground(for: colorScheme))
+        .background(AppColors.surfaceRaised(for: colorScheme))
         .cornerRadius(AppCorners.md)
         .overlay(
             RoundedRectangle(cornerRadius: AppCorners.md)
