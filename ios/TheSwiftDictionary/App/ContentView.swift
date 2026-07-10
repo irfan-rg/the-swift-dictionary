@@ -19,7 +19,7 @@ struct ContentView: View {
         TabView(selection: $selectedTab) {
             // ── Home ───────────────────────────────────────────
             NavigationStack {
-                HomeViewPlaceholder()
+                HomeView()
             }
             .tabItem {
                 Label("Home", systemImage: "house.fill")
@@ -78,32 +78,6 @@ enum AppTab: Hashable {
 }
 
 // MARK: - Placeholder Views (replaced in later phases)
-
-/// Placeholder for the Home screen — Phase 2.
-struct HomeViewPlaceholder: View {
-    @Environment(\.colorScheme) var colorScheme
-
-    var body: some View {
-        VStack(spacing: AppSpacing.lg) {
-            Image(systemName: "house.fill")
-                .font(.system(size: 40))
-                .foregroundColor(AppColors.accent(for: colorScheme))
-
-            Text("The Swift Dictionary")
-                .font(AppFont.branding(size: 22))
-                .foregroundColor(AppColors.foreground(for: colorScheme))
-
-            Text("Home · Word of the Day · Top Songs · Era Timeline")
-                .font(AppFont.caption)
-                .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
-                .multilineTextAlignment(.center)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(AppColors.background(for: colorScheme))
-        .navigationTitle("Home")
-        .navigationBarTitleDisplayMode(.inline)
-    }
-}
 
 /// Placeholder for the Dictionary screen — Phase 3.
 struct DictionaryViewPlaceholder: View {
