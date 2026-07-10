@@ -1,0 +1,96 @@
+name: TheSwiftDictionary
+options:
+  bundleIdPrefix: com.irfan
+  deploymentTarget:
+    iOS: "16.0"
+  xcodeVersion: "16.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: 1
+    GENERATE_INFOPLIST_FILE: YES
+    INFOPLIST_KEY_CFBundleDisplayName: "Swift Dictionary"
+    INFOPLIST_KEY_LSApplicationCategoryType: "public.app-category.reference"
+
+packages:
+  Supabase:
+    url: https://github.com/supabase/supabase-swift
+    from: "2.0.0"
+
+targets:
+  TheSwiftDictionary:
+    type: application
+    platform: iOS
+    sources:
+      - TheSwiftDictionary
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.irfan.theswiftdictionary
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: "UIInterfaceOrientationPortrait"
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        # Custom fonts registration
+        INFOPLIST_KEY_UIAppFonts: >-
+          CormorantGaramond-Regular.ttf
+          CormorantGaramond-Medium.ttf
+          CormorantGaramond-SemiBold.ttf
+          CormorantGaramond-Italic.ttf
+          CormorantGaramond-MediumItalic.ttf
+          CormorantGaramond-SemiBoldItalic.ttf
+          BricolageGrotesque-Regular.ttf
+          BricolageGrotesque-Medium.ttf
+          BricolageGrotesque-SemiBold.ttf
+          BricolageGrotesque-Bold.ttf
+          CinzelDecorative-Regular.ttf
+          CinzelDecorative-Bold.ttf
+          NothingYouCouldDo-Regular.ttf
+        # URL scheme for OAuth callback
+        INFOPLIST_KEY_CFBundleURLTypes: >-
+          $(inherited)
+    dependencies:
+      - package: Supabase
+    info:
+      path: TheSwiftDictionary/Info.plist
+      properties:
+        CFBundleURLTypes:
+          - CFBundleURLSchemes:
+              - theswiftdictionary
+            CFBundleURLName: "OAuth Callback"
+        UIAppFonts:
+          - CormorantGaramond-Regular.ttf
+          - CormorantGaramond-Medium.ttf
+          - CormorantGaramond-SemiBold.ttf
+          - CormorantGaramond-Italic.ttf
+          - CormorantGaramond-MediumItalic.ttf
+          - CormorantGaramond-SemiBoldItalic.ttf
+          - BricolageGrotesque-Regular.ttf
+          - BricolageGrotesque-Medium.ttf
+          - BricolageGrotesque-SemiBold.ttf
+          - BricolageGrotesque-Bold.ttf
+          - CinzelDecorative-Regular.ttf
+          - CinzelDecorative-Bold.ttf
+          - NothingYouCouldDo-Regular.ttf
+
+  TheSwiftDictionaryTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - TheSwiftDictionaryTests
+    dependencies:
+      - target: TheSwiftDictionary
+
+schemes:
+  TheSwiftDictionary:
+    build:
+      targets:
+        TheSwiftDictionary: all
+        TheSwiftDictionaryTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - TheSwiftDictionaryTests
