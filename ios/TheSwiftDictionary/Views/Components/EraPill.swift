@@ -13,10 +13,10 @@ struct EraPill: View {
         let info = eraMap[slug] ?? eraMap[.debut]!
         
         Text(info.label.uppercased())
-            .font(AppFont.caption)
-            .fontWeight(.semibold)
-            .padding(.horizontal, AppSpacing.sm)
-            .padding(.vertical, AppSpacing.xs)
+            .font(.system(size: 8, weight: .bold))
+            .tracking(1.5)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
             .background(info.resolvedColor(for: colorScheme))
             .foregroundColor(.white)
             .cornerRadius(AppCorners.full)

@@ -1,14 +1,10 @@
 // ────────────────────────────────────────────────────────────────
 // The Swift Dictionary — Scrapbook Card
-// Mirrors the `.scrapbook-card` CSS class for the Victorian aesthetic.
+// Generic vintage card container.
 // ────────────────────────────────────────────────────────────────
 
 import SwiftUI
 
-/// A container view that applies the signature Victorian scrapbook styling:
-/// torn edges (simulated via corner radius here, since full SVG torn edges
-/// are complex in pure SwiftUI, though we can add an overlay later if needed),
-/// a subtle border, off-white paper background, and a soft shadow.
 struct ScrapbookCard<Content: View>: View {
     
     @Environment(\.colorScheme) var colorScheme
@@ -23,13 +19,13 @@ struct ScrapbookCard<Content: View>: View {
             .padding(AppSpacing.lg)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(AppColors.surfaceRaised(for: colorScheme))
-            .cornerRadius(AppCorners.md)
+            .cornerRadius(AppCorners.sm)
             .overlay(
-                RoundedRectangle(cornerRadius: AppCorners.md)
+                RoundedRectangle(cornerRadius: AppCorners.sm)
                     .stroke(AppColors.border(for: colorScheme), lineWidth: 1)
             )
             .shadow(
-                color: Color.black.opacity(colorScheme == .dark ? 0.3 : 0.05),
+                color: Color.black.opacity(colorScheme == .dark ? 0.3 : 0.03),
                 radius: 10,
                 x: 0,
                 y: 4

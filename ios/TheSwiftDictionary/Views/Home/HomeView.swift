@@ -1,5 +1,13 @@
 // ────────────────────────────────────────────────────────────────
 // The Swift Dictionary — Home View
+// Mirrors: src/app/page.tsx + mobile layouts of each component
+//
+// Sections (top to bottom, matching the web):
+//   1. Hero — branding title, handwriting tagline, description
+//   2. Word of the Day — polaroid flip card
+//   3. Top Songs — diary/journal style with spiral binder
+//   4. Era Timeline — horizontal album cover circles
+//   5. Ornate end mark
 // ────────────────────────────────────────────────────────────────
 
 import SwiftUI
@@ -9,172 +17,401 @@ struct HomeView: View {
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: AppSpacing.xl) {
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 40) {
                 
-                // ── Hero Section ─────────────────────────────
-                VStack(spacing: AppSpacing.md) {
-                    Text("The Swift Dictionary")
-                        .font(AppFont.branding(size: 36))
-                        .foregroundColor(AppColors.foreground(for: colorScheme))
-                        .multilineTextAlignment(.center)
-                    
-                    Text("A complete lexicon of vocabulary used across all eras of Taylor Swift's discography.")
-                        .font(AppFont.bodyRegular)
-                        .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, AppSpacing.lg)
-                }
-                .padding(.top, AppSpacing.xl)
+                // ── 1. Hero Section ──────────────────────────
+                HeroSection(colorScheme: colorScheme)
                 
                 // ── Loading / Error State ────────────────────
                 if viewModel.isLoading {
-                    ProgressView()
-                        .padding(.vertical, AppSpacing.xl)
+                    VStack(spacing: 16) {
+                        ProgressView()
+                            .tint(AppColors.accent(for: colorScheme))
+                        Text("Loading dictionary...")
+                            .font(.system(size: 12, weight: .medium))
+                            .tracking(2)
+                            .textCase(.uppercase)
+                            .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
+                    }
+                    .padding(.vertical, 60)
                 } else if let error = viewModel.errorMessage {
-                    Text(error)
-                        .foregroundColor(.red)
-                        .padding()
+                    VStack(spacing: 12) {
+                        Image(systemName: "wifi.exclamationmark")
+                            .font(.system(size: 32))
+                            .foregroundColor(AppColors.accent(for: colorScheme))
+                        Text(error)
+                            .font(AppFont.bodyRegular)
+                            .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
+                            .multilineTextAlignment(.center)
+                        Button("Try Again") {
+                            Task { await viewModel.loadData() }
+                        }
+                        .font(.system(size: 12, weight: .semibold))
+                        .tracking(1.5)
+                        .textCase(.uppercase)
+                        .foregroundColor(AppColors.accent(for: colorScheme))
+                        .padding(.top, 8)
+                    }
+                    .padding(.vertical, 40)
                 } else {
                     
-                    // ── Word of the Day ──────────────────────
+                    // ── 2. Word of the Day ────────────────────
                     if let wotd = viewModel.wordOfTheDay {
-                        VStack(alignment: .leading, spacing: AppSpacing.md) {
-                            SectionHeader(title: "Word of the Day")
-                            WordOfTheDayCard(word: wotd)
-                                .padding(.horizontal, AppSpacing.md)
-                        }
+                        WordOfTheDayCard(word: wotd)
+                            .padding(.horizontal, 16)
                     }
                     
-                    // ── Era Timeline ─────────────────────────
-                    VStack(alignment: .leading, spacing: AppSpacing.md) {
-                        SectionHeader(title: "The Eras")
-                        
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: AppSpacing.md) {
-                                // Add leading padding inside the scrollview for proper inset behavior
-                                Spacer().frame(width: AppSpacing.xs)
-                                
-                                ForEach(EraSlug.allCases, id: \.self) { era in
-                                    EraTimelineCard(era: era)
-                                }
-                                
-                                Spacer().frame(width: AppSpacing.xs)
-                            }
-                        }
-                    }
+                    // ── 3. Top Songs (Diary Journal) ──────────
+                    TopSongsSection(
+                        songs: viewModel.topSongs,
+                        colorScheme: colorScheme
+                    )
                     
-                    // ── Top Songs ────────────────────────────
-                    VStack(alignment: .leading, spacing: AppSpacing.md) {
-                        SectionHeader(title: "Most Vocabulary")
-                        
-                        VStack(spacing: AppSpacing.sm) {
-                            ForEach(Array(viewModel.topSongs.enumerated()), id: \.element.id) { index, song in
-                                TopSongRow(rank: index + 1, song: song)
-                            }
-                        }
-                        .padding(.horizontal, AppSpacing.md)
-                    }
+                    // ── Divider ───────────────────────────────
+                    Rectangle()
+                        .fill(AppColors.border(for: colorScheme))
+                        .frame(height: 1)
+                        .padding(.horizontal, 16)
+                    
+                    // ── 4. Era Timeline ───────────────────────
+                    EraTimelineSection(
+                        viewModel: viewModel,
+                        colorScheme: colorScheme
+                    )
+                    
+                    // ── 5. Ornate End Mark ────────────────────
+                    Text("✧")
+                        .font(.system(size: 20))
+                        .foregroundColor(AppColors.accent(for: colorScheme).opacity(0.4))
+                        .padding(.vertical, 20)
                 }
             }
-            .padding(.bottom, AppSpacing.xxl)
+            .padding(.bottom, 40)
         }
         .background(AppColors.background(for: colorScheme))
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("𝒯𝒮𝒟")
+                    .font(AppFont.branding(size: 20))
+                    .foregroundColor(AppColors.accent(for: colorScheme))
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                ThemeToggleButton(colorScheme: colorScheme)
+            }
+        }
         .task {
-            // Load data when view appears
             await viewModel.loadData()
         }
     }
 }
 
-// MARK: - Subcomponents
+// MARK: - Theme Toggle Button
 
-/// Simple reusable section header
-private struct SectionHeader: View {
-    let title: String
-    @Environment(\.colorScheme) var colorScheme
+/// Sun/Moon toggle matching the web header's theme button.
+private struct ThemeToggleButton: View {
+    let colorScheme: ColorScheme
+    @AppStorage("appThemeOverride") private var themeOverride: String = "system"
     
     var body: some View {
-        Text(title)
-            .font(AppFont.sectionTitle)
-            .foregroundColor(AppColors.foreground(for: colorScheme))
-            .padding(.horizontal, AppSpacing.md)
-    }
-}
-
-/// A card for the horizontal era timeline
-private struct EraTimelineCard: View {
-    let era: EraSlug
-    @Environment(\.colorScheme) var colorScheme
-    
-    var body: some View {
-        let info = eraMap[era]!
-        
-        VStack {
-            // Since we don't have album images bundled yet, we use a colored block
-            // In Phase 4, we might replace this with actual album art via AsyncImage
-            Rectangle()
-                .fill(info.resolvedColor(for: colorScheme))
-                .frame(width: 120, height: 120)
-                .cornerRadius(AppCorners.md)
-                .overlay(
-                    Text(info.label.prefix(1))
-                        .font(AppFont.branding(size: 48))
-                        .foregroundColor(.white.opacity(0.3))
-                )
-            
-            Text(info.label)
-                .font(AppFont.caption)
-                .foregroundColor(AppColors.foreground(for: colorScheme))
-                .fontWeight(.medium)
-                .lineLimit(1)
+        Button {
+            // Toggle between light and dark
+            if colorScheme == .dark {
+                themeOverride = "light"
+            } else {
+                themeOverride = "dark"
+            }
+        } label: {
+            Image(systemName: colorScheme == .dark ? "sun.max" : "moon.stars")
+                .font(.system(size: 16, weight: .light))
+                .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
         }
-        .frame(width: 120)
     }
 }
 
-/// A row for the Top Songs list
+// MARK: - Hero Section
+
+/// Mirrors: src/components/HeroSection.tsx (mobile layout)
+private struct HeroSection: View {
+    let colorScheme: ColorScheme
+    
+    var body: some View {
+        VStack(spacing: 16) {
+            // Handwriting tagline (rotated slightly like the web)
+            Text("a vocabulary for every era...")
+                .font(AppFont.handwriting(size: 20))
+                .foregroundColor(AppColors.accent(for: colorScheme))
+                .rotationEffect(.degrees(-2))
+                .padding(.top, 20)
+            
+            // Hero Title — THE SWIFT DICTIONARY
+            VStack(spacing: 0) {
+                Text("The Swift")
+                    .font(AppFont.branding(size: 44))
+                    .foregroundColor(AppColors.foreground(for: colorScheme))
+                Text("Dictionary")
+                    .font(AppFont.branding(size: 44))
+                    .foregroundColor(AppColors.foreground(for: colorScheme))
+            }
+            .multilineTextAlignment(.center)
+            .padding(.top, 16)
+            
+            // Description
+            Text("Every lyric tells a story. Every word carries a meaning.\nUncover the sophistication hidden in her discography.")
+                .font(.system(size: 15, weight: .light))
+                .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
+                .multilineTextAlignment(.center)
+                .lineSpacing(4)
+                .padding(.horizontal, 20)
+                .padding(.top, 8)
+            
+            // Era Marquee Dots
+            EraMarquee(colorScheme: colorScheme)
+                .padding(.top, 16)
+        }
+    }
+}
+
+// MARK: - Era Marquee (scrolling era dots)
+
+/// Mirrors: HeroSection.tsx → scrolling marquee of era dots at bottom
+private struct EraMarquee: View {
+    let colorScheme: ColorScheme
+    
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 16) {
+                ForEach(allEras) { era in
+                    HStack(spacing: 6) {
+                        Circle()
+                            .fill(era.resolvedColor(for: colorScheme))
+                            .frame(width: 6, height: 6)
+                        Text(era.label)
+                            .font(.system(size: 11, weight: .medium))
+                            .tracking(1)
+                            .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
+                    }
+                }
+            }
+            .padding(.horizontal, 16)
+        }
+    }
+}
+
+// MARK: - Top Songs Section
+
+/// Mirrors: src/components/TopSongs.tsx (mobile layout)
+/// Diary/journal style with spiral binder holes on the left.
+private struct TopSongsSection: View {
+    let songs: [SongWithAlbum]
+    let colorScheme: ColorScheme
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            // The Diary Page Container
+            HStack(spacing: 0) {
+                // Spiral Binder Column
+                VStack(spacing: 0) {
+                    ForEach(0..<12, id: \.self) { _ in
+                        Spacer()
+                        Circle()
+                            .fill(AppColors.background(for: colorScheme))
+                            .frame(width: 8, height: 8)
+                            .overlay(
+                                Circle()
+                                    .stroke(AppColors.border(for: colorScheme), lineWidth: 1)
+                            )
+                        Spacer()
+                    }
+                }
+                .frame(width: 24)
+                .overlay(
+                    Rectangle()
+                        .fill(AppColors.border(for: colorScheme))
+                        .frame(width: 1),
+                    alignment: .trailing
+                )
+                .padding(.vertical, 24)
+                
+                // Content
+                VStack(alignment: .leading, spacing: 0) {
+                    // Header
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("The Mastermind Collection")
+                            .font(.system(size: 10, weight: .medium))
+                            .tracking(2)
+                            .textCase(.uppercase)
+                            .foregroundColor(AppColors.accent(for: colorScheme).opacity(0.8))
+                        
+                        Text("Top Songs")
+                            .font(AppFont.display(size: 32, weight: .medium))
+                            .foregroundColor(AppColors.foreground(for: colorScheme))
+                    }
+                    .padding(.bottom, 16)
+                    
+                    // Song List
+                    ForEach(Array(songs.enumerated()), id: \.element.id) { index, song in
+                        TopSongRow(rank: index + 1, song: song, colorScheme: colorScheme)
+                    }
+                    
+                    // Mobile explore link
+                    HStack {
+                        Spacer()
+                        Text("Explore Index")
+                            .font(.system(size: 11, weight: .medium))
+                            .tracking(2)
+                            .textCase(.uppercase)
+                            .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
+                        Spacer()
+                    }
+                    .padding(.top, 16)
+                }
+                .padding(.leading, 16)
+                .padding(.trailing, 12)
+                .padding(.vertical, 24)
+            }
+            .background(AppColors.surfaceRaised(for: colorScheme))
+            .overlay(
+                RoundedRectangle(cornerRadius: 2)
+                    .stroke(AppColors.border(for: colorScheme), lineWidth: 1)
+            )
+            .cornerRadius(2)
+        }
+        .padding(.horizontal, 16)
+    }
+}
+
+/// Individual song row — mirrors TopSongs.tsx row layout
 private struct TopSongRow: View {
     let rank: Int
     let song: SongWithAlbum
-    @Environment(\.colorScheme) var colorScheme
+    let colorScheme: ColorScheme
     
     var body: some View {
-        HStack(spacing: AppSpacing.md) {
+        HStack(alignment: .center, spacing: 12) {
+            // Rank Number
             Text("\(rank)")
-                .font(AppFont.sectionTitle)
-                .foregroundColor(AppColors.accent(for: colorScheme))
-                .frame(width: 24, alignment: .center)
+                .font(AppFont.displayItalic(size: 20))
+                .foregroundColor(AppColors.accent(for: colorScheme).opacity(0.8))
+                .frame(width: 20, alignment: .trailing)
             
-            VStack(alignment: .leading, spacing: 2) {
+            // Song Info
+            VStack(alignment: .leading, spacing: 3) {
                 Text(song.title)
-                    .font(AppFont.bodyRegular)
-                    .fontWeight(.semibold)
+                    .font(AppFont.display(size: 17, weight: .medium))
                     .foregroundColor(AppColors.foreground(for: colorScheme))
                     .lineLimit(1)
                 
-                HStack {
-                    EraPill(slug: song.albumSlug)
+                HStack(spacing: 6) {
+                    Text(song.albumTitle)
+                        .font(.system(size: 9, weight: .medium))
+                        .tracking(1.5)
+                        .textCase(.uppercase)
+                        .foregroundColor(AppColors.foregroundMuted(for: colorScheme).opacity(0.8))
+                    
+                    Circle()
+                        .fill(AppColors.border(for: colorScheme).opacity(0.3))
+                        .frame(width: 3, height: 3)
+                    
+                    Text("\(song.vocabCount) words")
+                        .font(.system(size: 10))
+                        .foregroundColor(AppColors.foregroundMuted(for: colorScheme).opacity(0.7))
                 }
             }
             
             Spacer()
+        }
+        .padding(.vertical, 10)
+        .overlay(
+            Rectangle()
+                .fill(AppColors.border(for: colorScheme))
+                .frame(height: 1),
+            alignment: .bottom
+        )
+    }
+}
+
+// MARK: - Era Timeline Section
+
+/// Mirrors: src/components/EraTimeline.tsx → mobile layout
+/// Horizontal scroll of album cover circles with era labels.
+private struct EraTimelineSection: View {
+    @ObservedObject var viewModel: HomeViewModel
+    let colorScheme: ColorScheme
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            // Section Label
+            Text("The Eras")
+                .font(.system(size: 10, weight: .medium))
+                .tracking(2.5)
+                .textCase(.uppercase)
+                .foregroundColor(AppColors.foregroundMuted(for: colorScheme).opacity(0.5))
             
-            VStack(alignment: .trailing, spacing: 2) {
-                Text("\(song.vocabCount)")
-                    .font(AppFont.display(size: 20))
-                    .foregroundColor(AppColors.foreground(for: colorScheme))
-                Text("words")
-                    .font(.system(size: 10, weight: .medium, design: .serif))
-                    .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
+            // Horizontal Scroll of Album Covers
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 16) {
+                    ForEach(allEras) { era in
+                        VStack(spacing: 10) {
+                            // Album Cover Circle
+                            if let coverURL = viewModel.coverURL(for: era.slug) {
+                                AsyncImage(url: coverURL) { phase in
+                                    switch phase {
+                                    case .success(let image):
+                                        image
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                    case .failure:
+                                        eraPlaceholder(for: era)
+                                    case .empty:
+                                        ProgressView()
+                                            .frame(width: 68, height: 68)
+                                    @unknown default:
+                                        eraPlaceholder(for: era)
+                                    }
+                                }
+                                .frame(width: 68, height: 68)
+                                .clipShape(RoundedRectangle(cornerRadius: AppCorners.md))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: AppCorners.md)
+                                        .stroke(AppColors.border(for: colorScheme), lineWidth: 1)
+                                )
+                            } else {
+                                eraPlaceholder(for: era)
+                                    .frame(width: 68, height: 68)
+                                    .clipShape(RoundedRectangle(cornerRadius: AppCorners.md))
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: AppCorners.md)
+                                            .stroke(AppColors.border(for: colorScheme), lineWidth: 1)
+                                    )
+                            }
+                            
+                            // Era Label
+                            Text(era.label)
+                                .font(.system(size: 9, weight: .medium))
+                                .tracking(1)
+                                .textCase(.uppercase)
+                                .foregroundColor(era.resolvedColor(for: colorScheme))
+                                .lineLimit(1)
+                        }
+                        .frame(width: 80)
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.bottom, 8)
             }
         }
-        .padding()
-        .background(AppColors.surfaceRaised(for: colorScheme))
-        .cornerRadius(AppCorners.md)
-        .overlay(
-            RoundedRectangle(cornerRadius: AppCorners.md)
-                .stroke(AppColors.border(for: colorScheme), lineWidth: 1)
-        )
+    }
+    
+    @ViewBuilder
+    private func eraPlaceholder(for era: EraInfo) -> some View {
+        Rectangle()
+            .fill(era.resolvedColor(for: colorScheme).opacity(0.2))
+            .overlay(
+                Text(era.label.prefix(1))
+                    .font(AppFont.branding(size: 28))
+                    .foregroundColor(era.resolvedColor(for: colorScheme).opacity(0.5))
+            )
     }
 }

@@ -10,6 +10,7 @@ final class HomeViewModel: ObservableObject {
     
     @Published var wordOfTheDay: WordWithDetails?
     @Published var topSongs: [SongWithAlbum] = []
+    @Published var albums: [Album] = []
     
     @Published var isLoading = true
     @Published var errorMessage: String?
@@ -22,14 +23,16 @@ final class HomeViewModel: ObservableObject {
         errorMessage = nil
         
         do {
-            // Run both network requests in parallel
+            // Run all three network requests in parallel
             async let fetchWOTD = supabase.fetchWordOfTheDay()
             async let fetchSongs = supabase.fetchTopSongs(limit: 5)
+            async let fetchAlbums = supabase.fetchAlbums()
             
-            let (wotdResult, songsResult) = try await (fetchWOTD, fetchSongs)
+            let (wotdResult, songsResult, albumsResult) = try await (fetchWOTD, fetchSongs, fetchAlbums)
             
             self.wordOfTheDay = wotdResult
             self.topSongs = songsResult
+            self.albums = albumsResult
             
         } catch {
             print("❌ [HomeViewModel] Failed to load data: \(error)")
@@ -37,5 +40,15 @@ final class HomeViewModel: ObservableObject {
         }
         
         isLoading = false
+    }
+    
+    /// Get the cover URL for a given era slug from loaded albums.
+    func coverURL(for slug: EraSlug) -> URL? {
+        guard let album = albums.first(where: { $0.slug == slug }),
+              let urlString = album.coverUrl,
+              let url = URL(string: urlString) else {
+            return nil
+        }
+        return url
     }
 }

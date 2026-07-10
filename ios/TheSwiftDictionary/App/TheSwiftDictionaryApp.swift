@@ -10,15 +10,28 @@ struct TheSwiftDictionaryApp: App {
 
     /// Auth service injected as an environment object for the entire app.
     @StateObject private var authService = AuthService()
+    
+    /// User-selected theme override. "system" follows device, "light"/"dark" are forced.
+    @AppStorage("appThemeOverride") private var themeOverride: String = "system"
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(authService)
+                .preferredColorScheme(resolvedScheme)
                 .onOpenURL { url in
                     // Handle OAuth callback (e.g. theswiftdictionary://auth/callback)
                     handleDeepLink(url)
                 }
+        }
+    }
+    
+    /// Maps the stored string to an optional ColorScheme.
+    private var resolvedScheme: ColorScheme? {
+        switch themeOverride {
+        case "light": return .light
+        case "dark": return .dark
+        default: return nil // system
         }
     }
 
