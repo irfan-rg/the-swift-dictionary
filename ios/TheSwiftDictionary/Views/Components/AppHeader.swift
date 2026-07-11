@@ -17,7 +17,7 @@ struct AppHeader: View {
             // ── Left: TSD Brand Logo ──
             // Web: BrandLogo short → "TSD" in font-branding, tracking-[-0.1em]
             Text("TSD")
-                .font(AppFont.branding(size: 20, weight: .medium))
+                .font(AppFont.branding(size: 20))
                 .tracking(-2) // -0.1em at 20pt ≈ -2pt
                 .foregroundColor(AppColors.accent(for: colorScheme))
             
