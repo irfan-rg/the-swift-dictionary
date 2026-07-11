@@ -142,9 +142,9 @@ struct HomeView: View {
             ZStack(alignment: .top) {
                 AppColors.background(for: colorScheme)
                 
-                // Animated pull-to-toggle bracelet revealed behind the scrollview
+                // Animated pull-to-toggle spotlight beam revealed behind the scrollview
                 if pullOffset > 0 {
-                    FriendshipBraceletIndicator(offset: pullOffset, colorScheme: colorScheme, isReady: isReadyToToggle)
+                    SpotlightIndicator(offset: pullOffset, colorScheme: colorScheme, isReady: isReadyToToggle)
                 }
             }
             .ignoresSafeArea()
@@ -454,56 +454,52 @@ struct ScrollOffsetKey: PreferenceKey {
     }
 }
 
-// MARK: - Friendship Bracelet Pull Indicator
+// MARK: - Eras Tour Spotlight Indicator
 
-/// A creative Taylor Swift themed pull-to-toggle indicator that looks like a friendship bracelet
-private struct FriendshipBraceletIndicator: View {
+/// A highly cinematic Taylor Swift themed pull indicator that shines a light beam from the Dynamic Island.
+private struct SpotlightIndicator: View {
     let offset: CGFloat
     let colorScheme: ColorScheme
     let isReady: Bool
     
     var body: some View {
-        let word = colorScheme == .dark ? "DAYLIGHT" : "MIDNIGHT"
+        let lyric = colorScheme == .dark ? "step into the daylight..." : "meet me at midnight..."
         let progress = min(max(offset / 90.0, 0), 1.0)
         
-        VStack(spacing: 2) {
-            // The string
-            Rectangle()
-                .fill(AppColors.borderFocus(for: colorScheme))
-                .frame(width: 2, height: max(0, offset - CGFloat(word.count * 26))) // String adjusts to fit beads
-            
-            // The beads
-            ForEach(Array(word.enumerated()), id: \.offset) { index, char in
-                BraceletBead(letter: char, colorScheme: colorScheme)
-                    // Scatter physics when ready to snap!
-                    .offset(x: isReady ? CGFloat.random(in: -30...30) : 0,
-                            y: isReady ? CGFloat.random(in: -10...50) : 0)
-                    .rotationEffect(.degrees(isReady ? Double.random(in: -90...90) : 0))
-                    .opacity(isReady ? 0 : 1)
-                    .animation(.spring(response: 0.3, dampingFraction: 0.5).delay(Double(index) * 0.015), value: isReady)
+        ZStack(alignment: .top) {
+            // The Spotlight Beam extending down from the dynamic island
+            Path { path in
+                let width = UIScreen.main.bounds.width
+                let islandTop: CGFloat = 30
+                // Notch is roughly 120pt wide. Start beam from edges of notch.
+                path.move(to: CGPoint(x: width/2 - 50, y: islandTop))
+                path.addLine(to: CGPoint(x: width/2 + 50, y: islandTop))
+                // The beam widens as it reaches down
+                path.addLine(to: CGPoint(x: width/2 + 120, y: islandTop + max(offset, 10)))
+                path.addLine(to: CGPoint(x: width/2 - 120, y: islandTop + max(offset, 10)))
+                path.closeSubpath()
             }
-        }
-        // Offset upwards so they pull down out of the dynamic island area
-        .padding(.top, max(0, offset - 50))
-        .opacity(progress)
-    }
-}
-
-/// An individual Friendship Bracelet bead
-private struct BraceletBead: View {
-    let letter: Character
-    let colorScheme: ColorScheme
-    
-    var body: some View {
-        ZStack {
-            Circle()
-                .fill(Color.white)
-                .frame(width: 24, height: 24)
-                .shadow(color: Color.black.opacity(0.15), radius: 2, y: 1)
+            .fill(
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        (isReady ? AppColors.foreground(for: colorScheme) : AppColors.accent(for: colorScheme)).opacity(0.35 * progress),
+                        Color.clear
+                    ]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isReady)
             
-            Text(String(letter))
-                .font(.system(size: 14, weight: .bold))
-                .foregroundColor(.black)
+            // The illuminated lyric text
+            Text(lyric)
+                .font(AppFont.handwriting(size: 22))
+                .foregroundColor(isReady ? AppColors.foreground(for: colorScheme) : AppColors.accent(for: colorScheme))
+                .opacity(progress)
+                .scaleEffect(isReady ? 1.08 : 1.0)
+                // Positioned in the middle of the growing beam
+                .padding(.top, max(30, offset - 10))
+                .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isReady)
         }
     }
 }

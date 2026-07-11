@@ -85,8 +85,8 @@ struct ThemeTransitionOverlay: View {
                         // The expanding circle that punches a hole in the mask
                         Circle()
                             .frame(width: manager.maskRadius * 2, height: manager.maskRadius * 2)
-                            // Starts exactly from the top center (where the string is pulled)
-                            .position(x: UIScreen.main.bounds.width / 2, y: 0)
+                            // Starts exactly from the center of the Dynamic Island (y: 30)
+                            .position(x: UIScreen.main.bounds.width / 2, y: 30)
                             .blendMode(.destinationOut)
                     }
                     .compositingGroup()
