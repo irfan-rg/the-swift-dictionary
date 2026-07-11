@@ -113,6 +113,11 @@ enum AppColors {
         scheme == .dark ? .white.opacity(0.08) : Color(hex: "E8DFD3")
     }
 
+    /// Returns the focused border color for the given scheme.
+    static func borderFocus(for scheme: ColorScheme) -> Color {
+        scheme == .dark ? .white.opacity(0.2) : Color(hex: "C2B2A4")
+    }
+
     /// Returns the muted foreground for the given scheme.
     static func foregroundMuted(for scheme: ColorScheme) -> Color {
         scheme == .dark ? Color(hex: "A39B93") : Color(hex: "7A6F68")
