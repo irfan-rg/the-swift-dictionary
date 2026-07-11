@@ -12,6 +12,11 @@ import SwiftUI
 struct HomeView: View {
     @StateObject private var viewModel = HomeViewModel()
     @Environment(\.colorScheme) var colorScheme
+    @AppStorage("appThemeOverride") private var themeOverride: String = "system"
+    
+    // For Pull-to-Toggle gesture
+    @State private var pullOffset: CGFloat = 0
+    @State private var isToggling = false
 
     var body: some View {
         // GeometryReader measures the actual available height AFTER the
@@ -20,6 +25,12 @@ struct HomeView: View {
         GeometryReader { geo in
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 0) {
+                    
+                    // Invisible tracker for scroll offset
+                    GeometryReader { proxy in
+                        Color.clear.preference(key: ScrollOffsetKey.self, value: proxy.frame(in: .named("scroll")).minY)
+                    }
+                    .frame(height: 0)
 
                     // ── 1. Hero — fills exactly the available viewport ──
                     HeroSection(colorScheme: colorScheme)
@@ -97,8 +108,39 @@ struct HomeView: View {
                 .padding(.bottom, 60)
             }
         } // End ScrollView
+        .coordinateSpace(name: "scroll")
+        .onPreferenceChange(ScrollOffsetKey.self) { value in
+            pullOffset = value
+            
+            // Trigger threshold is 90pt
+            if value > 90 && !isToggling {
+                isToggling = true
+                let generator = UIImpactFeedbackGenerator(style: .heavy)
+                generator.impactOccurred()
+                themeOverride = colorScheme == .dark ? "light" : "dark"
+            } else if value < 40 {
+                isToggling = false // Reset when scrolling back up
+            }
+        }
         } // End GeometryReader
-        .background(AppColors.background(for: colorScheme))
+        .background(
+            ZStack(alignment: .top) {
+                AppColors.background(for: colorScheme)
+                
+                // Animated pull-to-toggle indicator revealed behind the scrollview
+                if pullOffset > 0 {
+                    let progress = min(pullOffset / 90.0, 1.0)
+                    Image(systemName: colorScheme == .dark ? "sun.max.fill" : "moon.stars.fill")
+                        .font(.system(size: 24))
+                        .foregroundColor(AppColors.accent(for: colorScheme))
+                        .rotationEffect(.degrees(Double(progress * 180)))
+                        .scaleEffect(progress)
+                        .opacity(progress)
+                        .padding(.top, 40)
+                }
+            }
+            .ignoresSafeArea()
+        )
         .task {
             await viewModel.loadData()
         }
@@ -391,5 +433,15 @@ private struct EraTimelineSection: View {
                     .font(AppFont.branding(size: 28))
                     .foregroundColor(era.resolvedColor(for: colorScheme).opacity(0.5))
             )
+    }
+}
+
+// MARK: - Scroll Offset Tracker
+
+/// Preference key used to track the ScrollView's vertical offset for the Pull-to-Toggle gesture
+struct ScrollOffsetKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value += nextValue()
     }
 }
