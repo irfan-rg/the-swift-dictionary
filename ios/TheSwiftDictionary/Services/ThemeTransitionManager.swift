@@ -11,10 +11,22 @@ class ThemeTransitionManager: ObservableObject {
     
     private init() {}
     
-    /// Triggers a radial theme transition.
+    /// Captures the screen silently in the background while the user is still pulling.
+    func preCaptureScreen() {
+        guard let window = getMainWindow() else { return }
+        
+        UIGraphicsBeginImageContextWithOptions(window.bounds.size, false, 0.0)
+        window.drawHierarchy(in: window.bounds, afterScreenUpdates: false)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        self.snapshotImage = image
+    }
+    
+    /// Triggers the radial theme transition instantly using the pre-captured snapshot.
     /// - Parameter themeToggleAction: A closure that performs the actual theme state flip.
-    func triggerTransition(themeToggleAction: @escaping () -> Void) {
-        guard let window = getMainWindow() else {
+    func executeTransition(themeToggleAction: @escaping () -> Void) {
+        guard snapshotImage != nil, let window = getMainWindow() else {
             // Fallback if window isn't accessible
             withAnimation(.easeInOut(duration: 0.4)) {
                 themeToggleAction()
@@ -22,14 +34,8 @@ class ThemeTransitionManager: ObservableObject {
             return
         }
         
-        // 1. Capture the exact current state of the screen
-        UIGraphicsBeginImageContextWithOptions(window.bounds.size, false, 0.0)
-        window.drawHierarchy(in: window.bounds, afterScreenUpdates: false)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
         
         // 2. Set the overlay state
-        self.snapshotImage = image
         self.maskRadius = 0
         self.isTransitioning = true
         
