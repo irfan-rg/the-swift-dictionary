@@ -186,10 +186,9 @@ private struct HeroSection: View {
                     .font(AppFont.handwriting(size: 22))
                     .foregroundColor(AppColors.accent(for: colorScheme))
                     .rotationEffect(.degrees(-2))
-                    .padding(.bottom, 24)
+                    .padding(.bottom, 44) // Match web: mb-3 (12) + mt-8 (32) = 44px
 
                 // Hero Title — "The Swift Dictionary" with small-caps:
-                // T, S, D are full-height; other letters are synthesised small-caps.
                 VStack(spacing: -2) {
                     Text("The Swift")
                         .font(AppFont.brandingSmallCaps(size: 48))
@@ -201,7 +200,7 @@ private struct HeroSection: View {
                         .tracking(1)
                 }
                 .multilineTextAlignment(.center)
-                .padding(.bottom, 28)
+                .padding(.bottom, 32) // Match web: mb-8 (32px)
 
                 // Description
                 Text("Every lyric tells a story. Every word carries a meaning.\nUncover the sophistication hidden in her discography.")
@@ -211,13 +210,13 @@ private struct HeroSection: View {
                     .lineSpacing(5)
                     .padding(.horizontal, 28)
             }
-            // Slightly above true center to give room for the marquee at bottom
+            // Centered in the available space above the marquee
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-            .padding(.bottom, 64) // nudge up so marquee doesn't overlap
+            .padding(.bottom, 40) // Adjust vertical center slightly upward to visually balance with the bottom marquee
 
             // ── Era Marquee — always at bottom ──────────────────
             AutoScrollingMarquee(colorScheme: colorScheme)
-                .padding(.bottom, 32)
+                .padding(.bottom, 32) // Match web: pb-8 (32px)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
@@ -231,15 +230,52 @@ private struct HeroSection: View {
 private struct AutoScrollingMarquee: View {
     let colorScheme: ColorScheme
 
-    // Double the list so we can seamlessly loop
-    private let items: [EraInfo] = allEras + allEras
-
     @State private var offset: CGFloat = 0
-    @State private var singleWidth: CGFloat = 0
+    @State private var blockWidth: CGFloat = 0
 
     var body: some View {
-        HStack(spacing: 20) {
-            ForEach(Array(items.enumerated()), id: \.offset) { _, era in
+        HStack(spacing: 0) {
+            // We place two identical blocks side by side.
+            // When offset reaches -blockWidth, the animation instantly restarts at 0
+            // and because block 2 is identical to block 1, the user sees no jump!
+            ForEach(0..<2, id: \.self) { _ in
+                EraMarqueeBlock(colorScheme: colorScheme)
+                    .background(
+                        GeometryReader { geo in
+                            Color.clear.onAppear {
+                                // Measure exactly one block including its trailing padding
+                                if blockWidth == 0 {
+                                    blockWidth = geo.size.width
+                                    startScrolling()
+                                }
+                            }
+                        }
+                    )
+            }
+        }
+        .offset(x: offset)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .clipped()
+        .frame(height: 24)
+        .padding(.horizontal, 16)
+    }
+
+    private func startScrolling() {
+        guard blockWidth > 0 else { return }
+        offset = 0
+        let duration = Double(blockWidth) / 40.0 // 40 pt/s speed
+        withAnimation(.linear(duration: duration).repeatForever(autoreverses: false)) {
+            offset = -blockWidth
+        }
+    }
+}
+
+private struct EraMarqueeBlock: View {
+    let colorScheme: ColorScheme
+    
+    var body: some View {
+        HStack(spacing: 32) {
+            ForEach(allEras) { era in
                 HStack(spacing: 6) {
                     Circle()
                         .fill(era.resolvedColor(for: colorScheme))
@@ -252,31 +288,7 @@ private struct AutoScrollingMarquee: View {
                 }
             }
         }
-        // Measure the rendered width
-        .background(
-            GeometryReader { geo in
-                Color.clear.onAppear {
-                    let full = geo.size.width
-                    // We doubled the list so single-set width = half
-                    singleWidth = full / 2
-                    startScrolling()
-                }
-            }
-        )
-        .offset(x: offset)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .clipped()
-        .frame(height: 24)
-        .padding(.horizontal, 16)
-    }
-
-    private func startScrolling() {
-        guard singleWidth > 0 else { return }
-        offset = 0
-        let duration = Double(singleWidth) / 40.0 // 40 pt/s
-        withAnimation(.linear(duration: duration).repeatForever(autoreverses: false)) {
-            offset = -singleWidth
-        }
+        .padding(.trailing, 32) // Gap between the end of this block and the start of the next block!
     }
 }
 

@@ -18,6 +18,8 @@ struct AppHeader: View {
                 .font(AppFont.branding(size: 20))
                 .tracking(-2)
                 .foregroundColor(AppColors.accent(for: colorScheme))
+                // Perfectly mimics the ![-webkit-text-stroke:0.5px_currentColor] from the web BrandLogo
+                .shadow(color: AppColors.accent(for: colorScheme), radius: 0.3, x: 0, y: 0)
 
             Spacer()
 
