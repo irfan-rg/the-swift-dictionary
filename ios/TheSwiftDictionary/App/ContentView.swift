@@ -42,10 +42,6 @@ struct ContentView: View {
                 AppHeader(isMenuOpen: $isMenuOpen, colorScheme: colorScheme)
             }
             .background(AppColors.background(for: colorScheme))
-            
-            // Absolutely Highest Layer: Theme Transition and Spotlight
-            ThemeTransitionOverlay()
-                .zIndex(9999)
         }
     }
 

@@ -34,6 +34,7 @@ struct TheSwiftDictionaryApp: App {
             ContentView()
                 .environmentObject(authService)
                 .preferredColorScheme(resolvedScheme)
+                .overlay(ThemeTransitionOverlay()) // Guaranteed to sit above everything, including safeAreaInsets
                 .onOpenURL { url in
                     // Handle OAuth callback (e.g. theswiftdictionary://auth/callback)
                     handleDeepLink(url)
