@@ -36,23 +36,6 @@ struct AppHeader: View {
                         .frame(minWidth: 64, minHeight: 38)
                         .contentTransition(.interpolate)
                 }
-                .contextMenu {
-                    Button {
-                        themeOverride = "light"
-                    } label: {
-                        Label("Light Mode", systemImage: "sun.max")
-                    }
-                    Button {
-                        themeOverride = "dark"
-                    } label: {
-                        Label("Dark Mode", systemImage: "moon.stars")
-                    }
-                    Button {
-                        themeOverride = "system"
-                    } label: {
-                        Label("System", systemImage: "circle.lefthalf.filled")
-                    }
-                }
             }
         }
         .padding(.horizontal, 16)
