@@ -225,58 +225,54 @@ private struct HeroSection: View {
 // MARK: - Auto-Scrolling Marquee
 
 /// Infinite horizontal marquee of era dots.
-/// Uses a GeometryReader in the background to measure item width, then
-/// kicks off a repeating linear animation for seamless looping.
+/// Uses a PreferenceKey to dynamically measure item width when layout stabilizes,
+/// and resets / loops the offset seamlessly across 3 identical blocks to prevent gaps.
 private struct AutoScrollingMarquee: View {
     let colorScheme: ColorScheme
+
     @State private var offset: CGFloat = 0
     @State private var blockWidth: CGFloat = 0
 
     var body: some View {
         HStack(spacing: 0) {
-            // Block 1: Measures its exact width
-            EraMarqueeBlock(colorScheme: colorScheme, idOffset: 0)
-                .background(
-                    GeometryReader { geo in
-                        Color.clear
-                            .onAppear {
-                                if blockWidth == 0 {
-                                    blockWidth = geo.size.width
-                                    startScrolling()
-                                }
-                            }
-                            .onChange(of: geo.size.width) { newWidth in
-                                if abs(blockWidth - newWidth) > 1 {
-                                    blockWidth = newWidth
-                                    startScrolling()
-                                }
-                            }
-                    }
-                )
-            
-            // Block 2: The exact duplicate for the seamless loop
-            EraMarqueeBlock(colorScheme: colorScheme, idOffset: 100)
+            // We place three identical blocks side by side.
+            // Using 3 blocks ensures we NEVER see a gap on any device width!
+            ForEach(0..<3, id: \.self) { index in
+                EraMarqueeBlock(colorScheme: colorScheme)
+                    .background(
+                        GeometryReader { geo in
+                            Color.clear
+                                .preference(key: MarqueeSizeKey.self, value: index == 0 ? geo.size.width : 0)
+                        }
+                    )
+            }
         }
-        .fixedSize(horizontal: true, vertical: false) // CRITICAL: Ensures the HStack grows beyond screen bounds
-        .drawingGroup() // CRITICAL: Forces SwiftUI to render both blocks fully in a single Metal context, preventing off-screen culling!
+        .fixedSize(horizontal: true, vertical: false) // CRITICAL: Prevents SwiftUI from squishing the HStack
         .offset(x: offset)
         .frame(maxWidth: .infinity, alignment: .leading)
         .clipped()
         .frame(height: 24)
-        .padding(.horizontal, 16)
+        .onPreferenceChange(MarqueeSizeKey.self) { width in
+            // When the first block layout settles and reports a non-zero size, kick off the scroll loop
+            guard width > 0, width != blockWidth else { return }
+            blockWidth = width
+            startScrolling()
+        }
     }
 
     private func startScrolling() {
         guard blockWidth > 0 else { return }
         
-        // Reset instantly without animation
-        offset = 0
+        // Safely cancel any active animation transaction and snap offset to 0
+        withAnimation(.none) {
+            offset = 0
+        }
         
-        // CRITICAL: Wait for the run loop to commit the 0 offset before starting the infinite animation.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            let duration = Double(blockWidth) / 40.0 // 40 pt/s
+        // Kick off the scrolling animation on the next runloop tick to prevent visual jumpiness
+        DispatchQueue.main.async {
+            let duration = Double(self.blockWidth) / 40.0 // 40 pt/s speed
             withAnimation(.linear(duration: duration).repeatForever(autoreverses: false)) {
-                offset = -blockWidth
+                self.offset = -self.blockWidth
             }
         }
     }
@@ -284,11 +280,10 @@ private struct AutoScrollingMarquee: View {
 
 private struct EraMarqueeBlock: View {
     let colorScheme: ColorScheme
-    let idOffset: Int // Ensures unique IDs across identical blocks
     
     var body: some View {
         HStack(spacing: 32) {
-            ForEach(Array(allEras.enumerated()), id: \.offset) { index, era in
+            ForEach(allEras) { era in
                 HStack(spacing: 6) {
                     Circle()
                         .fill(era.resolvedColor(for: colorScheme))
@@ -299,19 +294,12 @@ private struct EraMarqueeBlock: View {
                         .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
                         .fixedSize()
                 }
-                .id(index + idOffset) // CRITICAL: Prevents SwiftUI from dropping identical views!
             }
         }
-        .padding(.trailing, 32) // Gap before the next block
+        .padding(.trailing, 32) // Gap between the end of this block and the start of the next block!
     }
 }
 
-private struct MarqueeWidthKey: PreferenceKey {
-    static var defaultValue: CGFloat = 0
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-        value = nextValue()
-    }
-}
 
 // MARK: - Top Songs Section
 
@@ -497,5 +485,13 @@ struct ScrollOffsetKey: PreferenceKey {
     static var defaultValue: CGFloat = 0
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value += nextValue()
+    }
+}
+
+/// Preference key used to track the marquee block width
+struct MarqueeSizeKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
     }
 }
