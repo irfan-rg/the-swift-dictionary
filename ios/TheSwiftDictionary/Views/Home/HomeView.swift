@@ -16,7 +16,9 @@ struct HomeView: View {
     
     // For Pull-to-Toggle gesture
     @State private var pullOffset: CGFloat = 0
-    @State private var isToggling = false
+    @State private var isReadyToToggle = false
+    @State private var isAnimatingDrop = false
+    @State private var dropRadius: CGFloat = 0
 
     var body: some View {
         // GeometryReader measures the actual available height AFTER the
@@ -112,16 +114,34 @@ struct HomeView: View {
         .onPreferenceChange(ScrollOffsetKey.self) { value in
             pullOffset = value
             
-            // Trigger threshold is 90pt
-            if value > 90 && !isToggling {
-                isToggling = true
-                let generator = UIImpactFeedbackGenerator(style: .heavy)
-                generator.impactOccurred()
-                withAnimation(.easeInOut(duration: 0.5)) {
-                    themeOverride = colorScheme == .dark ? "light" : "dark"
+            if value > 90 {
+                // User pulled past threshold
+                if !isReadyToToggle && !isAnimatingDrop {
+                    isReadyToToggle = true
+                    let generator = UIImpactFeedbackGenerator(style: .light)
+                    generator.impactOccurred()
                 }
-            } else if value < 40 {
-                isToggling = false // Reset when scrolling back up
+            } else if value < 80 {
+                // User released the pull (offset shrinking)
+                if isReadyToToggle {
+                    isReadyToToggle = false
+                    isAnimatingDrop = true
+                    
+                    let generator = UIImpactFeedbackGenerator(style: .heavy)
+                    generator.impactOccurred()
+                    
+                    // Animate the radial mask expansion
+                    withAnimation(.easeIn(duration: 0.45)) {
+                        dropRadius = UIScreen.main.bounds.height * 1.5
+                    }
+                    
+                    // After the circle consumes the screen, flip the theme and reset
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) {
+                        themeOverride = colorScheme == .dark ? "light" : "dark"
+                        dropRadius = 0
+                        isAnimatingDrop = false
+                    }
+                }
             }
         }
         } // End GeometryReader
@@ -129,9 +149,19 @@ struct HomeView: View {
             ZStack(alignment: .top) {
                 AppColors.background(for: colorScheme)
                 
-                // Animated pull-to-toggle indicator revealed behind the scrollview
-                if pullOffset > 0 {
-                    PullToToggleIndicator(offset: pullOffset, colorScheme: colorScheme)
+                // 1. The expanding radial mask transition
+                if isAnimatingDrop {
+                    let targetScheme: ColorScheme = colorScheme == .dark ? .light : .dark
+                    Circle()
+                        .fill(AppColors.background(for: targetScheme))
+                        .frame(width: dropRadius * 2, height: dropRadius * 2)
+                        // Expand from the top center
+                        .position(x: UIScreen.main.bounds.width / 2, y: 0)
+                }
+                
+                // 2. Animated pull-to-toggle lyrics revealed behind the scrollview
+                if pullOffset > 0 && !isAnimatingDrop {
+                    PullToToggleIndicator(offset: pullOffset, colorScheme: colorScheme, isReady: isReadyToToggle)
                 }
             }
             .ignoresSafeArea()
@@ -447,32 +477,18 @@ struct ScrollOffsetKey: PreferenceKey {
 private struct PullToToggleIndicator: View {
     let offset: CGFloat
     let colorScheme: ColorScheme
+    let isReady: Bool
     
     var body: some View {
         let progress = min(max(offset / 90.0, 0), 1.0)
-        let isPastThreshold = offset > 90
+        let lyric = colorScheme == .dark ? "step into the daylight..." : "meet me at midnight..."
         
-        VStack(spacing: 0) {
-            // The "string"
-            Rectangle()
-                .fill(AppColors.borderFocus(for: colorScheme))
-                .frame(width: 2, height: max(0, offset - 22)) // string stretches with pull
-            
-            // The icon at the end of the string
-            ZStack {
-                Circle()
-                    .fill(isPastThreshold ? AppColors.foreground(for: colorScheme) : AppColors.surfaceRaised(for: colorScheme))
-                    .frame(width: 44, height: 44)
-                    .shadow(color: Color.black.opacity(0.15), radius: 8, x: 0, y: 4)
-                
-                Image(systemName: colorScheme == .dark ? "sun.max.fill" : "moon.stars.fill")
-                    .font(.system(size: 18))
-                    .foregroundColor(isPastThreshold ? AppColors.background(for: colorScheme) : AppColors.accent(for: colorScheme))
-                    .rotationEffect(.degrees(Double(progress * 180)))
-            }
-            .scaleEffect(isPastThreshold ? 1.15 : 1.0)
-            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isPastThreshold)
-        }
-        .opacity(progress)
+        Text(lyric)
+            .font(AppFont.handwriting(size: 20))
+            .foregroundColor(isReady ? AppColors.foreground(for: colorScheme) : AppColors.accent(for: colorScheme))
+            .opacity(progress)
+            .scaleEffect(isReady ? 1.08 : 1.0)
+            .padding(.top, max(40, offset - 30))
+            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isReady)
     }
 }
