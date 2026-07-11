@@ -230,37 +230,42 @@ private struct HeroSection: View {
 private struct AutoScrollingMarquee: View {
     let colorScheme: ColorScheme
     @State private var offset: CGFloat = 0
+    @State private var blockWidth: CGFloat = 0
 
     var body: some View {
         HStack(spacing: 0) {
-            // We place two identical blocks side by side.
-            // When offset reaches -blockWidth, the animation instantly restarts at 0
-            
-            // Block 1 (Measures its own exact width to drive the animation)
             EraMarqueeBlock(colorScheme: colorScheme)
-                .background(
-                    GeometryReader { geo in
-                        Color.clear.onAppear {
-                            let width = geo.size.width
-                            let duration = Double(width) / 40.0 // 40 pt/s speed
-                            
-                            // Immediately kick off the infinite linear animation
-                            withAnimation(.linear(duration: duration).repeatForever(autoreverses: false)) {
-                                offset = -width
-                            }
-                        }
-                    }
-                )
-            
-            // Block 2 (The seamless loop duplicate)
             EraMarqueeBlock(colorScheme: colorScheme)
         }
         .fixedSize() // CRITICAL: Prevents SwiftUI from squishing the HStack into the screen width!
+        .background(
+            GeometryReader { geo in
+                Color.clear.onAppear {
+                    // Since spacing is 0, the total width is exactly 2 blocks.
+                    // Dividing by 2 gives us the flawless, exact width of one block!
+                    blockWidth = geo.size.width / 2.0
+                    startScrolling()
+                }
+            }
+        )
         .offset(x: offset)
         .frame(maxWidth: .infinity, alignment: .leading)
         .clipped()
         .frame(height: 24)
         .padding(.horizontal, 16)
+    }
+
+    private func startScrolling() {
+        guard blockWidth > 0 else { return }
+        
+        // CRITICAL: We must dispatch this to the next run loop!
+        // Calling withAnimation directly inside onAppear (during layout) causes SwiftUI to swallow the animation.
+        DispatchQueue.main.async {
+            let duration = Double(blockWidth) / 40.0 // 40 pt/s speed
+            withAnimation(.linear(duration: duration).repeatForever(autoreverses: false)) {
+                offset = -blockWidth
+            }
+        }
     }
 }
 
@@ -284,6 +289,8 @@ private struct EraMarqueeBlock: View {
         }
         .padding(.trailing, 32) // Gap between the end of this block and the start of the next block!
     }
+}
+
 // MARK: - Top Songs Section
 
 /// Mirrors: src/components/TopSongs.tsx — diary/journal style with spiral binder.
