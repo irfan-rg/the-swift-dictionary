@@ -42,6 +42,9 @@ struct ContentView: View {
             AppHeader(isMenuOpen: $isMenuOpen, colorScheme: colorScheme)
         }
         .background(AppColors.background(for: colorScheme))
+        .overlay(
+            ThemeTransitionOverlay()
+        )
     }
 
     @ViewBuilder

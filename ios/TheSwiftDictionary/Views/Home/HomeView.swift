@@ -127,8 +127,8 @@ struct HomeView: View {
                     let generator = UIImpactFeedbackGenerator(style: .heavy)
                     generator.impactOccurred()
                     
-                    // Trigger the global theme change directly
-                    withAnimation(.easeInOut(duration: 0.4)) {
+                    // Trigger the radial snapshot theme change
+                    ThemeTransitionManager.shared.triggerTransition {
                         themeOverride = colorScheme == .dark ? "light" : "dark"
                     }
                 }
