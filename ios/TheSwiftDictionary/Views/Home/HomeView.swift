@@ -238,7 +238,19 @@ private struct AutoScrollingMarquee: View {
             EraMarqueeBlock(colorScheme: colorScheme)
                 .background(
                     GeometryReader { geo in
-                        Color.clear.preference(key: MarqueeWidthKey.self, value: geo.size.width)
+                        Color.clear
+                            .onAppear {
+                                if blockWidth == 0 {
+                                    blockWidth = geo.size.width
+                                    startScrolling()
+                                }
+                            }
+                            .onChange(of: geo.size.width) { newWidth in
+                                if abs(blockWidth - newWidth) > 1 {
+                                    blockWidth = newWidth
+                                    startScrolling()
+                                }
+                            }
                     }
                 )
             
@@ -246,23 +258,6 @@ private struct AutoScrollingMarquee: View {
             EraMarqueeBlock(colorScheme: colorScheme)
         }
         .fixedSize(horizontal: true, vertical: false) // CRITICAL: Ensures the HStack grows beyond screen bounds
-        .background(
-            GeometryReader { geo in
-                Color.clear
-                    .onAppear {
-                        if blockWidth == 0 {
-                            blockWidth = geo.size.width
-                            startScrolling()
-                        }
-                    }
-                    .onChange(of: geo.size.width) { newWidth in
-                        if abs(blockWidth - newWidth) > 1 {
-                            blockWidth = newWidth
-                            startScrolling()
-                        }
-                    }
-            }
-        )
         .offset(x: offset)
         .frame(maxWidth: .infinity, alignment: .leading)
         .clipped()
