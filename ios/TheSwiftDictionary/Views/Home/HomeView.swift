@@ -107,35 +107,34 @@ struct HomeView: View {
 
 // MARK: - Hero Section
 
-/// Full-screen hero matching the web's HeroSection.tsx mobile layout.
-/// Layout: [flex-1 spacer] → [content group] → [flex-1 spacer] → [marquee]
+/// Full-screen hero. Uses ZStack so the marquee is ALWAYS pinned to the
+/// bottom of the viewport regardless of content height.
 private struct HeroSection: View {
     let colorScheme: ColorScheme
 
     var body: some View {
-        VStack(spacing: 0) {
+        ZStack(alignment: .bottom) {
 
-            Spacer() // pushes content to vertical center
-
-            // ── Centered Content Group ──
+            // ── Central Content (vertically centered in remaining space) ──
             VStack(spacing: 0) {
-                // Handwriting tagline — rotated -2° like the web
+                // Handwriting tagline
                 Text("a vocabulary for every era...")
                     .font(AppFont.handwriting(size: 22))
                     .foregroundColor(AppColors.accent(for: colorScheme))
                     .rotationEffect(.degrees(-2))
                     .padding(.bottom, 24)
 
-                // Hero Title
-                VStack(spacing: -4) {
-                    Text("THE SWIFT")
-                        .font(AppFont.branding(size: 48))
+                // Hero Title — "The Swift Dictionary" with small-caps:
+                // T, S, D are full-height; other letters are synthesised small-caps.
+                VStack(spacing: -2) {
+                    Text("The Swift")
+                        .font(AppFont.brandingSmallCaps(size: 48))
                         .foregroundColor(AppColors.foreground(for: colorScheme))
-                        .tracking(2)
-                    Text("DICTIONARY")
-                        .font(AppFont.branding(size: 48))
+                        .tracking(1)
+                    Text("Dictionary")
+                        .font(AppFont.brandingSmallCaps(size: 48))
                         .foregroundColor(AppColors.foreground(for: colorScheme))
-                        .tracking(2)
+                        .tracking(1)
                 }
                 .multilineTextAlignment(.center)
                 .padding(.bottom, 28)
@@ -146,12 +145,13 @@ private struct HeroSection: View {
                     .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
                     .multilineTextAlignment(.center)
                     .lineSpacing(5)
-                    .padding(.horizontal, 24)
+                    .padding(.horizontal, 28)
             }
+            // Slightly above true center to give room for the marquee at bottom
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            .padding(.bottom, 64) // nudge up so marquee doesn't overlap
 
-            Spacer() // pushes marquee to the bottom
-
-            // ── Era Marquee — anchored at bottom ──
+            // ── Era Marquee — always at bottom ──────────────────
             AutoScrollingMarquee(colorScheme: colorScheme)
                 .padding(.bottom, 32)
         }
@@ -161,73 +161,61 @@ private struct HeroSection: View {
 
 // MARK: - Auto-Scrolling Marquee
 
-/// Infinite horizontal auto-scroll of era dots, matching the web's CSS marquee animation.
+/// Infinite horizontal marquee of era dots.
+/// Uses a GeometryReader in the background to measure item width, then
+/// kicks off a repeating linear animation for seamless looping.
 private struct AutoScrollingMarquee: View {
     let colorScheme: ColorScheme
 
-    // Double the eras for seamless loop
+    // Double the list so we can seamlessly loop
     private let items: [EraInfo] = allEras + allEras
 
-    // Measured width of one full set of items
-    @State private var singleWidth: CGFloat = 0
     @State private var offset: CGFloat = 0
-
-    // Speed: points per second
-    private let speed: CGFloat = 40
+    @State private var singleWidth: CGFloat = 0
 
     var body: some View {
-        // Clip so nothing spills outside the screen edges
-        GeometryReader { geo in
-            HStack(spacing: 20) {
-                ForEach(Array(items.enumerated()), id: \.offset) { index, era in
-                    HStack(spacing: 6) {
-                        Circle()
-                            .fill(era.resolvedColor(for: colorScheme))
-                            .frame(width: 6, height: 6)
-                        Text(era.label)
-                            .font(.system(size: 11, weight: .medium))
-                            .tracking(0.5)
-                            .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
-                            .fixedSize()
-                    }
+        HStack(spacing: 20) {
+            ForEach(Array(items.enumerated()), id: \.offset) { _, era in
+                HStack(spacing: 6) {
+                    Circle()
+                        .fill(era.resolvedColor(for: colorScheme))
+                        .frame(width: 6, height: 6)
+                    Text(era.label)
+                        .font(.system(size: 11, weight: .medium))
+                        .tracking(0.5)
+                        .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
+                        .fixedSize()
                 }
             }
-            // Measure the width of ONE full pass (half of doubled items)
-            .background(
-                GeometryReader { inner in
-                    Color.clear.onAppear {
-                        singleWidth = inner.size.width / 2
-                    }
-                }
-            )
-            .offset(x: offset)
-            .onAppear {
-                guard singleWidth == 0 else { return }
-                // Give layout a moment to measure, then start
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        }
+        // Measure the rendered width
+        .background(
+            GeometryReader { geo in
+                Color.clear.onAppear {
+                    let full = geo.size.width
+                    // We doubled the list so single-set width = half
+                    singleWidth = full / 2
                     startScrolling()
                 }
             }
-            .onChange(of: singleWidth) { _ in
-                startScrolling()
-            }
-        }
-        .frame(height: 24)
+        )
+        .offset(x: offset)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .clipped()
+        .frame(height: 24)
         .padding(.horizontal, 16)
     }
 
     private func startScrolling() {
         guard singleWidth > 0 else { return }
-        // Reset to start
         offset = 0
-        // Duration for one full pass
-        let duration = Double(singleWidth) / Double(speed)
+        let duration = Double(singleWidth) / 40.0 // 40 pt/s
         withAnimation(.linear(duration: duration).repeatForever(autoreverses: false)) {
             offset = -singleWidth
         }
     }
 }
+
 
 // MARK: - Top Songs Section
 

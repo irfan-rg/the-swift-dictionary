@@ -1,8 +1,9 @@
 // ────────────────────────────────────────────────────────────────
 // The Swift Dictionary — App Header (Mobile)
-// Mirrors: src/components/Header.tsx → mobile layout (lines 245-286)
+// Mirrors: src/components/Header.tsx → mobile layout
 //
-// Layout: [TSD logo]  ···  [☀/☾] [🔍] [menu./close.]
+// Layout: [TSD logo]  ···  [🔍] [menu./close.]
+// Theme toggle lives inside the hamburger menu.
 // ────────────────────────────────────────────────────────────────
 
 import SwiftUI
@@ -10,40 +11,29 @@ import SwiftUI
 struct AppHeader: View {
     @Binding var isMenuOpen: Bool
     let colorScheme: ColorScheme
-    @AppStorage("appThemeOverride") private var themeOverride: String = "system"
-    
+
     var body: some View {
         HStack {
-            // ── Left: TSD Brand Logo ──
-            // Web: BrandLogo short → "TSD" in font-branding, tracking-[-0.1em]
+            // ── TSD Brand Logo ─────────────────────────────────
+            // Cinzel Decorative, tight tracking, matches web BrandLogo
             Text("TSD")
                 .font(AppFont.branding(size: 20))
-                .tracking(-2) // -0.1em at 20pt ≈ -2pt
+                .tracking(-2)
                 .foregroundColor(AppColors.accent(for: colorScheme))
-            
+
             Spacer()
-            
-            // ── Right: Action Buttons ──
-            HStack(spacing: 2) {
-                // Theme Toggle (sun/moon)
-                Button {
-                    themeOverride = colorScheme == .dark ? "light" : "dark"
-                } label: {
-                    Image(systemName: colorScheme == .dark ? "sun.max" : "moon.stars")
-                        .font(.system(size: 18, weight: .light))
-                        .frame(width: 38, height: 38)
-                        .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
-                }
-                
-                // Search Icon (placeholder for Phase 3)
+
+            // ── Right Actions ──────────────────────────────────
+            HStack(spacing: 0) {
+                // Search icon
                 Button { } label: {
                     Image(systemName: "magnifyingglass")
-                        .font(.system(size: 18, weight: .light))
+                        .font(.system(size: 17, weight: .light))
                         .frame(width: 38, height: 38)
                         .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
                 }
-                
-                // Menu / Close Button (handwriting font)
+
+                // menu. / close. in handwriting font
                 Button {
                     withAnimation(.easeInOut(duration: 0.25)) {
                         isMenuOpen.toggle()
@@ -51,9 +41,9 @@ struct AppHeader: View {
                 } label: {
                     Text(isMenuOpen ? "close." : "menu.")
                         .font(AppFont.handwriting(size: 20))
-                        .tracking(1)
+                        .tracking(0.5)
                         .foregroundColor(AppColors.foreground(for: colorScheme))
-                        .frame(minWidth: 64, minHeight: 36)
+                        .frame(minWidth: 64, height: 38)
                         .contentTransition(.interpolate)
                 }
             }

@@ -20,53 +20,53 @@ struct ContentView: View {
     @State private var isMenuOpen: Bool = false
 
     var body: some View {
-        ZStack(alignment: .top) {
-
-            // ── Page Content ────────────────────────────────────
-            // Sits below the fixed 56pt header
-            Group {
-                switch currentPage {
-                case .home:
-                    HomeView()
-                case .dictionary:
-                    PagePlaceholder(
-                        icon: "text.book.closed.fill",
-                        title: "Dictionary",
-                        subtitle: "Search & filter vocabulary across all eras"
+        // The page content fills the full screen.
+        // We use .safeAreaInset to push content below the fixed header,
+        // which is the cleanest way to handle a custom fixed top bar.
+        pageContent
+            .ignoresSafeArea(edges: .bottom)
+            .safeAreaInset(edge: .top, spacing: 0) {
+                AppHeader(isMenuOpen: $isMenuOpen, colorScheme: colorScheme)
+            }
+            .overlay(alignment: .top) {
+                if isMenuOpen {
+                    MenuOverlay(
+                        currentPage: $currentPage,
+                        isMenuOpen: $isMenuOpen,
+                        colorScheme: colorScheme
                     )
-                case .explorer:
-                    PagePlaceholder(
-                        icon: "square.grid.2x2.fill",
-                        title: "The Eras",
-                        subtitle: "Browse albums → songs → lyrics"
-                    )
-                case .about:
-                    PagePlaceholder(
-                        icon: "info.circle",
-                        title: "About",
-                        subtitle: "The story behind The Swift Dictionary"
-                    )
+                    // Offset below the header (header height = 56 + safe area top)
+                    .ignoresSafeArea(edges: .bottom)
+                    .transition(.opacity)
                 }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .padding(.top, 56) // offset for the fixed header
+            .background(AppColors.background(for: colorScheme))
+    }
 
-            // ── Fixed Header (always on top) ────────────────────
-            AppHeader(isMenuOpen: $isMenuOpen, colorScheme: colorScheme)
-
-            // ── Full-Screen Menu Overlay ─────────────────────────
-            if isMenuOpen {
-                MenuOverlay(
-                    currentPage: $currentPage,
-                    isMenuOpen: $isMenuOpen,
-                    colorScheme: colorScheme
-                )
-                .padding(.top, 56) // sits below the header bar
-                .transition(.opacity)
-            }
+    @ViewBuilder
+    private var pageContent: some View {
+        switch currentPage {
+        case .home:
+            HomeView()
+        case .dictionary:
+            PagePlaceholder(
+                icon: "text.book.closed.fill",
+                title: "Dictionary",
+                subtitle: "Search & filter vocabulary across all eras"
+            )
+        case .explorer:
+            PagePlaceholder(
+                icon: "square.grid.2x2.fill",
+                title: "The Eras",
+                subtitle: "Browse albums → songs → lyrics"
+            )
+        case .about:
+            PagePlaceholder(
+                icon: "info.circle",
+                title: "About",
+                subtitle: "The story behind The Swift Dictionary"
+            )
         }
-        .ignoresSafeArea(edges: .bottom)
-        .background(AppColors.background(for: colorScheme))
     }
 }
 

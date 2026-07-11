@@ -113,6 +113,14 @@ enum AppFont {
         return .custom(name, size: size)
     }
 
+    /// Branding font with small-caps synthesis:
+    /// uppercase letters (T, S, D) render at full height,
+    /// lowercase letters are synthesized as smaller caps.
+    /// Write text as "The Swift Dictionary" — NOT all-caps.
+    static func brandingSmallCaps(size: CGFloat) -> Font {
+        Font.custom(FontName.cinzelRegular, size: size).smallCaps()
+    }
+
     // ── Handwriting (Nothing You Could Do) ─────────────────────
 
     /// Handwritten cursive font — used for diary-style annotations, quotes.
