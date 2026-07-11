@@ -225,24 +225,33 @@ private struct HeroSection: View {
 // MARK: - Auto-Scrolling Marquee
 
 /// Infinite horizontal marquee of era dots.
-/// Uses a PreferenceKey to dynamically measure item width when layout stabilizes,
+/// Uses an onChange listener to dynamically measure item width when layout stabilizes,
 /// and resets / loops the offset seamlessly across 3 identical blocks to prevent gaps.
 private struct AutoScrollingMarquee: View {
     let colorScheme: ColorScheme
 
     @State private var offset: CGFloat = 0
     @State private var blockWidth: CGFloat = 0
+    @State private var measuredWidth: CGFloat = 0
 
     var body: some View {
         HStack(spacing: 0) {
-            // We place three identical blocks side by side.
-            // Using 3 blocks ensures we NEVER see a gap on any device width!
+            // Render 3 blocks to be absolutely safe against gaps on wider screens
             ForEach(0..<3, id: \.self) { index in
                 EraMarqueeBlock(colorScheme: colorScheme)
                     .background(
                         GeometryReader { geo in
-                            Color.clear
-                                .preference(key: MarqueeSizeKey.self, value: index == 0 ? geo.size.width : 0)
+                            if index == 0 {
+                                Color.clear
+                                    .onAppear {
+                                        measuredWidth = geo.size.width
+                                    }
+                                    .onChange(of: geo.size.width) { newValue in
+                                        measuredWidth = newValue
+                                    }
+                            } else {
+                                Color.clear
+                            }
                         }
                     )
             }
@@ -252,10 +261,9 @@ private struct AutoScrollingMarquee: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .clipped()
         .frame(height: 24)
-        .onPreferenceChange(MarqueeSizeKey.self) { width in
-            // When the first block layout settles and reports a non-zero size, kick off the scroll loop
-            guard width > 0, width != blockWidth else { return }
-            blockWidth = width
+        .onChange(of: measuredWidth) { newWidth in
+            guard newWidth > 0, newWidth != blockWidth else { return }
+            blockWidth = newWidth
             startScrolling()
         }
     }
@@ -485,13 +493,5 @@ struct ScrollOffsetKey: PreferenceKey {
     static var defaultValue: CGFloat = 0
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value += nextValue()
-    }
-}
-
-/// Preference key used to track the marquee block width
-struct MarqueeSizeKey: PreferenceKey {
-    static var defaultValue: CGFloat = 0
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-        value = nextValue()
     }
 }
