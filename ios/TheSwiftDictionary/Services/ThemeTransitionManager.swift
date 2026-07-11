@@ -17,14 +17,21 @@ class ThemeTransitionManager: ObservableObject {
     
     /// Captures the screen silently in the background while the user is still pulling.
     func preCaptureScreen() {
-        guard let window = getMainWindow() else { return }
-        
-        UIGraphicsBeginImageContextWithOptions(window.bounds.size, false, 0.0)
-        window.drawHierarchy(in: window.bounds, afterScreenUpdates: false)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        self.snapshotImage = image
+        // Dispatch to the next main thread cycle to prevent stuttering the user's scroll gesture frame!
+        DispatchQueue.main.async {
+            guard let window = self.getMainWindow() else { return }
+            
+            // Use the highly optimized UIGraphicsImageRenderer instead of the legacy context
+            let format = UIGraphicsImageRendererFormat()
+            format.opaque = true
+            let renderer = UIGraphicsImageRenderer(size: window.bounds.size, format: format)
+            
+            let image = renderer.image { _ in
+                window.drawHierarchy(in: window.bounds, afterScreenUpdates: false)
+            }
+            
+            self.snapshotImage = image
+        }
     }
     
     /// Triggers the radial theme transition instantly using the pre-captured snapshot.
@@ -104,7 +111,9 @@ struct ThemeTransitionOverlay: View {
             }
             
             // Render the Spotlight Indicator above everything (including AppHeader)
-            if manager.pullOffset > 0 {
+            // We hide it the moment the transition starts so the text doesn't slide backward,
+            // leaving ONLY the perfectly frozen version in the screenshot to be erased!
+            if manager.pullOffset > 0 && !manager.isTransitioning {
                 SpotlightIndicator(
                     offset: manager.pullOffset,
                     colorScheme: colorScheme,
