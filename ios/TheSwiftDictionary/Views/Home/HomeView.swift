@@ -242,18 +242,19 @@ private struct AutoScrollingMarquee: View {
                 EraMarqueeBlock(colorScheme: colorScheme)
                     .background(
                         GeometryReader { geo in
-                            Color.clear.onAppear {
-                                // Measure exactly one block including its trailing padding
-                                if blockWidth == 0 {
-                                    blockWidth = geo.size.width
-                                    startScrolling()
-                                }
-                            }
+                            Color.clear.preference(key: MarqueeWidthKey.self, value: geo.size.width)
                         }
                     )
             }
         }
         .fixedSize() // CRITICAL: Prevents SwiftUI from squishing the HStack into the screen width!
+        .onPreferenceChange(MarqueeWidthKey.self) { newWidth in
+            // Only restart animation if the width changes meaningfully (e.g. after font load)
+            if abs(blockWidth - newWidth) > 1 {
+                blockWidth = newWidth
+                startScrolling()
+            }
+        }
         .offset(x: offset)
         .frame(maxWidth: .infinity, alignment: .leading)
         .clipped()
@@ -293,6 +294,12 @@ private struct EraMarqueeBlock: View {
     }
 }
 
+private struct MarqueeWidthKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
 
 // MARK: - Top Songs Section
 
