@@ -88,9 +88,11 @@ struct ThemeTransitionOverlay: View {
                             // The base mask that keeps the image visible
                             Rectangle()
                             
-                            // The expanding circle that punches a hole in the mask
-                            Circle()
-                                .frame(width: manager.maskRadius * 2, height: manager.maskRadius * 2)
+                            // The expanding Capsule that punches a hole in the mask
+                            Capsule()
+                                // Base size perfectly hugs the Dynamic Island (126x37).
+                                // As maskRadius grows, it expands outward natively.
+                                .frame(width: 126 + manager.maskRadius * 2, height: 37 + manager.maskRadius * 2)
                                 // Starts exactly from the center of the Dynamic Island (y: 30)
                                 .position(x: UIScreen.main.bounds.width / 2, y: 30)
                                 .blendMode(.destinationOut)
@@ -161,9 +163,10 @@ struct SpotlightIndicator: View {
                 .opacity(progress)
                 .scaleEffect(isReady ? 1.08 : 1.0)
                 // Positioned in the middle of the growing beam
-                .padding(.top, max(30, offset - 10))
+                .padding(.top, max(50, offset))
                 .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isReady)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .ignoresSafeArea()
     }
 }
