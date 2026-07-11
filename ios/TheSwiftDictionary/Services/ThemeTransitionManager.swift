@@ -111,6 +111,7 @@ struct ThemeTransitionOverlay: View {
                 .allowsHitTesting(false)
             }
         }
+        .ignoresSafeArea() // CRITICAL: Ensures y:30 is actually the physical notch
     }
 }
 
@@ -142,13 +143,15 @@ struct SpotlightIndicator: View {
             .fill(
                 LinearGradient(
                     gradient: Gradient(colors: [
-                        (isReady ? AppColors.foreground(for: colorScheme) : AppColors.accent(for: colorScheme)).opacity(0.35 * progress),
+                        (isReady ? AppColors.foreground(for: colorScheme) : AppColors.accent(for: colorScheme)).opacity(0.4 * progress),
                         Color.clear
                     ]),
                     startPoint: .top,
                     endPoint: .bottom
                 )
             )
+            .blur(radius: 8) // Makes the light beam soft and volumetric
+            .blendMode(.screen)
             .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isReady)
             
             // The illuminated lyric text

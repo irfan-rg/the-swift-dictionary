@@ -453,5 +453,3 @@ struct ScrollOffsetKey: PreferenceKey {
         value += nextValue()
     }
 }
-    }
-}
