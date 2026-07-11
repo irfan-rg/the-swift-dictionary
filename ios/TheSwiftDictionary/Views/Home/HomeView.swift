@@ -14,17 +14,16 @@ struct HomeView: View {
     @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(spacing: 0) {
+        // GeometryReader measures the actual available height AFTER the
+        // .safeAreaInset header is applied in ContentView. This is the
+        // only reliable way to make the hero fill exactly the visible viewport.
+        GeometryReader { geo in
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 0) {
 
-                // ── 1. Hero — Full Screen Height ─────────────────
-                // Uses GeometryReader to fill the viewport (minus the 56pt header)
-                GeometryReader { geo in
+                    // ── 1. Hero — fills exactly the available viewport ──
                     HeroSection(colorScheme: colorScheme)
                         .frame(width: geo.size.width, height: geo.size.height)
-                }
-                // Height = screen height minus the 56pt fixed header
-                .frame(height: UIScreen.main.bounds.height - 56)
 
                 // ── Content below the hero ────────────────────────
                 VStack(spacing: 40) {
@@ -97,7 +96,8 @@ struct HomeView: View {
                 .padding(.top, 40)
                 .padding(.bottom, 60)
             }
-        }
+        } // End ScrollView
+        } // End GeometryReader
         .background(AppColors.background(for: colorScheme))
         .task {
             await viewModel.loadData()

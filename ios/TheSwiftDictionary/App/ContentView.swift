@@ -20,27 +20,30 @@ struct ContentView: View {
     @State private var isMenuOpen: Bool = false
 
     var body: some View {
-        // The page content fills the full screen.
-        // We use .safeAreaInset to push content below the fixed header,
-        // which is the cleanest way to handle a custom fixed top bar.
-        pageContent
-            .ignoresSafeArea(edges: .bottom)
-            .safeAreaInset(edge: .top, spacing: 0) {
-                AppHeader(isMenuOpen: $isMenuOpen, colorScheme: colorScheme)
+        // Header is a safe-area inset on top of the whole ZStack —
+        // this means it sits above BOTH the page content and the menu overlay.
+        ZStack(alignment: .top) {
+            // Page content
+            pageContent
+                .ignoresSafeArea(edges: .bottom)
+
+            // Menu overlay — starts right below header (ZStack top = below header)
+            if isMenuOpen {
+                MenuOverlay(
+                    currentPage: $currentPage,
+                    isMenuOpen: $isMenuOpen,
+                    colorScheme: colorScheme
+                )
+                .ignoresSafeArea(edges: .bottom)
+                .transition(.opacity)
             }
-            .overlay(alignment: .top) {
-                if isMenuOpen {
-                    MenuOverlay(
-                        currentPage: $currentPage,
-                        isMenuOpen: $isMenuOpen,
-                        colorScheme: colorScheme
-                    )
-                    // Offset below the header (header height = 56 + safe area top)
-                    .ignoresSafeArea(edges: .bottom)
-                    .transition(.opacity)
-                }
-            }
-            .background(AppColors.background(for: colorScheme))
+        }
+        .ignoresSafeArea(edges: .bottom)
+        // Header sits above the entire ZStack via safeAreaInset
+        .safeAreaInset(edge: .top, spacing: 0) {
+            AppHeader(isMenuOpen: $isMenuOpen, colorScheme: colorScheme)
+        }
+        .background(AppColors.background(for: colorScheme))
     }
 
     @ViewBuilder

@@ -1,9 +1,7 @@
 // ────────────────────────────────────────────────────────────────
 // The Swift Dictionary — App Header (Mobile)
-// Mirrors: src/components/Header.tsx → mobile layout
-//
-// Layout: [TSD logo]  ···  [🔍] [menu./close.]
-// Theme toggle lives inside the hamburger menu.
+// Layout: [TSD logo]  ···  [☀/☾] [menu./close.]
+// Search lives inside the hamburger menu.
 // ────────────────────────────────────────────────────────────────
 
 import SwiftUI
@@ -11,11 +9,11 @@ import SwiftUI
 struct AppHeader: View {
     @Binding var isMenuOpen: Bool
     let colorScheme: ColorScheme
+    @AppStorage("appThemeOverride") private var themeOverride: String = "system"
 
     var body: some View {
         HStack {
             // ── TSD Brand Logo ─────────────────────────────────
-            // Cinzel Decorative, tight tracking, matches web BrandLogo
             Text("TSD")
                 .font(AppFont.branding(size: 20))
                 .tracking(-2)
@@ -23,13 +21,15 @@ struct AppHeader: View {
 
             Spacer()
 
-            // ── Right Actions ──────────────────────────────────
+            // ── Right Actions: [☀/☾] [menu./close.] ───────────
             HStack(spacing: 0) {
-                // Search icon
-                Button { } label: {
-                    Image(systemName: "magnifyingglass")
+                // Theme toggle
+                Button {
+                    themeOverride = colorScheme == .dark ? "light" : "dark"
+                } label: {
+                    Image(systemName: colorScheme == .dark ? "sun.max" : "moon.stars")
                         .font(.system(size: 17, weight: .light))
-                        .frame(width: 38, height: 38)
+                        .frame(width: 38, minHeight: 38)
                         .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
                 }
 
@@ -43,7 +43,7 @@ struct AppHeader: View {
                         .font(AppFont.handwriting(size: 20))
                         .tracking(0.5)
                         .foregroundColor(AppColors.foreground(for: colorScheme))
-                        .frame(minWidth: 64, height: 38)
+                        .frame(minWidth: 64, minHeight: 38)
                         .contentTransition(.interpolate)
                 }
             }
