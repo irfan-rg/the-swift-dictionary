@@ -203,7 +203,7 @@ private struct HeroSection: View {
                 .padding(.bottom, 32) // Match web: mb-8 (32px)
 
                 // Description
-                Text("Every lyric tells a story. Every word carries a meaning.\nUncover the sophistication hidden in her discography.")
+                Text("Every lyric tells a story.\nEvery word carries a meaning.\nUncover the sophistication hidden in discography.")
                     .font(AppFont.body(size: 15))
                     .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
                     .multilineTextAlignment(.center)
@@ -212,7 +212,7 @@ private struct HeroSection: View {
             }
             // Centered in the available space above the marquee
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-            .padding(.bottom, 40) // Adjust vertical center slightly upward to visually balance with the bottom marquee
+            .padding(.bottom, 120) // Push the hero content further up
 
             // ── Era Marquee — always at bottom ──────────────────
             AutoScrollingMarquee(colorScheme: colorScheme)
@@ -253,6 +253,7 @@ private struct AutoScrollingMarquee: View {
                     )
             }
         }
+        .fixedSize() // CRITICAL: Prevents SwiftUI from squishing the HStack into the screen width!
         .offset(x: offset)
         .frame(maxWidth: .infinity, alignment: .leading)
         .clipped()
