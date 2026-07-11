@@ -235,7 +235,7 @@ private struct AutoScrollingMarquee: View {
     var body: some View {
         HStack(spacing: 0) {
             // Block 1: Measures its exact width
-            EraMarqueeBlock(colorScheme: colorScheme)
+            EraMarqueeBlock(colorScheme: colorScheme, idOffset: 0)
                 .background(
                     GeometryReader { geo in
                         Color.clear
@@ -255,7 +255,7 @@ private struct AutoScrollingMarquee: View {
                 )
             
             // Block 2: The exact duplicate for the seamless loop
-            EraMarqueeBlock(colorScheme: colorScheme)
+            EraMarqueeBlock(colorScheme: colorScheme, idOffset: 100)
         }
         .fixedSize(horizontal: true, vertical: false) // CRITICAL: Ensures the HStack grows beyond screen bounds
         .offset(x: offset)
@@ -283,10 +283,11 @@ private struct AutoScrollingMarquee: View {
 
 private struct EraMarqueeBlock: View {
     let colorScheme: ColorScheme
+    let idOffset: Int // Ensures unique IDs across identical blocks
     
     var body: some View {
         HStack(spacing: 32) {
-            ForEach(allEras) { era in
+            ForEach(Array(allEras.enumerated()), id: \.offset) { index, era in
                 HStack(spacing: 6) {
                     Circle()
                         .fill(era.resolvedColor(for: colorScheme))
@@ -297,6 +298,7 @@ private struct EraMarqueeBlock: View {
                         .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
                         .fixedSize()
                 }
+                .id(index + idOffset) // CRITICAL: Prevents SwiftUI from dropping identical views!
             }
         }
         .padding(.trailing, 32) // Gap before the next block
