@@ -252,7 +252,11 @@ private struct AutoScrollingMarquee: View {
             // Only restart animation if the width changes meaningfully (e.g. after font load)
             if abs(blockWidth - newWidth) > 1 {
                 blockWidth = newWidth
-                startScrolling()
+                // CRITICAL: We must dispatch this to the next run loop!
+                // Calling withAnimation inside onPreferenceChange (during layout) causes SwiftUI to swallow the animation.
+                DispatchQueue.main.async {
+                    startScrolling()
+                }
             }
         }
         .offset(x: offset)
