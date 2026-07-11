@@ -17,8 +17,6 @@ struct HomeView: View {
     // For Pull-to-Toggle gesture
     @State private var pullOffset: CGFloat = 0
     @State private var isReadyToToggle = false
-    @State private var isAnimatingDrop = false
-    @State private var dropRadius: CGFloat = 0
 
     var body: some View {
         // GeometryReader measures the actual available height AFTER the
@@ -116,7 +114,7 @@ struct HomeView: View {
             
             if value > 90 {
                 // User pulled past threshold
-                if !isReadyToToggle && !isAnimatingDrop {
+                if !isReadyToToggle {
                     isReadyToToggle = true
                     let generator = UIImpactFeedbackGenerator(style: .light)
                     generator.impactOccurred()
@@ -125,21 +123,13 @@ struct HomeView: View {
                 // User released the pull (offset shrinking)
                 if isReadyToToggle {
                     isReadyToToggle = false
-                    isAnimatingDrop = true
                     
                     let generator = UIImpactFeedbackGenerator(style: .heavy)
                     generator.impactOccurred()
                     
-                    // Animate the radial mask expansion
-                    withAnimation(.easeIn(duration: 0.45)) {
-                        dropRadius = UIScreen.main.bounds.height * 1.5
-                    }
-                    
-                    // After the circle consumes the screen, flip the theme and reset
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) {
+                    // Trigger the global theme change directly
+                    withAnimation(.easeInOut(duration: 0.4)) {
                         themeOverride = colorScheme == .dark ? "light" : "dark"
-                        dropRadius = 0
-                        isAnimatingDrop = false
                     }
                 }
             }
@@ -149,18 +139,8 @@ struct HomeView: View {
             ZStack(alignment: .top) {
                 AppColors.background(for: colorScheme)
                 
-                // 1. The expanding radial mask transition
-                if isAnimatingDrop {
-                    let targetScheme: ColorScheme = colorScheme == .dark ? .light : .dark
-                    Circle()
-                        .fill(AppColors.background(for: targetScheme))
-                        .frame(width: dropRadius * 2, height: dropRadius * 2)
-                        // Expand from the top center
-                        .position(x: UIScreen.main.bounds.width / 2, y: 0)
-                }
-                
-                // 2. Animated pull-to-toggle lyrics revealed behind the scrollview
-                if pullOffset > 0 && !isAnimatingDrop {
+                // Animated pull-to-toggle lyrics revealed behind the scrollview
+                if pullOffset > 0 {
                     PullToToggleIndicator(offset: pullOffset, colorScheme: colorScheme, isReady: isReadyToToggle)
                 }
             }
