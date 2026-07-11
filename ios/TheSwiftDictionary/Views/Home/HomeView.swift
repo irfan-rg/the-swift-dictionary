@@ -258,6 +258,7 @@ private struct AutoScrollingMarquee: View {
             EraMarqueeBlock(colorScheme: colorScheme, idOffset: 100)
         }
         .fixedSize(horizontal: true, vertical: false) // CRITICAL: Ensures the HStack grows beyond screen bounds
+        .drawingGroup() // CRITICAL: Forces SwiftUI to render both blocks fully in a single Metal context, preventing off-screen culling!
         .offset(x: offset)
         .frame(maxWidth: .infinity, alignment: .leading)
         .clipped()
