@@ -229,50 +229,38 @@ private struct HeroSection: View {
 /// kicks off a repeating linear animation for seamless looping.
 private struct AutoScrollingMarquee: View {
     let colorScheme: ColorScheme
-
     @State private var offset: CGFloat = 0
-    @State private var blockWidth: CGFloat = 0
 
     var body: some View {
         HStack(spacing: 0) {
             // We place two identical blocks side by side.
             // When offset reaches -blockWidth, the animation instantly restarts at 0
-            // and because block 2 is identical to block 1, the user sees no jump!
-            ForEach(0..<2, id: \.self) { _ in
-                EraMarqueeBlock(colorScheme: colorScheme)
-                    .background(
-                        GeometryReader { geo in
-                            Color.clear.preference(key: MarqueeWidthKey.self, value: geo.size.width)
+            
+            // Block 1 (Measures its own exact width to drive the animation)
+            EraMarqueeBlock(colorScheme: colorScheme)
+                .background(
+                    GeometryReader { geo in
+                        Color.clear.onAppear {
+                            let width = geo.size.width
+                            let duration = Double(width) / 40.0 // 40 pt/s speed
+                            
+                            // Immediately kick off the infinite linear animation
+                            withAnimation(.linear(duration: duration).repeatForever(autoreverses: false)) {
+                                offset = -width
+                            }
                         }
-                    )
-            }
+                    }
+                )
+            
+            // Block 2 (The seamless loop duplicate)
+            EraMarqueeBlock(colorScheme: colorScheme)
         }
         .fixedSize() // CRITICAL: Prevents SwiftUI from squishing the HStack into the screen width!
-        .onPreferenceChange(MarqueeWidthKey.self) { newWidth in
-            // Only restart animation if the width changes meaningfully (e.g. after font load)
-            if abs(blockWidth - newWidth) > 1 {
-                blockWidth = newWidth
-                // CRITICAL: We must dispatch this to the next run loop!
-                // Calling withAnimation inside onPreferenceChange (during layout) causes SwiftUI to swallow the animation.
-                DispatchQueue.main.async {
-                    startScrolling()
-                }
-            }
-        }
         .offset(x: offset)
         .frame(maxWidth: .infinity, alignment: .leading)
         .clipped()
         .frame(height: 24)
         .padding(.horizontal, 16)
-    }
-
-    private func startScrolling() {
-        guard blockWidth > 0 else { return }
-        offset = 0
-        let duration = Double(blockWidth) / 40.0 // 40 pt/s speed
-        withAnimation(.linear(duration: duration).repeatForever(autoreverses: false)) {
-            offset = -blockWidth
-        }
     }
 }
 
@@ -296,15 +284,6 @@ private struct EraMarqueeBlock: View {
         }
         .padding(.trailing, 32) // Gap between the end of this block and the start of the next block!
     }
-}
-
-private struct MarqueeWidthKey: PreferenceKey {
-    static var defaultValue: CGFloat = 0
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-        value = nextValue()
-    }
-}
-
 // MARK: - Top Songs Section
 
 /// Mirrors: src/components/TopSongs.tsx — diary/journal style with spiral binder.
