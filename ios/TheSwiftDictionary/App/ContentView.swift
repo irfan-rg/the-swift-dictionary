@@ -20,31 +20,33 @@ struct ContentView: View {
     @State private var isMenuOpen: Bool = false
 
     var body: some View {
-        // Header is a safe-area inset on top of the whole ZStack —
-        // this means it sits above BOTH the page content and the menu overlay.
-        ZStack(alignment: .top) {
-            // Page content
-            pageContent
-                .ignoresSafeArea(edges: .bottom)
+        ZStack {
+            // Main App Content Layer
+            ZStack(alignment: .top) {
+                // Page content
+                pageContent
+                    .ignoresSafeArea(edges: .bottom)
 
-            // Menu overlay — always in hierarchy so it can manage its own
-            // staggered entrance and exit animations sequentially.
-            MenuOverlay(
-                currentPage: $currentPage,
-                isMenuOpen: $isMenuOpen,
-                colorScheme: colorScheme
-            )
+                // Menu overlay — always in hierarchy so it can manage its own
+                // staggered entrance and exit animations sequentially.
+                MenuOverlay(
+                    currentPage: $currentPage,
+                    isMenuOpen: $isMenuOpen,
+                    colorScheme: colorScheme
+                )
+                .ignoresSafeArea(edges: .bottom)
+            }
             .ignoresSafeArea(edges: .bottom)
-        }
-        .ignoresSafeArea(edges: .bottom)
-        // Header sits above the entire ZStack via safeAreaInset
-        .safeAreaInset(edge: .top, spacing: 0) {
-            AppHeader(isMenuOpen: $isMenuOpen, colorScheme: colorScheme)
-        }
-        .background(AppColors.background(for: colorScheme))
-        .overlay(
+            // Header sits above the main content ZStack via safeAreaInset
+            .safeAreaInset(edge: .top, spacing: 0) {
+                AppHeader(isMenuOpen: $isMenuOpen, colorScheme: colorScheme)
+            }
+            .background(AppColors.background(for: colorScheme))
+            
+            // Absolutely Highest Layer: Theme Transition and Spotlight
             ThemeTransitionOverlay()
-        )
+                .zIndex(9999)
+        }
     }
 
     @ViewBuilder

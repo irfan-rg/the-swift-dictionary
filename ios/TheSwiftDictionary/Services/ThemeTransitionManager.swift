@@ -151,7 +151,7 @@ struct SpotlightIndicator: View {
                 )
             )
             .blur(radius: 8) // Makes the light beam soft and volumetric
-            .blendMode(.screen)
+            .blendMode(colorScheme == .dark ? .screen : .normal)
             .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isReady)
             
             // The illuminated lyric text
