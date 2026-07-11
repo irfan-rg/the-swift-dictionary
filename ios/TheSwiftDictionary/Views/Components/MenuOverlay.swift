@@ -41,22 +41,39 @@ struct MenuOverlay: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
 
-            // ── Search Bar ──────────────────────────────────────
-            HStack(spacing: 10) {
-                Image(systemName: "magnifyingglass")
-                    .font(.system(size: 15, weight: .light))
-                    .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
-                TextField("Search for a lyric, word, or era...", text: $searchText)
-                    .font(AppFont.bodyRegular)
-                    .foregroundColor(AppColors.foreground(for: colorScheme))
-                    .autocorrectionDisabled()
-                    .textInputAutocapitalization(.never)
+            // ── Utilities: Search & Theme Toggle ────────────────
+            HStack(spacing: 12) {
+                // Search Bar
+                HStack(spacing: 10) {
+                    Image(systemName: "magnifyingglass")
+                        .font(.system(size: 15, weight: .light))
+                        .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
+                    TextField("Search...", text: $searchText)
+                        .font(AppFont.bodyRegular)
+                        .foregroundColor(AppColors.foreground(for: colorScheme))
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
+                }
+                .padding(.horizontal, 16)
+                .frame(height: 48)
+                .background(AppColors.surfaceRaised(for: colorScheme))
+                .cornerRadius(AppCorners.sm)
+                .overlay(RoundedRectangle(cornerRadius: AppCorners.sm).stroke(AppColors.border(for: colorScheme), lineWidth: 1))
+                
+                // Theme Toggle
+                Button {
+                    themeOverride = colorScheme == .dark ? "light" : "dark"
+                } label: {
+                    Image(systemName: colorScheme == .dark ? "sun.max" : "moon.stars")
+                        .font(.system(size: 16, weight: .light))
+                        .foregroundColor(AppColors.foreground(for: colorScheme))
+                        .frame(width: 48, height: 48)
+                        .background(AppColors.surfaceRaised(for: colorScheme))
+                        .cornerRadius(AppCorners.sm)
+                        .overlay(RoundedRectangle(cornerRadius: AppCorners.sm).stroke(AppColors.border(for: colorScheme), lineWidth: 1))
+                }
+                .buttonStyle(.plain)
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
-            .background(AppColors.surfaceRaised(for: colorScheme))
-            .cornerRadius(AppCorners.sm)
-            .overlay(RoundedRectangle(cornerRadius: AppCorners.sm).stroke(AppColors.border(for: colorScheme), lineWidth: 1))
             .padding(.horizontal, 24)
             .padding(.top, 28)
             .offset(y: itemsVisible ? 0 : -10)
@@ -95,27 +112,6 @@ struct MenuOverlay: View {
             .padding(.top, 16)
 
             Spacer()
-
-            // ── Theme Toggle ────────────────────────────────────
-            Button {
-                themeOverride = colorScheme == .dark ? "light" : "dark"
-            } label: {
-                HStack(spacing: 14) {
-                    Spacer()
-                    Text(colorScheme == .dark ? "Light Mode" : "Dark Mode")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
-                    Image(systemName: colorScheme == .dark ? "sun.max" : "moon.stars")
-                        .font(.system(size: 16, weight: .light))
-                        .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
-                }
-                .padding(.horizontal, 24)
-                .padding(.vertical, 12)
-            }
-            .buttonStyle(.plain)
-            .offset(y: itemsVisible ? 0 : 8)
-            .opacity(itemsVisible ? 1 : 0)
-            .animation(.easeOut(duration: 0.3).delay(0.28), value: itemsVisible)
 
             // ── Divider ─────────────────────────────────────────
             Rectangle()

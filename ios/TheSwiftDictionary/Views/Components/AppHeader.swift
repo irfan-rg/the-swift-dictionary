@@ -21,18 +21,8 @@ struct AppHeader: View {
 
             Spacer()
 
-            // ── Right Actions: [☀/☾] [menu./close.] ───────────
+            // ── Right Actions ──────────────────────────────────
             HStack(spacing: 0) {
-                // Theme toggle
-                Button {
-                    themeOverride = colorScheme == .dark ? "light" : "dark"
-                } label: {
-                    Image(systemName: colorScheme == .dark ? "sun.max" : "moon.stars")
-                        .font(.system(size: 17, weight: .light))
-                        .frame(width: 38, minHeight: 38)
-                        .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
-                }
-
                 // menu. / close. in handwriting font
                 Button {
                     withAnimation(.easeInOut(duration: 0.25)) {
