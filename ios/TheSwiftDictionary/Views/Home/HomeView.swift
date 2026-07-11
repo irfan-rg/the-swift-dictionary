@@ -246,12 +246,23 @@ private struct AutoScrollingMarquee: View {
             EraMarqueeBlock(colorScheme: colorScheme)
         }
         .fixedSize(horizontal: true, vertical: false) // CRITICAL: Ensures the HStack grows beyond screen bounds
-        .onPreferenceChange(MarqueeWidthKey.self) { newWidth in
-            if abs(blockWidth - newWidth) > 1 {
-                blockWidth = newWidth
-                startScrolling()
+        .background(
+            GeometryReader { geo in
+                Color.clear
+                    .onAppear {
+                        if blockWidth == 0 {
+                            blockWidth = geo.size.width
+                            startScrolling()
+                        }
+                    }
+                    .onChange(of: geo.size.width) { newWidth in
+                        if abs(blockWidth - newWidth) > 1 {
+                            blockWidth = newWidth
+                            startScrolling()
+                        }
+                    }
             }
-        }
+        )
         .offset(x: offset)
         .frame(maxWidth: .infinity, alignment: .leading)
         .clipped()
@@ -262,15 +273,11 @@ private struct AutoScrollingMarquee: View {
     private func startScrolling() {
         guard blockWidth > 0 else { return }
         
-        // CRITICAL: Delay the start by 50ms to guarantee SwiftUI has finished all layout passes.
+        // Reset instantly without animation
+        offset = 0
+        
+        // CRITICAL: Wait for the run loop to commit the 0 offset before starting the infinite animation.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            // Instantly snap back to 0 without animation if width changes
-            var transaction = Transaction(animation: nil)
-            transaction.disablesAnimations = true
-            withTransaction(transaction) {
-                offset = 0
-            }
-            
             let duration = Double(blockWidth) / 40.0 // 40 pt/s
             withAnimation(.linear(duration: duration).repeatForever(autoreverses: false)) {
                 offset = -blockWidth
