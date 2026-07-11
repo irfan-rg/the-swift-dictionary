@@ -133,17 +133,32 @@ struct MenuOverlay: View {
                     .opacity(itemsVisible ? 1 : 0)
                     .animation(.easeOut(duration: 0.3).delay(Double(index) * 0.06 + 0.1), value: itemsVisible)
                 }
+                
+                // Theme Toggle Row (Looks like Nav Link #05)
+                HStack(spacing: 20) {
+                    Text(String(format: "%02d", navLinks.count + 1))
+                        .font(.system(size: 12, weight: .medium))
+                        .tracking(2)
+                        .foregroundColor(AppColors.accent(for: colorScheme).opacity(0.5))
+                        .frame(width: 20, alignment: .trailing)
+                        .monospacedDigit()
+                    Text("Theme")
+                        .font(AppFont.body(size: 20, weight: .semibold))
+                        .tracking(0.5)
+                        .foregroundColor(AppColors.foreground(for: colorScheme))
+                    Spacer()
+                    themeTogglePill
+                        .frame(width: 90)
+                }
+                .padding(.vertical, 16)
+                .offset(x: itemsVisible ? 0 : -20)
+                .opacity(itemsVisible ? 1 : 0)
+                .animation(.easeOut(duration: 0.3).delay(Double(navLinks.count) * 0.06 + 0.1), value: itemsVisible)
             }
             .padding(.horizontal, 24)
             .padding(.top, 16)
 
             Spacer()
-
-            // Theme Toggle Pill
-            themeTogglePill
-                .offset(y: itemsVisible ? 0 : 8)
-                .opacity(itemsVisible ? 1 : 0)
-                .animation(.easeOut(duration: 0.3).delay(0.25), value: itemsVisible)
 
             // Divider
             Rectangle()
@@ -163,13 +178,11 @@ struct MenuOverlay: View {
                         .font(.system(size: 14, weight: .medium))
                         .tracking(0.5)
                 }
-                .foregroundColor(AppColors.foreground(for: colorScheme))
+                .foregroundColor(AppColors.background(for: colorScheme))
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
-                .overlay(
-                    RoundedRectangle(cornerRadius: AppCorners.full)
-                        .stroke(AppColors.border(for: colorScheme), lineWidth: 1)
-                )
+                .background(AppColors.foreground(for: colorScheme))
+                .cornerRadius(AppCorners.full)
             }
             .buttonStyle(.plain)
             .padding(.horizontal, 24)
@@ -180,45 +193,36 @@ struct MenuOverlay: View {
         }
     }
 
-    /// Explicit, unambiguous pill-shaped theme toggle.
+    /// Compact, icon-only pill-shaped theme toggle for the nav list.
     private var themeTogglePill: some View {
         HStack(spacing: 0) {
             Button {
                 themeOverride = "light"
             } label: {
-                HStack(spacing: 8) {
-                    Image(systemName: "sun.max.fill")
-                        .font(.system(size: 12))
-                    Text("Light")
-                }
-                .font(.system(size: 13, weight: .medium))
-                .foregroundColor(colorScheme == .light ? AppColors.background(for: .light) : AppColors.foregroundMuted(for: colorScheme))
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 10)
-                .background(colorScheme == .light ? AppColors.foreground(for: .light) : Color.clear)
-                .cornerRadius(AppCorners.full)
+                Image(systemName: "sun.max.fill")
+                    .font(.system(size: 13))
+                    .foregroundColor(colorScheme == .light ? AppColors.background(for: .light) : AppColors.foregroundMuted(for: colorScheme))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(colorScheme == .light ? AppColors.foreground(for: .light) : Color.clear)
+                    .cornerRadius(AppCorners.full)
             }
             
             Button {
                 themeOverride = "dark"
             } label: {
-                HStack(spacing: 8) {
-                    Image(systemName: "moon.stars.fill")
-                        .font(.system(size: 12))
-                    Text("Dark")
-                }
-                .font(.system(size: 13, weight: .medium))
-                .foregroundColor(colorScheme == .dark ? AppColors.background(for: .dark) : AppColors.foregroundMuted(for: colorScheme))
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 10)
-                .background(colorScheme == .dark ? AppColors.foreground(for: .dark) : Color.clear)
-                .cornerRadius(AppCorners.full)
+                Image(systemName: "moon.stars.fill")
+                    .font(.system(size: 13))
+                    .foregroundColor(colorScheme == .dark ? AppColors.background(for: .dark) : AppColors.foregroundMuted(for: colorScheme))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(colorScheme == .dark ? AppColors.foreground(for: .dark) : Color.clear)
+                    .cornerRadius(AppCorners.full)
             }
         }
         .padding(4)
         .background(AppColors.surfaceRaised(for: colorScheme))
         .cornerRadius(AppCorners.full)
-        .padding(.horizontal, 24)
     }
 
     /// The Spotlight-style search results shown when typing.
