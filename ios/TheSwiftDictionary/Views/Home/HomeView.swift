@@ -111,11 +111,14 @@ struct HomeView: View {
         .coordinateSpace(name: "scroll")
         .onPreferenceChange(ScrollOffsetKey.self) { value in
             pullOffset = value
+            ThemeTransitionManager.shared.pullOffset = value
             
             if value > 90 {
                 // User pulled past threshold
                 if !isReadyToToggle {
                     isReadyToToggle = true
+                    ThemeTransitionManager.shared.isReadyToToggle = true
+                    
                     let generator = UIImpactFeedbackGenerator(style: .light)
                     generator.impactOccurred()
                     
@@ -126,6 +129,7 @@ struct HomeView: View {
                 // User released the pull (offset shrinking)
                 if isReadyToToggle {
                     isReadyToToggle = false
+                    ThemeTransitionManager.shared.isReadyToToggle = false
                     
                     let generator = UIImpactFeedbackGenerator(style: .heavy)
                     generator.impactOccurred()
@@ -141,11 +145,7 @@ struct HomeView: View {
         .background(
             ZStack(alignment: .top) {
                 AppColors.background(for: colorScheme)
-                
-                // Animated pull-to-toggle spotlight beam revealed behind the scrollview
-                if pullOffset > 0 {
-                    SpotlightIndicator(offset: pullOffset, colorScheme: colorScheme, isReady: isReadyToToggle)
-                }
+                // SpotlightIndicator is now exclusively rendered in ThemeTransitionOverlay at the App root!
             }
             .ignoresSafeArea()
         )
