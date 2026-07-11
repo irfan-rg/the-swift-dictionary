@@ -229,16 +229,62 @@ private struct HeroSection: View {
 /// kicks off a repeating linear animation for seamless looping.
 private struct AutoScrollingMarquee: View {
     let colorScheme: ColorScheme
-    
-    // Double the list so we can seamlessly loop (exactly like the web's `doubled`)
-    private let items: [EraInfo] = allEras + allEras
-
     @State private var offset: CGFloat = 0
-    @State private var singleWidth: CGFloat = 0
+    @State private var blockWidth: CGFloat = 0
 
     var body: some View {
-        HStack(spacing: 32) { // Match web gap
-            ForEach(Array(items.enumerated()), id: \.offset) { _, era in
+        HStack(spacing: 0) {
+            // Block 1: Measures its exact width
+            EraMarqueeBlock(colorScheme: colorScheme)
+                .background(
+                    GeometryReader { geo in
+                        Color.clear.preference(key: MarqueeWidthKey.self, value: geo.size.width)
+                    }
+                )
+            
+            // Block 2: The exact duplicate for the seamless loop
+            EraMarqueeBlock(colorScheme: colorScheme)
+        }
+        .fixedSize(horizontal: true, vertical: false) // CRITICAL: Ensures the HStack grows beyond screen bounds
+        .onPreferenceChange(MarqueeWidthKey.self) { newWidth in
+            if abs(blockWidth - newWidth) > 1 {
+                blockWidth = newWidth
+                startScrolling()
+            }
+        }
+        .offset(x: offset)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .clipped()
+        .frame(height: 24)
+        .padding(.horizontal, 16)
+    }
+
+    private func startScrolling() {
+        guard blockWidth > 0 else { return }
+        
+        // CRITICAL: Delay the start by 50ms to guarantee SwiftUI has finished all layout passes.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+            // Instantly snap back to 0 without animation if width changes
+            var transaction = Transaction(animation: nil)
+            transaction.disablesAnimations = true
+            withTransaction(transaction) {
+                offset = 0
+            }
+            
+            let duration = Double(blockWidth) / 40.0 // 40 pt/s
+            withAnimation(.linear(duration: duration).repeatForever(autoreverses: false)) {
+                offset = -blockWidth
+            }
+        }
+    }
+}
+
+private struct EraMarqueeBlock: View {
+    let colorScheme: ColorScheme
+    
+    var body: some View {
+        HStack(spacing: 32) {
+            ForEach(allEras) { era in
                 HStack(spacing: 6) {
                     Circle()
                         .fill(era.resolvedColor(for: colorScheme))
@@ -251,39 +297,14 @@ private struct AutoScrollingMarquee: View {
                 }
             }
         }
-        .fixedSize(horizontal: true, vertical: false) // CRITICAL: Allows the HStack to grow beyond the screen width!
-        // Measure the rendered width of the entire track
-        .background(
-            GeometryReader { geo in
-                Color.clear.onAppear {
-                    // Total width has (2N) items and (2N - 1) gaps.
-                    // By adding 1 gap (32), we get exactly 2 * (N items + N gaps).
-                    // Dividing by 2 gives the EXACT pixel distance of one set + one gap.
-                    // This mathematically guarantees a 100% seamless jump!
-                    singleWidth = (geo.size.width + 32) / 2.0
-                    startScrolling()
-                }
-            }
-        )
-        .offset(x: offset)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .clipped()
-        .frame(height: 24)
-        .padding(.horizontal, 16)
+        .padding(.trailing, 32) // Gap before the next block
     }
+}
 
-    private func startScrolling() {
-        guard singleWidth > 0 else { return }
-        offset = 0
-        
-        // CRITICAL: Delay the start by 50ms to guarantee SwiftUI has finished all layout passes.
-        // If we don't delay, the animation engine swallows the state change and it freezes.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            let duration = Double(singleWidth) / 40.0 // 40 pt/s
-            withAnimation(.linear(duration: duration).repeatForever(autoreverses: false)) {
-                offset = -singleWidth
-            }
-        }
+private struct MarqueeWidthKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
     }
 }
 
