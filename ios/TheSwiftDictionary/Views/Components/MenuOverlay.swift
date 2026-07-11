@@ -28,6 +28,7 @@ struct MenuOverlay: View {
     let colorScheme: ColorScheme
 
     @State private var itemsVisible = false
+    @State private var overlayVisible = false
     @State private var searchText = ""
 
     private let navLinks: [(page: AppPage, label: String)] = [
@@ -100,13 +101,13 @@ struct MenuOverlay: View {
                 themeOverride = colorScheme == .dark ? "light" : "dark"
             } label: {
                 HStack(spacing: 14) {
-                    Image(systemName: colorScheme == .dark ? "sun.max" : "moon.stars")
-                        .font(.system(size: 16, weight: .light))
-                        .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
+                    Spacer()
                     Text(colorScheme == .dark ? "Light Mode" : "Dark Mode")
                         .font(.system(size: 14, weight: .medium))
                         .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
-                    Spacer()
+                    Image(systemName: colorScheme == .dark ? "sun.max" : "moon.stars")
+                        .font(.system(size: 16, weight: .light))
+                        .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
                 }
                 .padding(.horizontal, 24)
                 .padding(.vertical, 12)
@@ -152,16 +153,31 @@ struct MenuOverlay: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(AppColors.background(for: colorScheme))
+        .opacity(overlayVisible ? 1 : 0)
+        .allowsHitTesting(overlayVisible)
         .onAppear {
-            withAnimation { itemsVisible = true }
+            if isMenuOpen {
+                overlayVisible = true
+                itemsVisible = true
+            }
+        }
+        .onChange(of: isMenuOpen) { open in
+            if open {
+                // Entrance sequence: show background, then stagger items in
+                withAnimation(.easeInOut(duration: 0.2)) { overlayVisible = true }
+                withAnimation { itemsVisible = true }
+            } else {
+                // Exit sequence: stagger items out, then hide background
+                withAnimation(.easeIn(duration: 0.18)) { itemsVisible = false }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.28) {
+                    withAnimation(.easeInOut(duration: 0.15)) { overlayVisible = false }
+                }
+            }
         }
     }
 
-    /// Reverse-animate items out, then dismiss overlay.
+    /// Triggers the close sequence by toggling the binding
     private func closeMenu() {
-        withAnimation(.easeIn(duration: 0.18)) { itemsVisible = false }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.28) {
-            withAnimation(.easeInOut(duration: 0.15)) { isMenuOpen = false }
-        }
+        isMenuOpen = false
     }
 }

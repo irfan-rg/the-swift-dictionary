@@ -27,16 +27,14 @@ struct ContentView: View {
             pageContent
                 .ignoresSafeArea(edges: .bottom)
 
-            // Menu overlay — starts right below header (ZStack top = below header)
-            if isMenuOpen {
-                MenuOverlay(
-                    currentPage: $currentPage,
-                    isMenuOpen: $isMenuOpen,
-                    colorScheme: colorScheme
-                )
-                .ignoresSafeArea(edges: .bottom)
-                .transition(.opacity)
-            }
+            // Menu overlay — always in hierarchy so it can manage its own
+            // staggered entrance and exit animations sequentially.
+            MenuOverlay(
+                currentPage: $currentPage,
+                isMenuOpen: $isMenuOpen,
+                colorScheme: colorScheme
+            )
+            .ignoresSafeArea(edges: .bottom)
         }
         .ignoresSafeArea(edges: .bottom)
         // Header sits above the entire ZStack via safeAreaInset

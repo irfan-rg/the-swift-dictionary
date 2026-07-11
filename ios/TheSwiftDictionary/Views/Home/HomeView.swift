@@ -141,7 +141,7 @@ private struct HeroSection: View {
 
                 // Description
                 Text("Every lyric tells a story. Every word carries a meaning.\nUncover the sophistication hidden in her discography.")
-                    .font(.system(size: 15, weight: .light))
+                    .font(AppFont.body(size: 15))
                     .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
                     .multilineTextAlignment(.center)
                     .lineSpacing(5)
