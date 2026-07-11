@@ -453,53 +453,5 @@ struct ScrollOffsetKey: PreferenceKey {
         value += nextValue()
     }
 }
-
-// MARK: - Eras Tour Spotlight Indicator
-
-/// A highly cinematic Taylor Swift themed pull indicator that shines a light beam from the Dynamic Island.
-private struct SpotlightIndicator: View {
-    let offset: CGFloat
-    let colorScheme: ColorScheme
-    let isReady: Bool
-    
-    var body: some View {
-        let lyric = colorScheme == .dark ? "step into the daylight..." : "meet me at midnight..."
-        let progress = min(max(offset / 90.0, 0), 1.0)
-        
-        ZStack(alignment: .top) {
-            // The Spotlight Beam extending down from the dynamic island
-            Path { path in
-                let width = UIScreen.main.bounds.width
-                let islandTop: CGFloat = 30
-                // Notch is roughly 120pt wide. Start beam from edges of notch.
-                path.move(to: CGPoint(x: width/2 - 50, y: islandTop))
-                path.addLine(to: CGPoint(x: width/2 + 50, y: islandTop))
-                // The beam widens as it reaches down
-                path.addLine(to: CGPoint(x: width/2 + 120, y: islandTop + max(offset, 10)))
-                path.addLine(to: CGPoint(x: width/2 - 120, y: islandTop + max(offset, 10)))
-                path.closeSubpath()
-            }
-            .fill(
-                LinearGradient(
-                    gradient: Gradient(colors: [
-                        (isReady ? AppColors.foreground(for: colorScheme) : AppColors.accent(for: colorScheme)).opacity(0.35 * progress),
-                        Color.clear
-                    ]),
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-            )
-            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isReady)
-            
-            // The illuminated lyric text
-            Text(lyric)
-                .font(AppFont.handwriting(size: 22))
-                .foregroundColor(isReady ? AppColors.foreground(for: colorScheme) : AppColors.accent(for: colorScheme))
-                .opacity(progress)
-                .scaleEffect(isReady ? 1.08 : 1.0)
-                // Positioned in the middle of the growing beam
-                .padding(.top, max(30, offset - 10))
-                .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isReady)
-        }
     }
 }
