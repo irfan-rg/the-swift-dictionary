@@ -17,16 +17,17 @@ struct HomeView: View {
     // For Pull-to-Toggle gesture
     @State private var pullOffset: CGFloat = 0
     @State private var isReadyToToggle = false
+    @State private var isDragging = false
 
     var body: some View {
         // GeometryReader measures the actual available height AFTER the
         // .safeAreaInset header is applied in ContentView. This is the
         // only reliable way to make the hero fill exactly the visible viewport.
         GeometryReader { geo in
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 0) {
-                    
-                    // Invisible tracker for scroll offset
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 0) {
+                
+                // Invisible tracker for scroll offset
                     GeometryReader { proxy in
                         Color.clear.preference(key: ScrollOffsetKey.self, value: proxy.frame(in: .named("scroll")).minY)
                     }
@@ -109,11 +110,32 @@ struct HomeView: View {
             }
         } // End ScrollView
         .coordinateSpace(name: "scroll")
+        .simultaneousGesture(
+            DragGesture(minimumDistance: 10)
+                .onChanged { _ in
+                    isDragging = true
+                }
+                .onEnded { _ in
+                    isDragging = false
+                    // Execute ONLY if user physically let go while past the threshold
+                    if pullOffset > 90 && isReadyToToggle {
+                        isReadyToToggle = false
+                        ThemeTransitionManager.shared.isReadyToToggle = false
+                        
+                        let generator = UIImpactFeedbackGenerator(style: .heavy)
+                        generator.impactOccurred()
+                        
+                        ThemeTransitionManager.shared.executeTransition {
+                            themeOverride = colorScheme == .dark ? "light" : "dark"
+                        }
+                    }
+                }
+        )
         .onPreferenceChange(ScrollOffsetKey.self) { value in
             pullOffset = value
             ThemeTransitionManager.shared.pullOffset = value
             
-            if value > 90 {
+            if value > 90 && isDragging {
                 // User pulled past threshold
                 if !isReadyToToggle {
                     isReadyToToggle = true
@@ -125,19 +147,11 @@ struct HomeView: View {
                     // Pre-capture the screen exactly as it looks now!
                     ThemeTransitionManager.shared.preCaptureScreen()
                 }
-            } else if value < 80 {
-                // User released the pull (offset shrinking)
+            } else if value <= 90 && isDragging {
+                // User manually dragged back UP to cancel
                 if isReadyToToggle {
                     isReadyToToggle = false
                     ThemeTransitionManager.shared.isReadyToToggle = false
-                    
-                    let generator = UIImpactFeedbackGenerator(style: .heavy)
-                    generator.impactOccurred()
-                    
-                    // Trigger the radial snapshot theme change instantly
-                    ThemeTransitionManager.shared.executeTransition {
-                        themeOverride = colorScheme == .dark ? "light" : "dark"
-                    }
                 }
             }
         }
