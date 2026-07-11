@@ -9,6 +9,10 @@ class ThemeTransitionManager: ObservableObject {
     @Published var maskRadius: CGFloat = 0
     @Published var isTransitioning: Bool = false
     
+    // For Pull-to-Toggle gesture
+    @Published var pullOffset: CGFloat = 0
+    @Published var isReadyToToggle: Bool = false
+    
     private init() {}
     
     /// Captures the screen silently in the background while the user is still pulling.
@@ -71,28 +75,92 @@ class ThemeTransitionManager: ObservableObject {
 /// The overlay view that holds the snapshot and applies the inverse radial mask.
 struct ThemeTransitionOverlay: View {
     @ObservedObject var manager = ThemeTransitionManager.shared
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
-        if manager.isTransitioning, let image = manager.snapshotImage {
-            Image(uiImage: image)
-                .resizable()
-                .ignoresSafeArea()
-                .mask(
-                    ZStack {
-                        // The base mask that keeps the image visible
-                        Rectangle()
-                        
-                        // The expanding circle that punches a hole in the mask
-                        Circle()
-                            .frame(width: manager.maskRadius * 2, height: manager.maskRadius * 2)
-                            // Starts exactly from the center of the Dynamic Island (y: 30)
-                            .position(x: UIScreen.main.bounds.width / 2, y: 30)
-                            .blendMode(.destinationOut)
-                    }
-                    .compositingGroup()
+        ZStack {
+            if manager.isTransitioning, let image = manager.snapshotImage {
+                Image(uiImage: image)
+                    .resizable()
+                    .ignoresSafeArea()
+                    .mask(
+                        ZStack {
+                            // The base mask that keeps the image visible
+                            Rectangle()
+                            
+                            // The expanding circle that punches a hole in the mask
+                            Circle()
+                                .frame(width: manager.maskRadius * 2, height: manager.maskRadius * 2)
+                                // Starts exactly from the center of the Dynamic Island (y: 30)
+                                .position(x: UIScreen.main.bounds.width / 2, y: 30)
+                                .blendMode(.destinationOut)
+                        }
+                        .compositingGroup()
+                    )
+                    .ignoresSafeArea()
+                    .allowsHitTesting(false)
+            }
+            
+            // Render the Spotlight Indicator above everything (including AppHeader)
+            if manager.pullOffset > 0 {
+                SpotlightIndicator(
+                    offset: manager.pullOffset,
+                    colorScheme: colorScheme,
+                    isReady: manager.isReadyToToggle
                 )
-                .ignoresSafeArea()
                 .allowsHitTesting(false)
+            }
         }
+    }
+}
+
+// MARK: - Eras Tour Spotlight Indicator
+
+/// A highly cinematic Taylor Swift themed pull indicator that shines a light beam from the Dynamic Island.
+struct SpotlightIndicator: View {
+    let offset: CGFloat
+    let colorScheme: ColorScheme
+    let isReady: Bool
+    
+    var body: some View {
+        let lyric = colorScheme == .dark ? "step into the daylight..." : "meet me at midnight..."
+        let progress = min(max(offset / 90.0, 0), 1.0)
+        
+        ZStack(alignment: .top) {
+            // The Spotlight Beam extending down from the dynamic island
+            Path { path in
+                let width = UIScreen.main.bounds.width
+                let islandTop: CGFloat = 30
+                // Notch is roughly 120pt wide. Start beam from edges of notch.
+                path.move(to: CGPoint(x: width/2 - 50, y: islandTop))
+                path.addLine(to: CGPoint(x: width/2 + 50, y: islandTop))
+                // The beam widens as it reaches down
+                path.addLine(to: CGPoint(x: width/2 + 120, y: islandTop + max(offset, 10)))
+                path.addLine(to: CGPoint(x: width/2 - 120, y: islandTop + max(offset, 10)))
+                path.closeSubpath()
+            }
+            .fill(
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        (isReady ? AppColors.foreground(for: colorScheme) : AppColors.accent(for: colorScheme)).opacity(0.35 * progress),
+                        Color.clear
+                    ]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isReady)
+            
+            // The illuminated lyric text
+            Text(lyric)
+                .font(AppFont.handwriting(size: 22))
+                .foregroundColor(isReady ? AppColors.foreground(for: colorScheme) : AppColors.accent(for: colorScheme))
+                .opacity(progress)
+                .scaleEffect(isReady ? 1.08 : 1.0)
+                // Positioned in the middle of the growing beam
+                .padding(.top, max(30, offset - 10))
+                .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isReady)
+        }
+        .ignoresSafeArea()
     }
 }
