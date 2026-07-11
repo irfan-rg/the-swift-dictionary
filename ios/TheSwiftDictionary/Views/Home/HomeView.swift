@@ -251,6 +251,7 @@ private struct AutoScrollingMarquee: View {
                 }
             }
         }
+        .fixedSize(horizontal: true, vertical: false) // CRITICAL: Allows the HStack to grow beyond the screen width!
         // Measure the rendered width of the entire track
         .background(
             GeometryReader { geo in
@@ -274,9 +275,14 @@ private struct AutoScrollingMarquee: View {
     private func startScrolling() {
         guard singleWidth > 0 else { return }
         offset = 0
-        let duration = Double(singleWidth) / 40.0 // 40 pt/s
-        withAnimation(.linear(duration: duration).repeatForever(autoreverses: false)) {
-            offset = -singleWidth
+        
+        // CRITICAL: Delay the start by 50ms to guarantee SwiftUI has finished all layout passes.
+        // If we don't delay, the animation engine swallows the state change and it freezes.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+            let duration = Double(singleWidth) / 40.0 // 40 pt/s
+            withAnimation(.linear(duration: duration).repeatForever(autoreverses: false)) {
+                offset = -singleWidth
+            }
         }
     }
 }
