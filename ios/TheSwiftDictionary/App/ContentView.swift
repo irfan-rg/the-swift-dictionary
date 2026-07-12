@@ -51,11 +51,7 @@ struct ContentView: View {
         case .home:
             HomeView()
         case .dictionary:
-            PagePlaceholder(
-                icon: "text.book.closed.fill",
-                title: "Dictionary",
-                subtitle: "Search & filter vocabulary across all eras"
-            )
+            DictionaryView()
         case .explorer:
             PagePlaceholder(
                 icon: "square.grid.2x2.fill",

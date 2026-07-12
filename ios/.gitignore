@@ -39,3 +39,6 @@ Supabase.env
 
 # Thumbnails
 ._*
+
+# Roadmap
+ROADMAP.md
