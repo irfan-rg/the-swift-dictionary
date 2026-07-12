@@ -29,6 +29,7 @@ final class DictionaryViewModel: ObservableObject {
     
     init() {
         setupBindings()
+        fetchInitial()
     }
     
     private func setupBindings() {

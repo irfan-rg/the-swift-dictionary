@@ -10,12 +10,25 @@ struct WordDetailSheet: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // Drag Indicator
-            Capsule()
-                .fill(AppColors.foregroundMuted(for: colorScheme).opacity(0.3))
-                .frame(width: 40, height: 5)
-                .padding(.top, 12)
-                .padding(.bottom, 8)
+            // Top Action Bar
+            HStack {
+                Button(action: { dismiss() }) {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 20, weight: .regular))
+                        .foregroundColor(AppColors.foreground(for: colorScheme))
+                        .padding(20)
+                }
+                
+                Spacer()
+                
+                Button(action: { isFavorited.toggle() }) {
+                    Image(systemName: isFavorited ? "heart.fill" : "heart")
+                        .font(.system(size: 20, weight: .regular))
+                        .foregroundColor(isFavorited ? AppColors.accent(for: colorScheme) : AppColors.foreground(for: colorScheme))
+                        .padding(20)
+                }
+            }
+            .background(AppColors.background(for: colorScheme))
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 32) {
                     
@@ -27,18 +40,10 @@ struct WordDetailSheet: View {
                         
                         Spacer()
                         
-                        VStack(alignment: .trailing, spacing: 12) {
-                            Button(action: { isFavorited.toggle() }) {
-                                Image(systemName: isFavorited ? "heart.fill" : "heart")
-                                    .font(.system(size: 22, weight: .regular))
-                                    .foregroundColor(isFavorited ? AppColors.accent(for: colorScheme) : AppColors.foregroundMuted(for: colorScheme))
-                            }
-                            
-                            Text(word.difficulty.rawValue.capitalized)
-                                .font(AppFont.handwriting(size: 15))
-                                .foregroundColor(AppColors.accent(for: colorScheme))
-                        }
-                        .padding(.top, 12)
+                        Text(word.difficulty.rawValue.capitalized)
+                            .font(AppFont.handwriting(size: 15))
+                            .foregroundColor(AppColors.accent(for: colorScheme))
+                            .padding(.top, 16)
                     }
                     
                     // Definition
@@ -117,7 +122,16 @@ struct WordDetailSheet: View {
                         }
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(AppColors.surfaceRaised(for: colorScheme))
+                        .background(
+                            LinearGradient(
+                                colors: [
+                                    eraInfo.resolvedColor(for: colorScheme).opacity(0.15),
+                                    AppColors.surfaceRaised(for: colorScheme)
+                                ],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
                         .cornerRadius(AppCorners.lg)
                         .overlay(
                             RoundedRectangle(cornerRadius: AppCorners.lg)
