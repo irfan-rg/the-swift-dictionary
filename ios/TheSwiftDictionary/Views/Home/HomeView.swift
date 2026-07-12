@@ -99,10 +99,7 @@ struct HomeView: View {
                         )
 
                         // ── 5. Ornate End Mark ────────────────────
-                        Text("✧")
-                            .font(.system(size: 20))
-                            .foregroundColor(AppColors.accent(for: colorScheme).opacity(0.4))
-                            .padding(.vertical, 20)
+                        OrnateDivider(colorScheme: colorScheme)
                     }
                 }
                 .padding(.top, 40)
@@ -186,7 +183,7 @@ private struct HeroSection: View {
                     .font(AppFont.handwriting(size: 22))
                     .foregroundColor(AppColors.accent(for: colorScheme))
                     .rotationEffect(.degrees(-2))
-                    .padding(.bottom, 44) // Match web: mb-3 (12) + mt-8 (32) = 44px
+                    .padding(.bottom, 80) // Match web: mb-3 (12) + mt-8 (32) = 44px
 
                 // Hero Title — "The Swift Dictionary" with small-caps:
                 VStack(spacing: -2) {
@@ -200,7 +197,7 @@ private struct HeroSection: View {
                         .tracking(1)
                 }
                 .multilineTextAlignment(.center)
-                .padding(.bottom, 32) // Match web: mb-8 (32px)
+                .padding(.bottom, 90) // Increased from 32 to 44 to move description down slightly and balance tagline spacing
 
                 // Description
                 Text("Every lyric tells a story.\nEvery word carries a meaning.\nUncover the sophistication hidden in discography.")
@@ -493,5 +490,45 @@ struct ScrollOffsetKey: PreferenceKey {
     static var defaultValue: CGFloat = 0
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value += nextValue()
+    }
+}
+
+// MARK: - Ornate Divider Component
+
+struct OrnateDivider: View {
+    let colorScheme: ColorScheme
+
+    var body: some View {
+        HStack(spacing: 16) {
+            // Left fading line
+            Rectangle()
+                .fill(
+                    LinearGradient(
+                        colors: [.clear, AppColors.borderFocus(for: colorScheme)],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+                .frame(height: 1)
+
+            // Sparkle / Star Icon
+            Text("✧")
+                .font(.system(size: 20))
+                .foregroundColor(AppColors.accent(for: colorScheme).opacity(0.5))
+
+            // Right fading line
+            Rectangle()
+                .fill(
+                    LinearGradient(
+                        colors: [AppColors.borderFocus(for: colorScheme), .clear],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+                .frame(height: 1)
+        }
+        .opacity(0.5)
+        .padding(.horizontal, 32)
+        .padding(.vertical, 20)
     }
 }
