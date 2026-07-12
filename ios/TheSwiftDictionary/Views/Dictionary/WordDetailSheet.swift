@@ -103,12 +103,6 @@ struct WordDetailSheet: View {
                     // Song & Album Tappable Card
                     if let eraInfo = allEras.first(where: { $0.slug == word.albumSlug }) {
                         HStack(spacing: 16) {
-                            Image(eraInfo.slug.rawValue)
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 48, height: 48)
-                                .clipShape(RoundedRectangle(cornerRadius: AppCorners.sm))
-                            
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(word.songTitle)
                                     .font(.system(size: 16, weight: .semibold))
