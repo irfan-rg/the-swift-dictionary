@@ -9,7 +9,27 @@ struct WordDetailSheet: View {
     @State private var isFavorited = false
     
     var body: some View {
-        NavigationStack {
+        VStack(spacing: 0) {
+            // Custom Toolbar (Unstyled, Flat)
+            HStack {
+                Button(action: { dismiss() }) {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 16, weight: .regular))
+                        .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
+                        .padding(16)
+                }
+                
+                Spacer()
+                
+                Button(action: { isFavorited.toggle() }) {
+                    Image(systemName: isFavorited ? "heart.fill" : "heart")
+                        .font(.system(size: 18, weight: .regular))
+                        .foregroundColor(isFavorited ? AppColors.accent(for: colorScheme) : AppColors.foregroundMuted(for: colorScheme))
+                        .padding(16)
+                }
+            }
+            .background(AppColors.background(for: colorScheme))
+            
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 32) {
                     
@@ -22,7 +42,7 @@ struct WordDetailSheet: View {
                         Spacer()
                         
                         Text(word.difficulty.rawValue.capitalized)
-                            .font(AppFont.handwriting(size: 18))
+                            .font(AppFont.handwriting(size: 15))
                             .foregroundColor(AppColors.accent(for: colorScheme))
                             .padding(.top, 16)
                     }
@@ -80,17 +100,14 @@ struct WordDetailSheet: View {
                         }
                     }
                     
-                    // Song & Album Badge
+                    // Song & Album Tappable Card
                     if let eraInfo = allEras.first(where: { $0.slug == word.albumSlug }) {
                         HStack(spacing: 16) {
-                            Circle()
-                                .fill(eraInfo.resolvedColor(for: colorScheme))
-                                .frame(width: 40, height: 40)
-                                .overlay(
-                                    Text(String(eraInfo.label.prefix(1)))
-                                        .font(AppFont.branding(size: 20))
-                                        .foregroundColor(AppColors.background(for: colorScheme).opacity(0.8))
-                                )
+                            Image(eraInfo.slug.rawValue)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 48, height: 48)
+                                .clipShape(RoundedRectangle(cornerRadius: AppCorners.sm))
                             
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(word.songTitle)
@@ -101,41 +118,38 @@ struct WordDetailSheet: View {
                                     .font(.system(size: 13))
                                     .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
                             }
+                            
+                            Spacer()
+                            
+                            VStack(alignment: .trailing, spacing: 4) {
+                                Text("View Song")
+                                    .font(.system(size: 10, weight: .semibold))
+                                    .textCase(.uppercase)
+                                Image(systemName: "arrow.right")
+                                    .font(.system(size: 10, weight: .bold))
+                            }
+                            .foregroundColor(AppColors.accent(for: colorScheme))
                         }
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .background(AppColors.surfaceRaised(for: colorScheme))
                         .cornerRadius(AppCorners.lg)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: AppCorners.lg)
+                                .stroke(AppColors.border(for: colorScheme), lineWidth: 1)
+                        )
+                        .onTapGesture {
+                            // Phase 4: Route to SongDetailView
+                            dismiss()
+                        }
                     }
                     
                     Spacer(minLength: 40)
                 }
-                .padding(24)
+                .padding(.horizontal, 24)
+                .padding(.bottom, 24)
             }
             .background(AppColors.background(for: colorScheme).ignoresSafeArea())
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: { dismiss() }) {
-                        Image(systemName: "xmark")
-                            .font(.system(size: 16, weight: .regular))
-                            .foregroundColor(AppColors.foreground(for: colorScheme))
-                            .padding(8)
-                    }
-                }
-                
-                // Favorite Button Placeholder
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        isFavorited.toggle()
-                    }) {
-                        Image(systemName: isFavorited ? "heart.fill" : "heart")
-                            .font(.system(size: 18, weight: .regular))
-                            .foregroundColor(isFavorited ? AppColors.accent(for: colorScheme) : AppColors.foreground(for: colorScheme))
-                            .padding(8)
-                    }
-                }
-            }
         }
     }
 }

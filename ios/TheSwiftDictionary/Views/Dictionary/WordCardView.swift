@@ -18,7 +18,7 @@ struct WordCardView: View {
                     Spacer()
                     
                     Text(word.difficulty.rawValue.capitalized)
-                        .font(AppFont.handwriting(size: 16))
+                        .font(AppFont.handwriting(size: 13))
                         .foregroundColor(AppColors.accent(for: colorScheme))
                 }
                 
@@ -36,7 +36,7 @@ struct WordCardView: View {
                     .frame(height: 1)
                     .padding(.vertical, 4)
                 
-                // Footer: Era dot + Song / Album + View Song
+                // Footer: Era dot + Song / Album
                 HStack(spacing: 8) {
                     if let eraInfo = allEras.first(where: { $0.slug == word.albumSlug }) {
                         Circle()
@@ -47,16 +47,6 @@ struct WordCardView: View {
                             .font(.system(size: 11, weight: .medium))
                             .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
                             .lineLimit(1)
-                            
-                        Spacer()
-                        
-                        HStack(spacing: 4) {
-                            Text("View Song")
-                                .font(.system(size: 10, weight: .semibold))
-                            Image(systemName: "arrow.right")
-                                .font(.system(size: 8, weight: .bold))
-                        }
-                        .foregroundColor(AppColors.accent(for: colorScheme))
                     }
                 }
             }
