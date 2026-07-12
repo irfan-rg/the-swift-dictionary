@@ -30,7 +30,6 @@ struct DictionaryFiltersSheet: View {
                         Text("Beginner").tag(Optional(Difficulty.beginner))
                         Text("Intermediate").tag(Optional(Difficulty.intermediate))
                         Text("Advanced").tag(Optional(Difficulty.advanced))
-                        Text("Scholar").tag(Optional(Difficulty.scholar))
                     }
                 } header: {
                     Text("Filter by Difficulty").font(.system(size: 11, weight: .medium)).tracking(1).textCase(.uppercase)

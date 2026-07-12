@@ -14,20 +14,17 @@ struct WordDetailSheet: View {
                 VStack(alignment: .leading, spacing: 32) {
                     
                     // Header Area
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text(word.word)
-                            .font(AppFont.branding(size: 44))
+                    HStack(alignment: .top) {
+                        Text(word.word.lowercased())
+                            .font(AppFont.display(size: 48))
                             .foregroundColor(AppColors.foreground(for: colorScheme))
                         
+                        Spacer()
+                        
                         Text(word.difficulty.rawValue.capitalized)
-                            .font(.system(size: 10, weight: .bold))
-                            .tracking(1.5)
-                            .textCase(.uppercase)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 5)
-                            .background(AppColors.border(for: colorScheme))
-                            .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
-                            .clipShape(Capsule())
+                            .font(AppFont.handwriting(size: 18))
+                            .foregroundColor(AppColors.accent(for: colorScheme))
+                            .padding(.top, 16)
                     }
                     
                     // Definition
@@ -121,11 +118,9 @@ struct WordDetailSheet: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: { dismiss() }) {
                         Image(systemName: "xmark")
-                            .font(.system(size: 14, weight: .bold))
+                            .font(.system(size: 16, weight: .regular))
                             .foregroundColor(AppColors.foreground(for: colorScheme))
                             .padding(8)
-                            .background(AppColors.surfaceRaised(for: colorScheme))
-                            .clipShape(Circle())
                     }
                 }
                 
@@ -135,11 +130,9 @@ struct WordDetailSheet: View {
                         isFavorited.toggle()
                     }) {
                         Image(systemName: isFavorited ? "heart.fill" : "heart")
-                            .font(.system(size: 16, weight: .medium))
+                            .font(.system(size: 18, weight: .regular))
                             .foregroundColor(isFavorited ? AppColors.accent(for: colorScheme) : AppColors.foreground(for: colorScheme))
                             .padding(8)
-                            .background(AppColors.surfaceRaised(for: colorScheme))
-                            .clipShape(Circle())
                     }
                 }
             }
