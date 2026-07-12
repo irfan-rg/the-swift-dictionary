@@ -10,26 +10,12 @@ struct WordDetailSheet: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // Custom Toolbar (Unstyled, Flat)
-            HStack {
-                Button(action: { dismiss() }) {
-                    Image(systemName: "xmark")
-                        .font(.system(size: 16, weight: .regular))
-                        .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
-                        .padding(16)
-                }
-                
-                Spacer()
-                
-                Button(action: { isFavorited.toggle() }) {
-                    Image(systemName: isFavorited ? "heart.fill" : "heart")
-                        .font(.system(size: 18, weight: .regular))
-                        .foregroundColor(isFavorited ? AppColors.accent(for: colorScheme) : AppColors.foregroundMuted(for: colorScheme))
-                        .padding(16)
-                }
-            }
-            .background(AppColors.background(for: colorScheme))
-            
+            // Drag Indicator
+            Capsule()
+                .fill(AppColors.foregroundMuted(for: colorScheme).opacity(0.3))
+                .frame(width: 40, height: 5)
+                .padding(.top, 12)
+                .padding(.bottom, 8)
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 32) {
                     
@@ -41,10 +27,18 @@ struct WordDetailSheet: View {
                         
                         Spacer()
                         
-                        Text(word.difficulty.rawValue.capitalized)
-                            .font(AppFont.handwriting(size: 15))
-                            .foregroundColor(AppColors.accent(for: colorScheme))
-                            .padding(.top, 16)
+                        VStack(alignment: .trailing, spacing: 12) {
+                            Button(action: { isFavorited.toggle() }) {
+                                Image(systemName: isFavorited ? "heart.fill" : "heart")
+                                    .font(.system(size: 22, weight: .regular))
+                                    .foregroundColor(isFavorited ? AppColors.accent(for: colorScheme) : AppColors.foregroundMuted(for: colorScheme))
+                            }
+                            
+                            Text(word.difficulty.rawValue.capitalized)
+                                .font(AppFont.handwriting(size: 15))
+                                .foregroundColor(AppColors.accent(for: colorScheme))
+                        }
+                        .padding(.top, 12)
                     }
                     
                     // Definition
@@ -107,22 +101,19 @@ struct WordDetailSheet: View {
                                 Text(word.songTitle)
                                     .font(.system(size: 16, weight: .semibold))
                                     .foregroundColor(AppColors.foreground(for: colorScheme))
+                                    .lineLimit(2)
+                                    .multilineTextAlignment(.leading)
                                 
                                 Text("from \(eraInfo.label)")
                                     .font(.system(size: 13))
                                     .foregroundColor(AppColors.foregroundMuted(for: colorScheme))
                             }
                             
-                            Spacer()
+                            Spacer(minLength: 16)
                             
-                            VStack(alignment: .trailing, spacing: 4) {
-                                Text("View Song")
-                                    .font(.system(size: 10, weight: .semibold))
-                                    .textCase(.uppercase)
-                                Image(systemName: "arrow.right")
-                                    .font(.system(size: 10, weight: .bold))
-                            }
-                            .foregroundColor(AppColors.accent(for: colorScheme))
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(AppColors.foregroundMuted(for: colorScheme).opacity(0.4))
                         }
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .leading)
